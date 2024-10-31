@@ -117,9 +117,10 @@ lp3	LDRB R1, [R5]    		  ;Pega o primeiro numero da comparação
 		ADDLE R5, R5, #1	  ;De qualquer forma, itera a posição do numero comparado
 	CMP R5, R0				  ;Verifica se chegou no último primo
 	BNE lp3
+	SUB R0, R0, #1
 	ADD R3, R3, #1			  ;Incrementa o número de iterações do loop principal		
 	CMP R10, R3
-	BNE lp4
+	BLT lp4
 	
 	
 	
