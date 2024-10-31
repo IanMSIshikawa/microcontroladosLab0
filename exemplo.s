@@ -102,14 +102,28 @@ lp2
 	STRB R1, [R5], #1		  ;Se não, implica que não tem nenhum divisor, salva no endereço dos primos
 	B lp1
 fim 
-	MOV R0, #0				  ;R0 armazena o número de números ordenados
-	LDR R5, =0x20000B00		  ;Volta R5 para o endereço onde estão os primos	
-	LDRB R1, [R5]    		  ;Pega o prieiro numero da comparação
+	MOV R3, #0       		  ;R3 salva o número de iterações do loop principal
+	MOV R0, R5				  ;Salva o endereço do ultimo primo
+	SUB R0, R0, #1
+lp4	LDR R5, =0x20000B00		  ;Volta R5 para o endereço onde estão os primos	
+lp3	LDRB R1, [R5]    		  ;Pega o prieiro numero da comparação
 	LDRB R2, [R5, #1]         ;Pega o segundo número da comparação
 	CMP R1, R2
-	ITT GT
-		STRB R2, [R5], #1     ;Número menor recua de posição
-		STRB R1, [R5]		  ;Número maior avança 
+	ITTE GT
+		STRBGT R2, [R5], #1     ;Número menor recua de posição
+		STRBGT R1, [R5]		  ;Número maior avança 
+		ADDLS R5, R5, #1
+	CMP R5, R0				  ;Verifica se chegou no último primo
+	BNE lp3
+	ADD R3, R3, #1			  ;Incrementa o número de iterações do loop principal
+	MOV R10, #0					
+	ADD R10, R3, 0x20000B00	  ;Verifica se chegou ao fim do loop principal comparando endereço final dos primos
+	CMP R10, R0
+	BNE lp4
+	
+	
+	
+	
 		
 		
 		
