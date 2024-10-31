@@ -102,6 +102,18 @@ lp2
 	STRB R1, [R5], #1		  ;Se não, implica que não tem nenhum divisor, salva no endereço dos primos
 	B lp1
 fim 
+	MOV R0, #0				  ;R0 armazena o número de números ordenados
+	LDR R5, =0x20000B00		  ;Volta R5 para o endereço onde estão os primos	
+	LDRB R1, [R5]    		  ;Pega o prieiro numero da comparação
+	LDRB R2, [R5, #1]         ;Pega o segundo número da comparação
+	CMP R1, R2
+	ITT GT
+		STRB R2, [R5], #1     ;Número menor recua de posição
+		STRB R1, [R5]		  ;Número maior avança 
+		
+		
+		
+	
 	
 	
 	NOP
