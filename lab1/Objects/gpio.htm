@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\Objects\gpio.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Objects\gpio.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 6220000: Last Updated: Mon Nov 11 13:35:58 2024
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 6220000: Last Updated: Mon Nov 11 23:10:08 2024
 <BR><P>
 <H3>Maximum Stack Usage =          0 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -14,12 +14,15 @@ Functions with no stack information
 </H3><UL>
  <LI><a href="#[0]">Reset_Handler</a>
  <LI><a href="#[6c]">GPIO_Init</a>
- <LI><a href="#[6d]">PortN_Output</a>
- <LI><a href="#[6e]">PortJ_Input</a>
+ <LI><a href="#[6d]">PortA_Output</a>
+ <LI><a href="#[6e]">PortB_Output</a>
+ <LI><a href="#[6f]">PortQ_Output</a>
+ <LI><a href="#[70]">PortP_Output</a>
+ <LI><a href="#[71]">PortJ_Input</a>
  <LI><a href="#[6b]">Start</a>
- <LI><a href="#[6f]">PLL_Init</a>
- <LI><a href="#[70]">SysTick_Init</a>
- <LI><a href="#[71]">SysTick_Wait1ms</a>
+ <LI><a href="#[72]">PLL_Init</a>
+ <LI><a href="#[73]">SysTick_Init</a>
+ <LI><a href="#[74]">SysTick_Wait1ms</a>
 </UL>
 </UL>
 <P>
@@ -519,9 +522,15 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[6b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Start
 </UL>
 
-<P><STRONG><a name="[6d]"></a>PortN_Output</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, gpio.o(.text), UNUSED)
+<P><STRONG><a name="[6d]"></a>PortA_Output</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, gpio.o(.text), UNUSED)
 
-<P><STRONG><a name="[6e]"></a>PortJ_Input</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, gpio.o(.text), UNUSED)
+<P><STRONG><a name="[6e]"></a>PortB_Output</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, gpio.o(.text), UNUSED)
+
+<P><STRONG><a name="[6f]"></a>PortQ_Output</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, gpio.o(.text), UNUSED)
+
+<P><STRONG><a name="[70]"></a>PortP_Output</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, gpio.o(.text), UNUSED)
+
+<P><STRONG><a name="[71]"></a>PortJ_Input</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, gpio.o(.text), UNUSED)
 
 <P><STRONG><a name="[6b]"></a>Start</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, main.o(.text))
 <BR><BR>[Calls]<UL><LI><a href="#[6c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_Init
@@ -529,11 +538,11 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Reset_Handler
 </UL>
 
-<P><STRONG><a name="[6f]"></a>PLL_Init</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, utils.o(.text), UNUSED)
+<P><STRONG><a name="[72]"></a>PLL_Init</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, utils.o(.text), UNUSED)
 
-<P><STRONG><a name="[70]"></a>SysTick_Init</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, utils.o(.text), UNUSED)
+<P><STRONG><a name="[73]"></a>SysTick_Init</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, utils.o(.text), UNUSED)
 
-<P><STRONG><a name="[71]"></a>SysTick_Wait1ms</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, utils.o(.text), UNUSED)
+<P><STRONG><a name="[74]"></a>SysTick_Wait1ms</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, utils.o(.text), UNUSED)
 <P>
 <H3>
 Local Symbols
