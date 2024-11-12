@@ -80,51 +80,54 @@ ARM Macro Assembler    Page 2
                        -------------------------
    53 00000000         ; Função main()
    54 00000000         Start
-   55 00000000         ; BL PLL_Init                  ;Chama a subrotina para a
-                       lterar o clock do microcontrolador para 80MHz
-   56 00000000         ;   BL SysTick_Init              ;Chama a subrotina para
-                        inicializar o SysTick
-   57 00000000 F7FF FFFE       BL               GPIO_Init   ;Chama a subrotina 
+   55 00000000 F7FF FFFE       BL               PLL_Init    ;Chama a subrotina 
+                                                            para alterar o cloc
+                                                            k do microcontrolad
+                                                            or para 80MHz
+   56 00000004 F7FF FFFE       BL               SysTick_Init ;Chama a subrotina
+                                                             para inicializar o
+                                                             SysTick
+   57 00000008 F7FF FFFE       BL               GPIO_Init   ;Chama a subrotina 
                                                             que inicializa os G
                                                             PIO
-   58 00000004         
-   59 00000004         MainLoop
-   60 00000004         ; ****************************************
-   61 00000004         ; Escrever código que lê o estado da chave, se ela estiv
+   58 0000000C         
+   59 0000000C         MainLoop
+   60 0000000C         ; ****************************************
+   61 0000000C         ; Escrever código que lê o estado da chave, se ela estiv
                        er desativada apaga o LED
-   62 00000004         ; Se estivar ativada chama a subrotina Pisca_LED
-   63 00000004         ; ****************************************
-   64 00000004 E7FE            B                MainLoop
-   65 00000006         
-   66 00000006         ;-------------------------------------------------------
+   62 0000000C         ; Se estivar ativada chama a subrotina Pisca_LED
+   63 0000000C         ; ****************************************
+   64 0000000C E7FE            B                MainLoop
+   65 0000000E         
+   66 0000000E         ;-------------------------------------------------------
                        -------------------------
-   67 00000006         ; Função Pisca_LED
-   68 00000006         ; Parâmetro de entrada: Não tem
-   69 00000006         ; Parâmetro de saída: Não tem
-   70 00000006         Pisca_LED
-   71 00000006         ; ****************************************
-   72 00000006         ; Escrever função que acende o LED, espera 1 segundo, ap
+   67 0000000E         ; Função Pisca_LED
+   68 0000000E         ; Parâmetro de entrada: Não tem
+   69 0000000E         ; Parâmetro de saída: Não tem
+   70 0000000E         Pisca_LED
+   71 0000000E         ; ****************************************
+   72 0000000E         ; Escrever função que acende o LED, espera 1 segundo, ap
                        aga o LED e espera 1 s
-   73 00000006         ; Esta função deve chamar a rotina SysTick_Wait1ms com o
+   73 0000000E         ; Esta função deve chamar a rotina SysTick_Wait1ms com o
                         parâmetro de entrada em R0
-   74 00000006         ; ****************************************
-   75 00000006         
-   76 00000006         ; ------------------------------------------------------
+   74 0000000E         ; ****************************************
+   75 0000000E         
+   76 0000000E         ; ------------------------------------------------------
                        --------------------------------------------------------
                        -----------
-   77 00000006         ; Fim do Arquivo
-   78 00000006         ; ------------------------------------------------------
+   77 0000000E         ; Fim do Arquivo
+   78 0000000E         ; ------------------------------------------------------
                        --------------------------------------------------------
                        ----------- 
-   79 00000006 00 00           ALIGN                        ;Garante que o fim 
+   79 0000000E 00 00           ALIGN                        ;Garante que o fim 
                                                             da seção está alinh
                                                             ada 
-   80 00000008                 END                          ;Fim do arquivo
+   80 00000010                 END                          ;Fim do arquivo
 Command Line: --debug --xref --diag_suppress=9931,A1950W --cpu=Cortex-M4.fp.sp 
---depend=.\objects\main.d -o.\objects\main.o -I"C:\Users\Robson Junior\AppData\
-Local\Arm\Packs\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C129" --predefine="__EVAL
- SETA 1" --predefine="__UVISION_VERSION SETA 541" --predefine="TM4C1294NCPDT SE
-TA 1" --list=.\listings\main.lst main.s
+--depend=.\objects\main.d -o.\objects\main.o -IC:\Users\IanIshikawa\AppData\Loc
+al\Arm\Packs\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C129 --predefine="__EVAL SET
+A 1" --predefine="__UVISION_VERSION SETA 541" --predefine="TM4C1294NCPDT SETA 1
+" --list=.\listings\main.lst main.s
 
 
 
@@ -154,7 +157,7 @@ Symbol: .text
    Uses
       None
 Comment: .text unused
-MainLoop 00000004
+MainLoop 0000000C
 
 Symbol: MainLoop
    Definitions
@@ -162,7 +165,7 @@ Symbol: MainLoop
    Uses
       At line 64 in file main.s
 Comment: MainLoop used once
-Pisca_LED 00000006
+Pisca_LED 0000000E
 
 Symbol: Pisca_LED
    Definitions
@@ -199,8 +202,8 @@ Symbol: PLL_Init
    Definitions
       At line 41 in file main.s
    Uses
-      None
-Comment: PLL_Init unused
+      At line 55 in file main.s
+Comment: PLL_Init used once
 PortA_Output 00000000
 
 Symbol: PortA_Output
@@ -253,8 +256,8 @@ External symbols
    Definitions
       At line 42 in file main.s
    Uses
-      None
-Comment: SysTick_Init unused
+      At line 56 in file main.s
+Comment: SysTick_Init used once
 SysTick_Wait1ms 00000000
 
 Symbol: SysTick_Wait1ms

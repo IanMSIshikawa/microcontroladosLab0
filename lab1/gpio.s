@@ -237,15 +237,11 @@ GPIO_Init
 	ORR     R1, #GPIO_PORTJ
 	STR     R1, [R0]	
 
-;SETANDO PORTAS A, B, P, Q, J para serem usadas
-	LDR R0, =2_11000000100011
-	LDR R1, =SYSCTL_RCGCGPIO_R
-	STR R0, [R1]
+
 ;AGUARDA SYSCTL_PRGPIO_R FICAR PRONTO
 aguarda
-	LDR R1, =SYSCTL_PRGPIO_R
-	LDR R0, [R1]
-	LDR R1, =2_11000000100011
+	LDR R2, =SYSCTL_PRGPIO_R
+	LDR R0, [R2]
 	CMP R0, R1
 	BNE aguarda
 ;SETANDO GPIOAMSEL PORTAS A, B, P, Q, J
@@ -389,25 +385,8 @@ aguarda
 	MOV R1, #2_00000011
 	STR R1, [R0]
 	
-	
-
-	
-	
-	
-	
 	BX LR
 
-; -------------------------------------------------------------------------------
-; Fun��o PortN_Output
-; Par�metro de entrada: 
-; Par�metro de sa�da: N�o tem
-PortN_Output
-; ****************************************
-; Escrever fun��o que acende ou apaga o LED
-; ****************************************
-	
-	BX LR
-; -------------------------------------------------------------------------------
 ; -------------------------------------------------------------------------------
 ; Função PortA_Output
 ; Parâmetro de entrada: R0 --> se os BIT5-6 estão ligado ou desligado
