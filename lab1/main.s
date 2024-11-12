@@ -42,8 +42,11 @@
 		IMPORT  SysTick_Init
 		IMPORT  SysTick_Wait1ms			
 		IMPORT  GPIO_Init
-        IMPORT  PortN_Output
-        IMPORT  PortJ_Input	
+		IMPORT  PortP_Output
+		IMPORT  PortQ_Output
+		IMPORT  PortA_Output
+		IMPORT  PortB_Output
+		IMPORT  PortJ_Input
 
 
 ; -------------------------------------------------------------------------------
