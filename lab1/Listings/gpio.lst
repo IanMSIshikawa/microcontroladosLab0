@@ -675,7 +675,7 @@ ARM Macro Assembler    Page 11
   233 00000000         ; Inicializar as portas NECESS�RIAS
   234 00000000         ; ****************************************
   235 00000000         ; HABILITA O CLOCK NAS PORTAS A, B, Q, P e J
-  236 00000000 48B6            LDR              R0, =SYSCTL_RCGCGPIO_R
+  236 00000000 48BD            LDR              R0, =SYSCTL_RCGCGPIO_R
   237 00000002 F04F 0101       MOV              R1, #GPIO_PORTA
   238 00000006 F041 0102       ORR              R1, #GPIO_PORTB
   239 0000000A F441 4180       ORR              R1, #GPIO_PORTQ
@@ -686,32 +686,32 @@ ARM Macro Assembler    Page 11
   244 00000018         
   245 00000018         ;AGUARDA SYSCTL_PRGPIO_R FICAR PRONTO
   246 00000018         aguarda
-  247 00000018 4AB1            LDR              R2, =SYSCTL_PRGPIO_R
+  247 00000018 4AB8            LDR              R2, =SYSCTL_PRGPIO_R
   248 0000001A 6810            LDR              R0, [R2]
   249 0000001C 4288            CMP              R0, R1
   250 0000001E D1FB            BNE              aguarda
   251 00000020         ;SETANDO GPIOAMSEL PORTAS A, B, P, Q, J
-  252 00000020 48B0            LDR              R0,=GPIO_PORTA_BASE_R
+  252 00000020 48B7            LDR              R0,=GPIO_PORTA_BASE_R
   253 00000022 F500 60A5       ADD              R0, R0, #GPIO_AMSEL_R
   254 00000026 F04F 0100       LDR              R1, =2_00000000
   255 0000002A 6001            STR              R1, [R0]
   256 0000002C         
-  257 0000002C 48AE            LDR              R0,=GPIO_PORTB_BASE_R
+  257 0000002C 48B5            LDR              R0,=GPIO_PORTB_BASE_R
   258 0000002E F500 60A5       ADD              R0, R0, #GPIO_AMSEL_R
   259 00000032 F04F 0100       LDR              R1, =2_00000000
   260 00000036 6001            STR              R1, [R0]
   261 00000038         
-  262 00000038 48AC            LDR              R0,=GPIO_PORTP_BASE_R
+  262 00000038 48B3            LDR              R0,=GPIO_PORTP_BASE_R
   263 0000003A F500 60A5       ADD              R0, R0, #GPIO_AMSEL_R
   264 0000003E F04F 0100       LDR              R1, =2_00000000
   265 00000042 6001            STR              R1, [R0]
   266 00000044         
-  267 00000044 48AA            LDR              R0,=GPIO_PORTQ_BASE_R
+  267 00000044 48B1            LDR              R0,=GPIO_PORTQ_BASE_R
   268 00000046 F500 60A5       ADD              R0, R0, #GPIO_AMSEL_R
   269 0000004A F04F 0100       LDR              R1, =2_00000000
   270 0000004E 6001            STR              R1, [R0]
   271 00000050         
-  272 00000050 48A8            LDR              R0,=GPIO_PORTJ_BASE_R
+  272 00000050 48AF            LDR              R0,=GPIO_PORTJ_BASE_R
   273 00000052 F500 60A5       ADD              R0, R0, #GPIO_AMSEL_R
 
 
@@ -724,54 +724,54 @@ ARM Macro Assembler    Page 12
   276 0000005C         
   277 0000005C         ;SETANDO GPIOPCTL DAS PORTAS A, B, P, Q, J
   278 0000005C         
-  279 0000005C 48A1            LDR              R0,=GPIO_PORTA_BASE_R
+  279 0000005C 48A8            LDR              R0,=GPIO_PORTA_BASE_R
   280 0000005E F200 502C       ADD              R0, R0, #GPIO_PCTL_R
   281 00000062 F04F 0100       MOV              R1, #0
   282 00000066 6001            STR              R1, [R0]
   283 00000068         
-  284 00000068 489F            LDR              R0,=GPIO_PORTB_BASE_R
+  284 00000068 48A6            LDR              R0,=GPIO_PORTB_BASE_R
   285 0000006A F200 502C       ADD              R0, R0, #GPIO_PCTL_R
   286 0000006E F04F 0100       MOV              R1, #0
   287 00000072 6001            STR              R1, [R0]
   288 00000074         
-  289 00000074 489D            LDR              R0,=GPIO_PORTP_BASE_R
+  289 00000074 48A4            LDR              R0,=GPIO_PORTP_BASE_R
   290 00000076 F200 502C       ADD              R0, R0, #GPIO_PCTL_R
   291 0000007A F04F 0100       MOV              R1, #0
   292 0000007E 6001            STR              R1, [R0]
   293 00000080         
-  294 00000080 489B            LDR              R0,=GPIO_PORTQ_BASE_R
+  294 00000080 48A2            LDR              R0,=GPIO_PORTQ_BASE_R
   295 00000082 F200 502C       ADD              R0, R0, #GPIO_PCTL_R
   296 00000086 F04F 0100       MOV              R1, #0
   297 0000008A 6001            STR              R1, [R0]
   298 0000008C         
-  299 0000008C 4899            LDR              R0,=GPIO_PORTJ_BASE_R
+  299 0000008C 48A0            LDR              R0,=GPIO_PORTJ_BASE_R
   300 0000008E F200 502C       ADD              R0, R0, #GPIO_PCTL_R
   301 00000092 F04F 0100       MOV              R1, #0
   302 00000096 6001            STR              R1, [R0]
   303 00000098         
   304 00000098         ;SETANDO GPIODIR PARA AS PORTAS A, B, P, Q, J
   305 00000098         
-  306 00000098 4892            LDR              R0,=GPIO_PORTA_BASE_R
+  306 00000098 4899            LDR              R0,=GPIO_PORTA_BASE_R
   307 0000009A F500 6080       ADD              R0, R0, #GPIO_DIR_R
   308 0000009E F04F 01F0       MOV              R1, #2_11110000
   309 000000A2 6001            STR              R1, [R0]
   310 000000A4         
-  311 000000A4 4890            LDR              R0,=GPIO_PORTB_BASE_R
+  311 000000A4 4897            LDR              R0,=GPIO_PORTB_BASE_R
   312 000000A6 F500 6080       ADD              R0, R0, #GPIO_DIR_R
   313 000000AA F04F 0130       MOV              R1, #2_00110000
   314 000000AE 6001            STR              R1, [R0]
   315 000000B0         
-  316 000000B0 488E            LDR              R0,=GPIO_PORTP_BASE_R
+  316 000000B0 4895            LDR              R0,=GPIO_PORTP_BASE_R
   317 000000B2 F500 6080       ADD              R0, R0, #GPIO_DIR_R
   318 000000B6 F04F 0120       MOV              R1, #2_00100000
   319 000000BA 6001            STR              R1, [R0]
   320 000000BC         
-  321 000000BC 488C            LDR              R0,=GPIO_PORTQ_BASE_R
+  321 000000BC 4893            LDR              R0,=GPIO_PORTQ_BASE_R
   322 000000BE F500 6080       ADD              R0, R0, #GPIO_DIR_R
   323 000000C2 F04F 010F       MOV              R1, #2_00001111
   324 000000C6 6001            STR              R1, [R0]
   325 000000C8         
-  326 000000C8 488A            LDR              R0,=GPIO_PORTJ_BASE_R
+  326 000000C8 4891            LDR              R0,=GPIO_PORTJ_BASE_R
   327 000000CA F500 6080       ADD              R0, R0, #GPIO_DIR_R
   328 000000CE F04F 0100       MOV              R1, #2_00000000
   329 000000D2 6001            STR              R1, [R0]
@@ -784,61 +784,61 @@ ARM Macro Assembler    Page 12
 ARM Macro Assembler    Page 13 
 
 
-  333 000000D4 4883            LDR              R0,=GPIO_PORTA_BASE_R
+  333 000000D4 488A            LDR              R0,=GPIO_PORTA_BASE_R
   334 000000D6 F500 6084       ADD              R0, R0, #GPIO_AFSEL_R
   335 000000DA F04F 0100       MOV              R1, #2_00000000
   336 000000DE 6001            STR              R1, [R0]
   337 000000E0         
-  338 000000E0 4881            LDR              R0,=GPIO_PORTB_BASE_R
+  338 000000E0 4888            LDR              R0,=GPIO_PORTB_BASE_R
   339 000000E2 F500 6084       ADD              R0, R0, #GPIO_AFSEL_R
   340 000000E6 F04F 0100       MOV              R1, #2_00000000
   341 000000EA 6001            STR              R1, [R0]
   342 000000EC         
-  343 000000EC 487F            LDR              R0,=GPIO_PORTP_BASE_R
+  343 000000EC 4886            LDR              R0,=GPIO_PORTP_BASE_R
   344 000000EE F500 6084       ADD              R0, R0, #GPIO_AFSEL_R
   345 000000F2 F04F 0100       MOV              R1, #2_00000000
   346 000000F6 6001            STR              R1, [R0]
   347 000000F8         
-  348 000000F8 487D            LDR              R0,=GPIO_PORTQ_BASE_R
+  348 000000F8 4884            LDR              R0,=GPIO_PORTQ_BASE_R
   349 000000FA F500 6084       ADD              R0, R0, #GPIO_AFSEL_R
   350 000000FE F04F 0100       MOV              R1, #2_00000000
   351 00000102 6001            STR              R1, [R0]
   352 00000104         
-  353 00000104 487B            LDR              R0,=GPIO_PORTJ_BASE_R
+  353 00000104 4882            LDR              R0,=GPIO_PORTJ_BASE_R
   354 00000106 F500 6084       ADD              R0, R0, #GPIO_AFSEL_R
   355 0000010A F04F 0100       MOV              R1, #2_00000000
   356 0000010E 6001            STR              R1, [R0]
   357 00000110         
   358 00000110         ;SETANDO GPIO_DEN_R PARA AS PORTAS A, B, P, Q, J
   359 00000110         
-  360 00000110 4874            LDR              R0,=GPIO_PORTA_BASE_R
+  360 00000110 487B            LDR              R0,=GPIO_PORTA_BASE_R
   361 00000112 F200 501C       ADD              R0, R0, #GPIO_DEN_R
   362 00000116 F04F 01F0       MOV              R1, #2_11110000
   363 0000011A 6001            STR              R1, [R0]
   364 0000011C         
-  365 0000011C 4872            LDR              R0,=GPIO_PORTB_BASE_R
+  365 0000011C 4879            LDR              R0,=GPIO_PORTB_BASE_R
   366 0000011E F200 501C       ADD              R0, R0, #GPIO_DEN_R
   367 00000122 F04F 0130       MOV              R1, #2_00110000
   368 00000126 6001            STR              R1, [R0]
   369 00000128         
-  370 00000128 4870            LDR              R0,=GPIO_PORTP_BASE_R
+  370 00000128 4877            LDR              R0,=GPIO_PORTP_BASE_R
   371 0000012A F200 501C       ADD              R0, R0, #GPIO_DEN_R
   372 0000012E F04F 0120       MOV              R1, #2_00100000
   373 00000132 6001            STR              R1, [R0]
   374 00000134         
-  375 00000134 486E            LDR              R0,=GPIO_PORTQ_BASE_R
+  375 00000134 4875            LDR              R0,=GPIO_PORTQ_BASE_R
   376 00000136 F200 501C       ADD              R0, R0, #GPIO_DEN_R
   377 0000013A F04F 010F       MOV              R1, #2_00001111
   378 0000013E 6001            STR              R1, [R0]
   379 00000140         
-  380 00000140 486C            LDR              R0,=GPIO_PORTJ_BASE_R
+  380 00000140 4873            LDR              R0,=GPIO_PORTJ_BASE_R
   381 00000142 F200 501C       ADD              R0, R0, #GPIO_DEN_R
   382 00000146 F04F 0103       MOV              R1, #2_00000011
   383 0000014A 6001            STR              R1, [R0]
   384 0000014C         
   385 0000014C         ;SETANDO GPIO_PUR_R DA PORTA J 
   386 0000014C         
-  387 0000014C 4869            LDR              R0,=GPIO_PORTJ_BASE_R
+  387 0000014C 4870            LDR              R0,=GPIO_PORTJ_BASE_R
   388 0000014E F500 60A2       ADD              R0, R0, #GPIO_PUR_R
   389 00000152 F04F 0103       MOV              R1, #2_00000011
   390 00000156 6001            STR              R1, [R0]
@@ -858,7 +858,7 @@ ARM Macro Assembler    Page 14
                        do ou desligado
   397 0000015A         ; Parâmetro de saída: Não tem
   398 0000015A         PortA_Output
-  399 0000015A 4967            LDR              R1, =GPIO_PORTA_AHB_DATA_R ;Car
+  399 0000015A 496E            LDR              R1, =GPIO_PORTA_AHB_DATA_R ;Car
                                                             rega o valor do off
                                                             set do data registe
                                                             r
@@ -885,7 +885,7 @@ ARM Macro Assembler    Page 14
                        do ou desligado
   410 0000016A         ; Parâmetro de saída: Não tem
   411 0000016A         PortB_Output
-  412 0000016A 4964            LDR              R1, =GPIO_PORTB_AHB_DATA_R ;Car
+  412 0000016A 496B            LDR              R1, =GPIO_PORTB_AHB_DATA_R ;Car
                                                             rega o valor do off
                                                             set do data registe
                                                             r
@@ -918,7 +918,7 @@ ARM Macro Assembler    Page 15
                        do ou desligado
   423 0000017A         ; Parâmetro de saída: Não tem
   424 0000017A         PortQ_Output
-  425 0000017A 4961            LDR              R1, =GPIO_PORTQ_AHB_DATA_R ;Car
+  425 0000017A 4968            LDR              R1, =GPIO_PORTQ_AHB_DATA_R ;Car
                                                             rega o valor do off
                                                             set do data registe
                                                             r
@@ -945,7 +945,7 @@ ARM Macro Assembler    Page 15
                        u desligado
   436 0000018A         ; Parâmetro de saída: Não tem
   437 0000018A         PortP_Output
-  438 0000018A 495E            LDR              R1, =GPIO_PORTP_AHB_DATA_R ;Car
+  438 0000018A 4965            LDR              R1, =GPIO_PORTP_AHB_DATA_R ;Car
                                                             rega o valor do off
                                                             set do data registe
                                                             r
@@ -981,165 +981,177 @@ ARM Macro Assembler    Page 16
 
   452 0000019A         
   453 0000019A         ; Usa display 0
-  454 0000019A F7FF FFFE       BL               DecimalTo7Seg
-  455 0000019E F04F 0010       MOV              R0, #2_10000
-  456 000001A2 F7FF FFFE       BL               PortB_Output
-  457 000001A6         ; Espera poucos ms
-  458 000001A6 F04F 0001       MOV              R0, #1
-  459 000001AA F7FF FFFE       BL               SysTick_Wait1ms
-  460 000001AE         ; Usa display B
-  461 000001AE 4608            MOV              R0, R1
-  462 000001B0 F7FF FFFE       BL               DecimalTo7Seg
-  463 000001B4 F04F 0020       MOV              R0, #2_100000
-  464 000001B8 F7FF FFFE       BL               PortB_Output
-  465 000001BC         
-  466 000001BC         
-  467 000001BC         
-  468 000001BC         
-  469 000001BC 4770            BX               LR          ;Retorno
-  470 000001BE         
-  471 000001BE         ; ------------------------------------------------------
+  454 0000019A B500            PUSH{LR}
+  455 0000019C F7FF FFFE       BL               DecimalTo7Seg
+  456 000001A0 F04F 0010       MOV              R0, #2_10000
+  457 000001A4 F7FF FFFE       BL               PortB_Output
+  458 000001A8         ; Espera poucos ms
+  459 000001A8 F04F 0001       MOV              R0, #1
+  460 000001AC F7FF FFFE       BL               SysTick_Wait1ms
+  461 000001B0         ; Usa display B
+  462 000001B0 4608            MOV              R0, R1
+  463 000001B2 F7FF FFFE       BL               DecimalTo7Seg
+  464 000001B6 F04F 0020       MOV              R0, #2_100000
+  465 000001BA F7FF FFFE       BL               PortB_Output
+  466 000001BE         
+  467 000001BE         
+  468 000001BE         
+  469 000001BE F85D EB04       POP              {LR}
+  470 000001C2 4770            BX               LR          ;Retorno
+  471 000001C4         
+  472 000001C4         ; ------------------------------------------------------
                        -------------------------
-  472 000001BE         ; COnverte os números passados por parâmetro para valo
+  473 000001C4         ; COnverte os números passados por parâmetro para valo
                        res usados no display de 7 segmentos
-  473 000001BE         ; Recebe o valor e seta as portas PQ0 - PQ3 e PA4 - PA7 
+  474 000001C4         ; Recebe o valor e seta as portas PQ0 - PQ3 e PA4 - PA7 
                        responsáveis pelo display
-  474 000001BE         ; Usa os registradores R2 e R10
-  475 000001BE         ; Parâmetro de entrada: r0 -> valor a ser convertido pa
+  475 000001C4         ; Usa os registradores R2 e R10
+  476 000001C4         ; Parâmetro de entrada: r0 -> valor a ser convertido pa
                        ra 7 segmentos
-  476 000001BE         ; Parâmetro de saída: não tem
-  477 000001BE         DecimalTo7Seg
-  478 000001BE         
-  479 000001BE 4682            MOV              R10, R0
-  480 000001C0         ;Seta display quando o valor passado for 0
-  481 000001C0 F04F 0200       MOV              R2, #0
-  482 000001C4 4592            CMP              R10, R2
-  483 000001C6 D109            BNE              cmp1
-  484 000001C8 F04F 00F0       MOV              R0, #2_11110000
-  485 000001CC F7FF FFFE       BL               PortA_Output
-  486 000001D0 F04F 0003       MOV              R0, #2_11
+  477 000001C4         ; Parâmetro de saída: não tem
+  478 000001C4         DecimalTo7Seg
+  479 000001C4         
+  480 000001C4 4682            MOV              R10, R0
+  481 000001C6         ;Seta display quando o valor passado for 0
+  482 000001C6 F04F 0200       MOV              R2, #0
+  483 000001CA 4592            CMP              R10, R2
+  484 000001CC D10A            BNE              cmp1
+  485 000001CE F04F 000F       MOV              R0, #2_1111
+  486 000001D2 B500            PUSH{LR}
   487 000001D4 F7FF FFFE       BL               PortQ_Output
-  488 000001D8 F000 F87B       BL               endDecimalTo7Seg
-  489 000001DC         cmp1
-  490 000001DC         ;Seta display quando o valor passado for 1
-  491 000001DC F04F 0201       MOV              R2, #1
-  492 000001E0 4592            CMP              R10, R2
-  493 000001E2 D109            BNE              cmp2
-  494 000001E4 F04F 0060       MOV              R0, #2_01100000
-  495 000001E8 F7FF FFFE       BL               PortA_Output
-  496 000001EC F04F 0000       MOV              R0, #0
-  497 000001F0 F7FF FFFE       BL               PortQ_Output
-  498 000001F4 F000 F86D       BL               endDecimalTo7Seg
-  499 000001F8         cmp2
-  500 000001F8 F04F 0202       MOV              R2, #2
-  501 000001FC 4592            CMP              R10, R2
-  502 000001FE D109            BNE              cmp3
-  503 00000200 F04F 00B0       MOV              R0, #2_10110000
-  504 00000204 F7FF FFFE       BL               PortA_Output
-  505 00000208 F04F 0005       MOV              R0, #2_101
-  506 0000020C F7FF FFFE       BL               PortQ_Output
+  488 000001D8 F04F 0030       MOV              R0, #2_110000
+  489 000001DC F7FF FFFE       BL               PortA_Output
+  490 000001E0 F000 F884       BL               endDecimalTo7Seg
+  491 000001E4         cmp1
+  492 000001E4         ;Seta display quando o valor passado for 1
+  493 000001E4 F04F 0201       MOV              R2, #1
+  494 000001E8 4592            CMP              R10, R2
+  495 000001EA D10A            BNE              cmp2
+  496 000001EC F04F 0060       MOV              R0, #2_01100000
+  497 000001F0 B500            PUSH{LR}
+  498 000001F2 F7FF FFFE       BL               PortA_Output
+  499 000001F6 F04F 0000       MOV              R0, #0
+  500 000001FA F7FF FFFE       BL               PortQ_Output
+  501 000001FE F000 F875       BL               endDecimalTo7Seg
+  502 00000202         cmp2
+  503 00000202 F04F 0202       MOV              R2, #2
+  504 00000206 4592            CMP              R10, R2
+  505 00000208 D10A            BNE              cmp3
+  506 0000020A F04F 00B0       MOV              R0, #2_10110000
 
 
 
 ARM Macro Assembler    Page 17 
 
 
-  507 00000210 F000 F85F       BL               endDecimalTo7Seg
-  508 00000214         cmp3
-  509 00000214 F04F 0203       MOV              R2, #3
-  510 00000218 4592            CMP              R10, R2
-  511 0000021A D109            BNE              cmp4
-  512 0000021C F04F 00F0       MOV              R0, #2_11110000
-  513 00000220 F7FF FFFE       BL               PortA_Output
-  514 00000224 F04F 0004       MOV              R0, #2_100
-  515 00000228 F7FF FFFE       BL               PortQ_Output
-  516 0000022C F000 F851       BL               endDecimalTo7Seg
-  517 00000230         cmp4
-  518 00000230 F04F 0204       MOV              R2, #4
-  519 00000234 4592            CMP              R10, R2
-  520 00000236 D109            BNE              cmp5
-  521 00000238 F04F 0060       MOV              R0, #2_01100000
-  522 0000023C F7FF FFFE       BL               PortA_Output
-  523 00000240 F04F 0006       MOV              R0, #2_110
-  524 00000244 F7FF FFFE       BL               PortQ_Output
-  525 00000248 F000 F843       BL               endDecimalTo7Seg
-  526 0000024C         cmp5
-  527 0000024C F04F 0205       MOV              R2, #5
-  528 00000250 4592            CMP              R10, R2
-  529 00000252 D109            BNE              cmp6
-  530 00000254 F04F 00D0       MOV              R0, #2_11010000
-  531 00000258 F7FF FFFE       BL               PortA_Output
-  532 0000025C F04F 0007       MOV              R0, #2_111
-  533 00000260 F7FF FFFE       BL               PortQ_Output
-  534 00000264 F000 F835       BL               endDecimalTo7Seg
-  535 00000268         cmp6
-  536 00000268 F04F 0206       MOV              R2, #6
-  537 0000026C 4592            CMP              R10, R2
-  538 0000026E D109            BNE              cmp7
-  539 00000270 F04F 00D0       MOV              R0, #2_11010000
-  540 00000274 F7FF FFFE       BL               PortA_Output
-  541 00000278 F04F 0006       MOV              R0, #2_110
-  542 0000027C F7FF FFFE       BL               PortQ_Output
-  543 00000280 F000 F827       BL               endDecimalTo7Seg
-  544 00000284         cmp7
-  545 00000284 F04F 0207       MOV              R2, #7
-  546 00000288 4592            CMP              R10, R2
-  547 0000028A D109            BNE              cmp8
-  548 0000028C F04F 0070       MOV              R0, #2_01110000
-  549 00000290 F7FF FFFE       BL               PortA_Output
-  550 00000294 F04F 0000       MOV              R0, #2_000
-  551 00000298 F7FF FFFE       BL               PortQ_Output
-  552 0000029C F000 F819       BL               endDecimalTo7Seg
-  553 000002A0         cmp8
-  554 000002A0 F04F 0208       MOV              R2, #8
-  555 000002A4 4592            CMP              R10, R2
-  556 000002A6 D109            BNE              cmp9
-  557 000002A8 F04F 00F0       MOV              R0, #2_11110000
-  558 000002AC F7FF FFFE       BL               PortA_Output
-  559 000002B0 F04F 0007       MOV              R0, #2_111
-  560 000002B4 F7FF FFFE       BL               PortQ_Output
-  561 000002B8 F000 F80B       BL               endDecimalTo7Seg
-  562 000002BC         cmp9
-  563 000002BC F04F 0209       MOV              R2, #9
-  564 000002C0 4592            CMP              R10, R2
-  565 000002C2 F04F 00F0       MOV              R0, #2_11110000
+  507 0000020E B500            PUSH{LR}
+  508 00000210 F7FF FFFE       BL               PortA_Output
+  509 00000214 F04F 0005       MOV              R0, #2_101
+  510 00000218 F7FF FFFE       BL               PortQ_Output
+  511 0000021C F000 F866       BL               endDecimalTo7Seg
+  512 00000220         cmp3
+  513 00000220 F04F 0203       MOV              R2, #3
+  514 00000224 4592            CMP              R10, R2
+  515 00000226 D10A            BNE              cmp4
+  516 00000228 F04F 00F0       MOV              R0, #2_11110000
+  517 0000022C B500            PUSH{LR}
+  518 0000022E F7FF FFFE       BL               PortA_Output
+  519 00000232 F04F 0004       MOV              R0, #2_100
+  520 00000236 F7FF FFFE       BL               PortQ_Output
+  521 0000023A F000 F857       BL               endDecimalTo7Seg
+  522 0000023E         cmp4
+  523 0000023E F04F 0204       MOV              R2, #4
+  524 00000242 4592            CMP              R10, R2
+  525 00000244 D10A            BNE              cmp5
+  526 00000246 F04F 0060       MOV              R0, #2_01100000
+  527 0000024A B500            PUSH{LR}
+  528 0000024C F7FF FFFE       BL               PortA_Output
+  529 00000250 F04F 0006       MOV              R0, #2_110
+  530 00000254 F7FF FFFE       BL               PortQ_Output
+  531 00000258 F000 F848       BL               endDecimalTo7Seg
+  532 0000025C         cmp5
+  533 0000025C F04F 0205       MOV              R2, #5
+  534 00000260 4592            CMP              R10, R2
+  535 00000262 D10A            BNE              cmp6
+  536 00000264 F04F 00D0       MOV              R0, #2_11010000
+  537 00000268 B500            PUSH{LR}
+  538 0000026A F7FF FFFE       BL               PortA_Output
+  539 0000026E F04F 0007       MOV              R0, #2_111
+  540 00000272 F7FF FFFE       BL               PortQ_Output
+  541 00000276 F000 F839       BL               endDecimalTo7Seg
+  542 0000027A         cmp6
+  543 0000027A F04F 0206       MOV              R2, #6
+  544 0000027E 4592            CMP              R10, R2
+  545 00000280 D10A            BNE              cmp7
+  546 00000282 F04F 00D0       MOV              R0, #2_11010000
+  547 00000286 B500            PUSH{LR}
+  548 00000288 F7FF FFFE       BL               PortA_Output
+  549 0000028C F04F 0006       MOV              R0, #2_110
+  550 00000290 F7FF FFFE       BL               PortQ_Output
+  551 00000294 F000 F82A       BL               endDecimalTo7Seg
+  552 00000298         cmp7
+  553 00000298 F04F 0207       MOV              R2, #7
+  554 0000029C 4592            CMP              R10, R2
+  555 0000029E D10A            BNE              cmp8
+  556 000002A0 F04F 0070       MOV              R0, #2_01110000
+  557 000002A4 B500            PUSH{LR}
+  558 000002A6 F7FF FFFE       BL               PortA_Output
+  559 000002AA F04F 0000       MOV              R0, #2_000
+  560 000002AE F7FF FFFE       BL               PortQ_Output
+  561 000002B2 F000 F81B       BL               endDecimalTo7Seg
+  562 000002B6         cmp8
+  563 000002B6 F04F 0208       MOV              R2, #8
+  564 000002BA 4592            CMP              R10, R2
+  565 000002BC D10A            BNE              cmp9
 
 
 
 ARM Macro Assembler    Page 18 
 
 
-  566 000002C6 F7FF FFFE       BL               PortA_Output
-  567 000002CA F04F 0006       MOV              R0, #2_110
-  568 000002CE F7FF FFFE       BL               PortQ_Output
-  569 000002D2         
-  570 000002D2         endDecimalTo7Seg
-  571 000002D2 4770            BX               LR          ;Retorno
-  572 000002D4         
-  573 000002D4         
-  574 000002D4         ; ------------------------------------------------------
+  566 000002BE F04F 00F0       MOV              R0, #2_11110000
+  567 000002C2 B500            PUSH{LR}
+  568 000002C4 F7FF FFFE       BL               PortA_Output
+  569 000002C8 F04F 0007       MOV              R0, #2_111
+  570 000002CC F7FF FFFE       BL               PortQ_Output
+  571 000002D0 F000 F80C       BL               endDecimalTo7Seg
+  572 000002D4         cmp9
+  573 000002D4 F04F 0209       MOV              R2, #9
+  574 000002D8 4592            CMP              R10, R2
+  575 000002DA F04F 00F0       MOV              R0, #2_11110000
+  576 000002DE B500            PUSH{LR}
+  577 000002E0 F7FF FFFE       BL               PortA_Output
+  578 000002E4 F04F 0006       MOV              R0, #2_110
+  579 000002E8 F7FF FFFE       BL               PortQ_Output
+  580 000002EC         
+  581 000002EC         endDecimalTo7Seg
+  582 000002EC F85D EB04       POP{LR}
+  583 000002F0 4770            BX               LR          ;Retorno
+  584 000002F2         
+  585 000002F2         
+  586 000002F2         ; ------------------------------------------------------
                        -------------------------
-  575 000002D4         ; Função PortJ_Input
-  576 000002D4         ; Parâmetro de entrada: Não tem
-  577 000002D4         ; Parâmetro de saída: R0 --> o valor da leitura
-  578 000002D4         PortJ_Input
-  579 000002D4 490C            LDR              R1, =GPIO_PORTJ_AHB_DATA_R ;Car
+  587 000002F2         ; Função PortJ_Input
+  588 000002F2         ; Parâmetro de entrada: Não tem
+  589 000002F2         ; Parâmetro de saída: R0 --> o valor da leitura
+  590 000002F2         PortJ_Input
+  591 000002F2 490C            LDR              R1, =GPIO_PORTJ_AHB_DATA_R ;Car
                                                             rega o valor do off
                                                             set do data registe
                                                             r
-  580 000002D6 6808            LDR              R0, [R1]    ;Lê no barramento 
+  592 000002F4 6808            LDR              R0, [R1]    ;Lê no barramento 
                                                             de dados dos pinos 
                                                             [J1-J0]
-  581 000002D8 4770            BX               LR          ;Retorno
-  582 000002DA         
-  583 000002DA         
-  584 000002DA         
-  585 000002DA         
-  586 000002DA         
-  587 000002DA 00 00           ALIGN                        ; garante que o fim
+  593 000002F6 4770            BX               LR          ;Retorno
+  594 000002F8         
+  595 000002F8         
+  596 000002F8         
+  597 000002F8         
+  598 000002F8         
+  599 000002F8                 ALIGN                        ; garante que o fim
                                                              da seção está a
                                                             linhada 
-  588 000002DC                 END                          ; fim do arquivo
+  600 000002F8                 END                          ; fim do arquivo
               400FE608 
               400FEA08 
               40058000 
@@ -1156,6 +1168,12 @@ Command Line: --debug --xref --diag_suppress=9931,A1950W --cpu=Cortex-M4.fp.sp
 --depend=.\objects\gpio.d -o.\objects\gpio.o -IC:\Users\IanIshikawa\AppData\Loc
 al\Arm\Packs\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C129 --predefine="__EVAL SET
 A 1" --predefine="__UVISION_VERSION SETA 541" --predefine="TM4C1294NCPDT SETA 1
+
+
+
+ARM Macro Assembler    Page 19 
+
+
 " --list=.\listings\gpio.lst gpio.s
 
 
@@ -1179,15 +1197,15 @@ Symbol: DSA_DSB_Output
    Uses
       At line 220 in file gpio.s
 Comment: DSA_DSB_Output used once
-DecimalTo7Seg 000001BE
+DecimalTo7Seg 000001C4
 
 Symbol: DecimalTo7Seg
    Definitions
-      At line 477 in file gpio.s
+      At line 478 in file gpio.s
    Uses
       At line 219 in file gpio.s
-      At line 454 in file gpio.s
-      At line 462 in file gpio.s
+      At line 455 in file gpio.s
+      At line 463 in file gpio.s
 
 GPIO_Init 00000000
 
@@ -1204,16 +1222,16 @@ Symbol: PortA_Output
       At line 398 in file gpio.s
    Uses
       At line 214 in file gpio.s
-      At line 485 in file gpio.s
-      At line 495 in file gpio.s
-      At line 504 in file gpio.s
-      At line 513 in file gpio.s
-      At line 522 in file gpio.s
-      At line 531 in file gpio.s
-      At line 540 in file gpio.s
-      At line 549 in file gpio.s
+      At line 489 in file gpio.s
+      At line 498 in file gpio.s
+      At line 508 in file gpio.s
+      At line 518 in file gpio.s
+      At line 528 in file gpio.s
+      At line 538 in file gpio.s
+      At line 548 in file gpio.s
       At line 558 in file gpio.s
-      At line 566 in file gpio.s
+      At line 568 in file gpio.s
+      At line 577 in file gpio.s
 
 PortB_Output 0000016A
 
@@ -1228,14 +1246,14 @@ Symbol: PortB_Output
 ARM Macro Assembler    Page 2 Alphabetic symbol ordering
 Relocatable symbols
 
-      At line 456 in file gpio.s
-      At line 464 in file gpio.s
+      At line 457 in file gpio.s
+      At line 465 in file gpio.s
 
-PortJ_Input 000002D4
+PortJ_Input 000002F2
 
 Symbol: PortJ_Input
    Definitions
-      At line 578 in file gpio.s
+      At line 590 in file gpio.s
    Uses
       At line 218 in file gpio.s
 Comment: PortJ_Input used once
@@ -1255,15 +1273,15 @@ Symbol: PortQ_Output
    Uses
       At line 216 in file gpio.s
       At line 487 in file gpio.s
-      At line 497 in file gpio.s
-      At line 506 in file gpio.s
-      At line 515 in file gpio.s
-      At line 524 in file gpio.s
-      At line 533 in file gpio.s
-      At line 542 in file gpio.s
-      At line 551 in file gpio.s
+      At line 500 in file gpio.s
+      At line 510 in file gpio.s
+      At line 520 in file gpio.s
+      At line 530 in file gpio.s
+      At line 540 in file gpio.s
+      At line 550 in file gpio.s
       At line 560 in file gpio.s
-      At line 568 in file gpio.s
+      At line 570 in file gpio.s
+      At line 579 in file gpio.s
 
 aguarda 00000018
 
@@ -1273,19 +1291,19 @@ Symbol: aguarda
    Uses
       At line 250 in file gpio.s
 Comment: aguarda used once
-cmp1 000001DC
+cmp1 000001E4
 
 Symbol: cmp1
    Definitions
-      At line 489 in file gpio.s
+      At line 491 in file gpio.s
    Uses
-      At line 483 in file gpio.s
+      At line 484 in file gpio.s
 Comment: cmp1 used once
-cmp2 000001F8
+cmp2 00000202
 
 Symbol: cmp2
    Definitions
-      At line 499 in file gpio.s
+      At line 502 in file gpio.s
    Uses
 
 
@@ -1293,65 +1311,65 @@ Symbol: cmp2
 ARM Macro Assembler    Page 3 Alphabetic symbol ordering
 Relocatable symbols
 
-      At line 493 in file gpio.s
+      At line 495 in file gpio.s
 Comment: cmp2 used once
-cmp3 00000214
+cmp3 00000220
 
 Symbol: cmp3
    Definitions
-      At line 508 in file gpio.s
+      At line 512 in file gpio.s
    Uses
-      At line 502 in file gpio.s
+      At line 505 in file gpio.s
 Comment: cmp3 used once
-cmp4 00000230
+cmp4 0000023E
 
 Symbol: cmp4
    Definitions
-      At line 517 in file gpio.s
+      At line 522 in file gpio.s
    Uses
-      At line 511 in file gpio.s
+      At line 515 in file gpio.s
 Comment: cmp4 used once
-cmp5 0000024C
+cmp5 0000025C
 
 Symbol: cmp5
    Definitions
-      At line 526 in file gpio.s
+      At line 532 in file gpio.s
    Uses
-      At line 520 in file gpio.s
+      At line 525 in file gpio.s
 Comment: cmp5 used once
-cmp6 00000268
+cmp6 0000027A
 
 Symbol: cmp6
    Definitions
-      At line 535 in file gpio.s
+      At line 542 in file gpio.s
    Uses
-      At line 529 in file gpio.s
+      At line 535 in file gpio.s
 Comment: cmp6 used once
-cmp7 00000284
+cmp7 00000298
 
 Symbol: cmp7
    Definitions
-      At line 544 in file gpio.s
+      At line 552 in file gpio.s
    Uses
-      At line 538 in file gpio.s
+      At line 545 in file gpio.s
 Comment: cmp7 used once
-cmp8 000002A0
+cmp8 000002B6
 
 Symbol: cmp8
    Definitions
-      At line 553 in file gpio.s
+      At line 562 in file gpio.s
    Uses
-      At line 547 in file gpio.s
+      At line 555 in file gpio.s
 Comment: cmp8 used once
-cmp9 000002BC
+cmp9 000002D4
 
 Symbol: cmp9
    Definitions
-      At line 562 in file gpio.s
+      At line 572 in file gpio.s
    Uses
-      At line 556 in file gpio.s
+      At line 565 in file gpio.s
 Comment: cmp9 used once
-endDecimalTo7Seg 000002D2
+endDecimalTo7Seg 000002EC
 
 
 
@@ -1361,17 +1379,17 @@ Relocatable symbols
 
 Symbol: endDecimalTo7Seg
    Definitions
-      At line 570 in file gpio.s
+      At line 581 in file gpio.s
    Uses
-      At line 488 in file gpio.s
-      At line 498 in file gpio.s
-      At line 507 in file gpio.s
-      At line 516 in file gpio.s
-      At line 525 in file gpio.s
-      At line 534 in file gpio.s
-      At line 543 in file gpio.s
-      At line 552 in file gpio.s
+      At line 490 in file gpio.s
+      At line 501 in file gpio.s
+      At line 511 in file gpio.s
+      At line 521 in file gpio.s
+      At line 531 in file gpio.s
+      At line 541 in file gpio.s
+      At line 551 in file gpio.s
       At line 561 in file gpio.s
+      At line 571 in file gpio.s
 
 20 symbols
 
@@ -2252,7 +2270,7 @@ Symbol: GPIO_PORTJ_AHB_DATA_R
    Definitions
       At line 27 in file gpio.s
    Uses
-      At line 579 in file gpio.s
+      At line 591 in file gpio.s
 Comment: GPIO_PORTJ_AHB_DATA_R used once
 GPIO_PORTJ_AHB_DEN_R 4006051C
 
@@ -2994,7 +3012,7 @@ Symbol: SysTick_Wait1ms
    Definitions
       At line 222 in file gpio.s
    Uses
-      At line 459 in file gpio.s
+      At line 460 in file gpio.s
 Comment: SysTick_Wait1ms used once
 1 symbol
 534 symbols in table
