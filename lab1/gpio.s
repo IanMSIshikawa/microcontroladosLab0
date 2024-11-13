@@ -452,6 +452,7 @@ DSA_DSB_Output
 	
 ; Usa display 0
 	PUSH{LR}
+	PUSH{R1}
 	BL DecimalTo7Seg
 	MOV R0, #2_100000
 	BL PortB_Output
@@ -459,10 +460,14 @@ DSA_DSB_Output
 	MOV R0, #1
 	BL SysTick_Wait1ms
 ; Usa display B
+	POP{R1}
 	MOV R0, R1
 	BL DecimalTo7Seg
 	MOV R0, #2_10000
 	BL PortB_Output
+; Espera poucos ms
+	MOV R0, #1
+	BL SysTick_Wait1ms
 
 	
 

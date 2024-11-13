@@ -60,6 +60,7 @@ Start
 	BL GPIO_Init                 ;Chama a subrotina que inicializa os GPIO
 	
 	MOV R0, #0
+	MOV R1, #0
 	MOV R7, #0
 	LDR R3, =500
 	MOV R8, #0
@@ -69,23 +70,11 @@ MainLoop
 ; ****************************************
 	
 wait1s
-	;Configura display A
-	MOV R0, R9
-	BL DecimalTo7Seg
-	MOV R0, #2_100000
-	BL PortB_Output 
-	
-	MOV R0, #1
-	BL SysTick_Wait1ms
-	
-	;Configura display B
+	;Configura display A, B
+	MOV R1, R9
 	MOV R0, R8
-	BL DecimalTo7Seg
-	MOV R0, #2_10000
-	BL PortB_Output 
-	
-	MOV R0, #1
-	BL SysTick_Wait1ms
+
+	BL DSA_DSB_Output
 	
 	;Contador para esperar 1s
 	ADD R7, R7, #1
