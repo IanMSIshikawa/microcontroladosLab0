@@ -47,6 +47,8 @@
 		IMPORT  PortA_Output
 		IMPORT  PortB_Output
 		IMPORT  PortJ_Input
+		IMPORT DecimalTo7Seg
+		IMPORT DSA_DSB_Output
 
 
 ; -------------------------------------------------------------------------------
@@ -58,8 +60,19 @@ Start
 
 MainLoop
 ; ****************************************
-; Escrever código que lê o estado da chave, se ela estiver desativada apaga o LED
-; Se estivar ativada chama a subrotina Pisca_LED
+	MOV R0, #0
+	MOV R10, #0
+	
+	
+	MOV R0, R10
+	BL DecimalTo7Seg
+	MOV R0, #2_10000
+	BL PortB_Output 
+	MOV R0, #1000
+	BL SysTick_Wait1ms
+	ADD R10, R10, #1
+	
+	
 ; ****************************************
 	B MainLoop
 

@@ -216,6 +216,10 @@ GPIO_PUR_R     	EQU    0x00000510
 		EXPORT PortQ_Output			; Permite chamar PortQ_Output de outro arquivo
 		EXPORT PortP_Output			; Permite chamar PortP_Output de outro arquivo	
 		EXPORT PortJ_Input          ; Permite chamar PortJ_Input de outro arquivo
+		EXPORT DecimalTo7Seg
+		EXPORT DSA_DSB_Output
+			
+		IMPORT SysTick_Wait1ms		;Permite chamar SysTick_Wait1ms no arquivo
 									
 
 ;--------------------------------------------------------------------------------
@@ -437,8 +441,135 @@ PortP_Output
 	BIC R2, #2_00100000                     ;Primeiro limpamos os dois bits do lido da porta R2 = R2 & 2_00100000
 	ORR R0, R0, R2                          ;Fazer o OR do lido pela porta com o parâmetro de entrada
 	STR R0, [R1]                            ;Escreve na porta F o barramento de dados dos pinos F4 e F0
-	BX LR	
+	BX LR
 
+; -------------------------------------------------------------------------------
+; Função DSA_DSB_Output
+; Parâmetro de entrada: r0 -> valor a ser exibido no Display A
+;						r1 -> valor a ser exibido no Display B
+; Parâmetro de saída: Não tem
+DSA_DSB_Output
+	
+; Usa display 0
+	BL DecimalTo7Seg
+	MOV R0, #2_10000
+	BL PortB_Output
+; Espera poucos ms
+	MOV R0, #1
+	BL SysTick_Wait1ms
+; Usa display B
+	MOV R0, R1
+	BL DecimalTo7Seg
+	MOV R0, #2_100000
+	BL PortB_Output
+
+	
+
+	
+	BX LR									;Retorno
+
+; -------------------------------------------------------------------------------
+; COnverte os números passados por parâmetro para valores usados no display de 7 segmentos
+; Recebe o valor e seta as portas PQ0 - PQ3 e PA4 - PA7 responsáveis pelo display
+; Usa os registradores R2 e R10
+; Parâmetro de entrada: r0 -> valor a ser convertido para 7 segmentos
+; Parâmetro de saída: não tem
+DecimalTo7Seg
+	
+	MOV R10, R0
+;Seta display quando o valor passado for 0
+	MOV R2, #0
+	CMP R10, R2
+	BNE cmp1
+	MOV R0, #2_11110000
+	BL PortA_Output
+	MOV R0, #2_11
+	BL PortQ_Output
+	BL endDecimalTo7Seg
+cmp1
+;Seta display quando o valor passado for 1
+	MOV R2, #1
+	CMP R10, R2
+	BNE cmp2
+	MOV R0, #2_01100000
+	BL PortA_Output
+	MOV R0, #0
+	BL PortQ_Output
+	BL endDecimalTo7Seg
+cmp2
+	MOV R2, #2
+	CMP R10, R2
+	BNE cmp3
+	MOV R0, #2_10110000
+	BL PortA_Output
+	MOV R0, #2_101
+	BL PortQ_Output	
+	BL endDecimalTo7Seg
+cmp3
+	MOV R2, #3
+	CMP R10, R2
+	BNE cmp4
+	MOV R0, #2_11110000
+	BL PortA_Output
+	MOV R0, #2_100
+	BL PortQ_Output	
+	BL endDecimalTo7Seg
+cmp4
+	MOV R2, #4
+	CMP R10, R2
+	BNE cmp5
+	MOV R0, #2_01100000
+	BL PortA_Output
+	MOV R0, #2_110
+	BL PortQ_Output	
+	BL endDecimalTo7Seg
+cmp5
+	MOV R2, #5
+	CMP R10, R2
+	BNE cmp6
+	MOV R0, #2_11010000
+	BL PortA_Output
+	MOV R0, #2_111
+	BL PortQ_Output	
+	BL endDecimalTo7Seg
+cmp6
+	MOV R2, #6
+	CMP R10, R2
+	BNE cmp7
+	MOV R0, #2_11010000
+	BL PortA_Output
+	MOV R0, #2_110
+	BL PortQ_Output		
+	BL endDecimalTo7Seg
+cmp7
+	MOV R2, #7
+	CMP R10, R2
+	BNE cmp8
+	MOV R0, #2_01110000
+	BL PortA_Output
+	MOV R0, #2_000
+	BL PortQ_Output		
+	BL endDecimalTo7Seg
+cmp8
+	MOV R2, #8
+	CMP R10, R2
+	BNE cmp9
+	MOV R0, #2_11110000
+	BL PortA_Output
+	MOV R0, #2_111
+	BL PortQ_Output		
+	BL endDecimalTo7Seg
+cmp9
+	MOV R2, #9
+	CMP R10, R2
+	MOV R0, #2_11110000
+	BL PortA_Output
+	MOV R0, #2_110
+	BL PortQ_Output		
+	
+endDecimalTo7Seg
+	BX LR ;Retorno
+								
 
 ; -------------------------------------------------------------------------------
 ; Função PortJ_Input
@@ -448,6 +579,8 @@ PortJ_Input
 	LDR	R1, =GPIO_PORTJ_AHB_DATA_R		    ;Carrega o valor do offset do data register
 	LDR R0, [R1]                            ;Lê no barramento de dados dos pinos [J1-J0]
 	BX LR									;Retorno
+	
+
 
 
 

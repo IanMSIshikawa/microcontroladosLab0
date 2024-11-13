@@ -74,55 +74,76 @@ ARM Macro Assembler    Page 2
    47 00000000                 IMPORT           PortA_Output
    48 00000000                 IMPORT           PortB_Output
    49 00000000                 IMPORT           PortJ_Input
-   50 00000000         
-   51 00000000         
-   52 00000000         ; ------------------------------------------------------
+   50 00000000                 IMPORT           DecimalTo7Seg
+   51 00000000                 IMPORT           DSA_DSB_Output
+   52 00000000         
+   53 00000000         
+   54 00000000         ; ------------------------------------------------------
                        -------------------------
-   53 00000000         ; Função main()
-   54 00000000         Start
-   55 00000000 F7FF FFFE       BL               PLL_Init    ;Chama a subrotina 
+   55 00000000         ; Função main()
+   56 00000000         Start
+   57 00000000 F7FF FFFE       BL               PLL_Init    ;Chama a subrotina 
                                                             para alterar o cloc
                                                             k do microcontrolad
                                                             or para 80MHz
-   56 00000004 F7FF FFFE       BL               SysTick_Init ;Chama a subrotina
+   58 00000004 F7FF FFFE       BL               SysTick_Init ;Chama a subrotina
                                                              para inicializar o
                                                              SysTick
-   57 00000008 F7FF FFFE       BL               GPIO_Init   ;Chama a subrotina 
+   59 00000008 F7FF FFFE       BL               GPIO_Init   ;Chama a subrotina 
                                                             que inicializa os G
                                                             PIO
-   58 0000000C         
-   59 0000000C         MainLoop
-   60 0000000C         ; ****************************************
-   61 0000000C         ; Escrever código que lê o estado da chave, se ela estiv
-                       er desativada apaga o LED
-   62 0000000C         ; Se estivar ativada chama a subrotina Pisca_LED
-   63 0000000C         ; ****************************************
-   64 0000000C E7FE            B                MainLoop
-   65 0000000E         
-   66 0000000E         ;-------------------------------------------------------
+   60 0000000C         
+   61 0000000C         MainLoop
+   62 0000000C         ; ****************************************
+   63 0000000C F04F 0000       MOV              R0, #0
+   64 00000010 F04F 0A00       MOV              R10, #0
+   65 00000014         
+   66 00000014         
+   67 00000014 F04F 0010       MOV              R0, #2_10000 ; APAGAR
+   68 00000018 F7FF FFFE       BL               PortB_Output ; APAGAR
+   69 0000001C         
+   70 0000001C 4650            MOV              R0, R10
+   71 0000001E F7FF FFFE       BL               DecimalTo7Seg
+   72 00000022 F04F 0010       MOV              R0, #2_10000
+   73 00000026 F7FF FFFE       BL               PortB_Output
+   74 0000002A F44F 707A       MOV              R0, #1000
+   75 0000002E F7FF FFFE       BL               SysTick_Wait1ms
+   76 00000032 F10A 0A01       ADD              R10, R10, #1
+   77 00000036         
+   78 00000036         
+   79 00000036         ; ****************************************
+   80 00000036 E7E9            B                MainLoop
+   81 00000038         
+   82 00000038         ;-------------------------------------------------------
                        -------------------------
-   67 0000000E         ; Função Pisca_LED
-   68 0000000E         ; Parâmetro de entrada: Não tem
-   69 0000000E         ; Parâmetro de saída: Não tem
-   70 0000000E         Pisca_LED
-   71 0000000E         ; ****************************************
-   72 0000000E         ; Escrever função que acende o LED, espera 1 segundo, ap
+   83 00000038         ; Função Pisca_LED
+   84 00000038         ; Parâmetro de entrada: Não tem
+   85 00000038         ; Parâmetro de saída: Não tem
+   86 00000038         Pisca_LED
+   87 00000038         ; ****************************************
+   88 00000038         ; Escrever função que acende o LED, espera 1 segundo, ap
                        aga o LED e espera 1 s
-   73 0000000E         ; Esta função deve chamar a rotina SysTick_Wait1ms com o
+   89 00000038         ; Esta função deve chamar a rotina SysTick_Wait1ms com o
                         parâmetro de entrada em R0
-   74 0000000E         ; ****************************************
-   75 0000000E         
-   76 0000000E         ; ------------------------------------------------------
+   90 00000038         ; ****************************************
+   91 00000038         
+   92 00000038         ; ------------------------------------------------------
+
+
+
+ARM Macro Assembler    Page 3 
+
+
                        --------------------------------------------------------
                        -----------
-   77 0000000E         ; Fim do Arquivo
-   78 0000000E         ; ------------------------------------------------------
+   93 00000038         ; Fim do Arquivo
+   94 00000038         ; ------------------------------------------------------
                        --------------------------------------------------------
                        ----------- 
-   79 0000000E 00 00           ALIGN                        ;Garante que o fim 
+   95 00000038                 ALIGN                        ;Garante que o fim 
                                                             da seção está alinh
                                                             ada 
-   80 00000010                 END                          ;Fim do arquivo
+   96 00000038                 END                          ;Fim do arquivo
 Command Line: --debug --xref --diag_suppress=9931,A1950W --cpu=Cortex-M4.fp.sp 
 --depend=.\objects\main.d -o.\objects\main.o -IC:\Users\IanIshikawa\AppData\Loc
 al\Arm\Packs\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C129 --predefine="__EVAL SET
@@ -161,15 +182,15 @@ MainLoop 0000000C
 
 Symbol: MainLoop
    Definitions
-      At line 59 in file main.s
+      At line 61 in file main.s
    Uses
-      At line 64 in file main.s
+      At line 80 in file main.s
 Comment: MainLoop used once
-Pisca_LED 0000000E
+Pisca_LED 00000038
 
 Symbol: Pisca_LED
    Definitions
-      At line 70 in file main.s
+      At line 86 in file main.s
    Uses
       None
 Comment: Pisca_LED unused
@@ -177,7 +198,7 @@ Start 00000000
 
 Symbol: Start
    Definitions
-      At line 54 in file main.s
+      At line 56 in file main.s
    Uses
       At line 35 in file main.s
 Comment: Start used once
@@ -188,13 +209,29 @@ Comment: Start used once
 ARM Macro Assembler    Page 1 Alphabetic symbol ordering
 External symbols
 
+DSA_DSB_Output 00000000
+
+Symbol: DSA_DSB_Output
+   Definitions
+      At line 51 in file main.s
+   Uses
+      None
+Comment: DSA_DSB_Output unused
+DecimalTo7Seg 00000000
+
+Symbol: DecimalTo7Seg
+   Definitions
+      At line 50 in file main.s
+   Uses
+      At line 71 in file main.s
+Comment: DecimalTo7Seg used once
 GPIO_Init 00000000
 
 Symbol: GPIO_Init
    Definitions
       At line 44 in file main.s
    Uses
-      At line 57 in file main.s
+      At line 59 in file main.s
 Comment: GPIO_Init used once
 PLL_Init 00000000
 
@@ -202,7 +239,7 @@ Symbol: PLL_Init
    Definitions
       At line 41 in file main.s
    Uses
-      At line 55 in file main.s
+      At line 57 in file main.s
 Comment: PLL_Init used once
 PortA_Output 00000000
 
@@ -218,8 +255,9 @@ Symbol: PortB_Output
    Definitions
       At line 48 in file main.s
    Uses
-      None
-Comment: PortB_Output unused
+      At line 68 in file main.s
+      At line 73 in file main.s
+
 PortJ_Input 00000000
 
 Symbol: PortJ_Input
@@ -229,6 +267,12 @@ Symbol: PortJ_Input
       None
 Comment: PortJ_Input unused
 PortP_Output 00000000
+
+
+
+
+ARM Macro Assembler    Page 2 Alphabetic symbol ordering
+External symbols
 
 Symbol: PortP_Output
    Definitions
@@ -247,16 +291,10 @@ Comment: PortQ_Output unused
 SysTick_Init 00000000
 
 Symbol: SysTick_Init
-
-
-
-ARM Macro Assembler    Page 2 Alphabetic symbol ordering
-External symbols
-
    Definitions
       At line 42 in file main.s
    Uses
-      At line 56 in file main.s
+      At line 58 in file main.s
 Comment: SysTick_Init used once
 SysTick_Wait1ms 00000000
 
@@ -264,7 +302,7 @@ Symbol: SysTick_Wait1ms
    Definitions
       At line 43 in file main.s
    Uses
-      None
-Comment: SysTick_Wait1ms unused
-9 symbols
-348 symbols in table
+      At line 75 in file main.s
+Comment: SysTick_Wait1ms used once
+11 symbols
+350 symbols in table
