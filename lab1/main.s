@@ -86,22 +86,22 @@ wait1s
 	MOV R0, #9
 	CMP R9, R0
 	MOV R7, #0
-	BNE continua
+	BNE incrementaDS2
 	MOV R9, #0
 	;Verifica se DS1 chegou a 9
 	MOV R0, #9
 	CMP R8, R0
-	BNE continua2
+	BNE incrementaDS1
 	MOV R8, #0
 	B wait1s
 	
 	
 	
-continua	
+incrementaDS2	
 	ADD R9, R9, #1
 	B wait1s
 	
-continua2 
+incrementaDS1 
 	ADD R8, R8, #1
 
 	
