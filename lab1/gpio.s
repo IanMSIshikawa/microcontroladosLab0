@@ -453,7 +453,7 @@ DSA_DSB_Output
 ; Usa display 0
 	PUSH{LR}
 	BL DecimalTo7Seg
-	MOV R0, #2_10000
+	MOV R0, #2_100000
 	BL PortB_Output
 ; Espera poucos ms
 	MOV R0, #1
@@ -461,7 +461,7 @@ DSA_DSB_Output
 ; Usa display B
 	MOV R0, R1
 	BL DecimalTo7Seg
-	MOV R0, #2_100000
+	MOV R0, #2_10000
 	BL PortB_Output
 
 	
@@ -493,90 +493,90 @@ cmp1
 	MOV R2, #1
 	CMP R10, R2
 	BNE cmp2
-	MOV R0, #2_01100000
+	MOV R0, #2_0110
 	PUSH{LR}
-	BL PortA_Output
-	MOV R0, #0
 	BL PortQ_Output
+	MOV R0, #0
+	BL PortA_Output
 	BL endDecimalTo7Seg
 cmp2
 	MOV R2, #2
 	CMP R10, R2
 	BNE cmp3
-	MOV R0, #2_10110000
+	MOV R0, #2_1011
 	PUSH{LR}
-	BL PortA_Output
-	MOV R0, #2_101
-	BL PortQ_Output	
+	BL PortQ_Output
+	MOV R0, #2_1010000
+	BL PortA_Output	
 	BL endDecimalTo7Seg
 cmp3
 	MOV R2, #3
 	CMP R10, R2
 	BNE cmp4
-	MOV R0, #2_11110000
+	MOV R0, #2_1111
 	PUSH{LR}
-	BL PortA_Output
-	MOV R0, #2_100
-	BL PortQ_Output	
+	BL PortQ_Output
+	MOV R0, #2_1000000
+	BL PortA_Output	
 	BL endDecimalTo7Seg
 cmp4
 	MOV R2, #4
 	CMP R10, R2
 	BNE cmp5
-	MOV R0, #2_01100000
+	MOV R0, #2_0110
 	PUSH{LR}
-	BL PortA_Output
-	MOV R0, #2_110
-	BL PortQ_Output	
+	BL PortQ_Output
+	MOV R0, #2_1100000
+	BL PortA_Output	
 	BL endDecimalTo7Seg
 cmp5
 	MOV R2, #5
 	CMP R10, R2
 	BNE cmp6
-	MOV R0, #2_11010000
+	MOV R0, #2_1101
 	PUSH{LR}
-	BL PortA_Output
-	MOV R0, #2_111
-	BL PortQ_Output	
+	BL PortQ_Output
+	MOV R0, #2_1100000
+	BL PortA_Output	
 	BL endDecimalTo7Seg
 cmp6
 	MOV R2, #6
 	CMP R10, R2
 	BNE cmp7
-	MOV R0, #2_11010000
+	MOV R0, #2_1101
 	PUSH{LR}
-	BL PortA_Output
-	MOV R0, #2_110
-	BL PortQ_Output		
+	BL PortQ_Output
+	MOV R0, #2_1110000
+	BL PortA_Output		
 	BL endDecimalTo7Seg
 cmp7
 	MOV R2, #7
 	CMP R10, R2
 	BNE cmp8
-	MOV R0, #2_01110000
+	MOV R0, #2_0111
 	PUSH{LR}
-	BL PortA_Output
-	MOV R0, #2_000
-	BL PortQ_Output		
+	BL PortQ_Output
+	MOV R0, #2_0000000
+	BL PortA_Output		
 	BL endDecimalTo7Seg
 cmp8
 	MOV R2, #8
 	CMP R10, R2
 	BNE cmp9
-	MOV R0, #2_11110000
+	MOV R0, #2_1111
 	PUSH{LR}
-	BL PortA_Output
-	MOV R0, #2_111
-	BL PortQ_Output		
+	BL PortQ_Output
+	MOV R0, #2_1110000
+	BL PortA_Output		
 	BL endDecimalTo7Seg
 cmp9
 	MOV R2, #9
 	CMP R10, R2
-	MOV R0, #2_11110000
+	MOV R0, #2_1111
 	PUSH{LR}
-	BL PortA_Output
-	MOV R0, #2_110
-	BL PortQ_Output		
+	BL PortQ_Output
+	MOV R0, #2_1100000
+	BL PortA_Output		
 	
 endDecimalTo7Seg
 	POP{LR}

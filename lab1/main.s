@@ -40,7 +40,8 @@
 									; função <func>
 		IMPORT  PLL_Init
 		IMPORT  SysTick_Init
-		IMPORT  SysTick_Wait1ms			
+		IMPORT  SysTick_Wait1ms
+		IMPORT  SysTick_Wait1us			
 		IMPORT  GPIO_Init
 		IMPORT  PortP_Output
 		IMPORT  PortQ_Output
@@ -59,19 +60,41 @@ Start
 	BL GPIO_Init                 ;Chama a subrotina que inicializa os GPIO
 	
 	MOV R0, #0
-	MOV R10, #0
+	MOV R7, #0
+	LDR R3, =500
+	MOV R8, #0
+	MOV R9, #0
+	
 MainLoop
 ; ****************************************
 	
+wait1s
+	;Configura display A
+	MOV R0, R9
+	BL DecimalTo7Seg
+	MOV R0, #2_100000
+	BL PortB_Output 
 	
+	MOV R0, #1
+	BL SysTick_Wait1ms
 	
-	MOV R0, R10
+	;Configura display B
+	MOV R0, R8
 	BL DecimalTo7Seg
 	MOV R0, #2_10000
 	BL PortB_Output 
-	MOV R0, #1000
+	
+	MOV R0, #1
 	BL SysTick_Wait1ms
-	ADD R10, R10, #1
+	
+	;Contador para esperar 1s
+	ADD R7, R7, #1
+	
+	CMP R7, R3
+	BNE wait1s
+	
+	ADD R9, R9, #1
+	MOV R7, #0
 	
 	
 ; ****************************************

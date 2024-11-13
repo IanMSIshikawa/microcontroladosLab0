@@ -1027,17 +1027,17 @@ ARM Macro Assembler    Page 16
   493 000001E4 F04F 0201       MOV              R2, #1
   494 000001E8 4592            CMP              R10, R2
   495 000001EA D10A            BNE              cmp2
-  496 000001EC F04F 0060       MOV              R0, #2_01100000
+  496 000001EC F04F 0006       MOV              R0, #2_0110
   497 000001F0 B500            PUSH{LR}
-  498 000001F2 F7FF FFFE       BL               PortA_Output
+  498 000001F2 F7FF FFFE       BL               PortQ_Output
   499 000001F6 F04F 0000       MOV              R0, #0
-  500 000001FA F7FF FFFE       BL               PortQ_Output
+  500 000001FA F7FF FFFE       BL               PortA_Output
   501 000001FE F000 F875       BL               endDecimalTo7Seg
   502 00000202         cmp2
   503 00000202 F04F 0202       MOV              R2, #2
   504 00000206 4592            CMP              R10, R2
   505 00000208 D10A            BNE              cmp3
-  506 0000020A F04F 00B0       MOV              R0, #2_10110000
+  506 0000020A F04F 000B       MOV              R0, #2_1011
 
 
 
@@ -1045,59 +1045,59 @@ ARM Macro Assembler    Page 17
 
 
   507 0000020E B500            PUSH{LR}
-  508 00000210 F7FF FFFE       BL               PortA_Output
-  509 00000214 F04F 0005       MOV              R0, #2_101
-  510 00000218 F7FF FFFE       BL               PortQ_Output
+  508 00000210 F7FF FFFE       BL               PortQ_Output
+  509 00000214 F04F 0050       MOV              R0, #2_1010000
+  510 00000218 F7FF FFFE       BL               PortA_Output
   511 0000021C F000 F866       BL               endDecimalTo7Seg
   512 00000220         cmp3
   513 00000220 F04F 0203       MOV              R2, #3
   514 00000224 4592            CMP              R10, R2
   515 00000226 D10A            BNE              cmp4
-  516 00000228 F04F 00F0       MOV              R0, #2_11110000
+  516 00000228 F04F 000F       MOV              R0, #2_1111
   517 0000022C B500            PUSH{LR}
-  518 0000022E F7FF FFFE       BL               PortA_Output
-  519 00000232 F04F 0004       MOV              R0, #2_100
-  520 00000236 F7FF FFFE       BL               PortQ_Output
+  518 0000022E F7FF FFFE       BL               PortQ_Output
+  519 00000232 F04F 0040       MOV              R0, #2_1000000
+  520 00000236 F7FF FFFE       BL               PortA_Output
   521 0000023A F000 F857       BL               endDecimalTo7Seg
   522 0000023E         cmp4
   523 0000023E F04F 0204       MOV              R2, #4
   524 00000242 4592            CMP              R10, R2
   525 00000244 D10A            BNE              cmp5
-  526 00000246 F04F 0060       MOV              R0, #2_01100000
+  526 00000246 F04F 0006       MOV              R0, #2_0110
   527 0000024A B500            PUSH{LR}
-  528 0000024C F7FF FFFE       BL               PortA_Output
-  529 00000250 F04F 0006       MOV              R0, #2_110
-  530 00000254 F7FF FFFE       BL               PortQ_Output
+  528 0000024C F7FF FFFE       BL               PortQ_Output
+  529 00000250 F04F 0060       MOV              R0, #2_1100000
+  530 00000254 F7FF FFFE       BL               PortA_Output
   531 00000258 F000 F848       BL               endDecimalTo7Seg
   532 0000025C         cmp5
   533 0000025C F04F 0205       MOV              R2, #5
   534 00000260 4592            CMP              R10, R2
   535 00000262 D10A            BNE              cmp6
-  536 00000264 F04F 00D0       MOV              R0, #2_11010000
+  536 00000264 F04F 000D       MOV              R0, #2_1101
   537 00000268 B500            PUSH{LR}
-  538 0000026A F7FF FFFE       BL               PortA_Output
-  539 0000026E F04F 0007       MOV              R0, #2_111
-  540 00000272 F7FF FFFE       BL               PortQ_Output
+  538 0000026A F7FF FFFE       BL               PortQ_Output
+  539 0000026E F04F 0060       MOV              R0, #2_1100000
+  540 00000272 F7FF FFFE       BL               PortA_Output
   541 00000276 F000 F839       BL               endDecimalTo7Seg
   542 0000027A         cmp6
   543 0000027A F04F 0206       MOV              R2, #6
   544 0000027E 4592            CMP              R10, R2
   545 00000280 D10A            BNE              cmp7
-  546 00000282 F04F 00D0       MOV              R0, #2_11010000
+  546 00000282 F04F 000D       MOV              R0, #2_1101
   547 00000286 B500            PUSH{LR}
-  548 00000288 F7FF FFFE       BL               PortA_Output
-  549 0000028C F04F 0006       MOV              R0, #2_110
-  550 00000290 F7FF FFFE       BL               PortQ_Output
+  548 00000288 F7FF FFFE       BL               PortQ_Output
+  549 0000028C F04F 0070       MOV              R0, #2_1110000
+  550 00000290 F7FF FFFE       BL               PortA_Output
   551 00000294 F000 F82A       BL               endDecimalTo7Seg
   552 00000298         cmp7
   553 00000298 F04F 0207       MOV              R2, #7
   554 0000029C 4592            CMP              R10, R2
   555 0000029E D10A            BNE              cmp8
-  556 000002A0 F04F 0070       MOV              R0, #2_01110000
+  556 000002A0 F04F 0007       MOV              R0, #2_0111
   557 000002A4 B500            PUSH{LR}
-  558 000002A6 F7FF FFFE       BL               PortA_Output
-  559 000002AA F04F 0000       MOV              R0, #2_000
-  560 000002AE F7FF FFFE       BL               PortQ_Output
+  558 000002A6 F7FF FFFE       BL               PortQ_Output
+  559 000002AA F04F 0000       MOV              R0, #2_0000000
+  560 000002AE F7FF FFFE       BL               PortA_Output
   561 000002B2 F000 F81B       BL               endDecimalTo7Seg
   562 000002B6         cmp8
   563 000002B6 F04F 0208       MOV              R2, #8
@@ -1109,20 +1109,20 @@ ARM Macro Assembler    Page 17
 ARM Macro Assembler    Page 18 
 
 
-  566 000002BE F04F 00F0       MOV              R0, #2_11110000
+  566 000002BE F04F 000F       MOV              R0, #2_1111
   567 000002C2 B500            PUSH{LR}
-  568 000002C4 F7FF FFFE       BL               PortA_Output
-  569 000002C8 F04F 0007       MOV              R0, #2_111
-  570 000002CC F7FF FFFE       BL               PortQ_Output
+  568 000002C4 F7FF FFFE       BL               PortQ_Output
+  569 000002C8 F04F 0070       MOV              R0, #2_1110000
+  570 000002CC F7FF FFFE       BL               PortA_Output
   571 000002D0 F000 F80C       BL               endDecimalTo7Seg
   572 000002D4         cmp9
   573 000002D4 F04F 0209       MOV              R2, #9
   574 000002D8 4592            CMP              R10, R2
-  575 000002DA F04F 00F0       MOV              R0, #2_11110000
+  575 000002DA F04F 000F       MOV              R0, #2_1111
   576 000002DE B500            PUSH{LR}
-  577 000002E0 F7FF FFFE       BL               PortA_Output
-  578 000002E4 F04F 0006       MOV              R0, #2_110
-  579 000002E8 F7FF FFFE       BL               PortQ_Output
+  577 000002E0 F7FF FFFE       BL               PortQ_Output
+  578 000002E4 F04F 0060       MOV              R0, #2_1100000
+  579 000002E8 F7FF FFFE       BL               PortA_Output
   580 000002EC         
   581 000002EC         endDecimalTo7Seg
   582 000002EC F85D EB04       POP{LR}
@@ -1223,15 +1223,15 @@ Symbol: PortA_Output
    Uses
       At line 214 in file gpio.s
       At line 489 in file gpio.s
-      At line 498 in file gpio.s
-      At line 508 in file gpio.s
-      At line 518 in file gpio.s
-      At line 528 in file gpio.s
-      At line 538 in file gpio.s
-      At line 548 in file gpio.s
-      At line 558 in file gpio.s
-      At line 568 in file gpio.s
-      At line 577 in file gpio.s
+      At line 500 in file gpio.s
+      At line 510 in file gpio.s
+      At line 520 in file gpio.s
+      At line 530 in file gpio.s
+      At line 540 in file gpio.s
+      At line 550 in file gpio.s
+      At line 560 in file gpio.s
+      At line 570 in file gpio.s
+      At line 579 in file gpio.s
 
 PortB_Output 0000016A
 
@@ -1273,15 +1273,15 @@ Symbol: PortQ_Output
    Uses
       At line 216 in file gpio.s
       At line 487 in file gpio.s
-      At line 500 in file gpio.s
-      At line 510 in file gpio.s
-      At line 520 in file gpio.s
-      At line 530 in file gpio.s
-      At line 540 in file gpio.s
-      At line 550 in file gpio.s
-      At line 560 in file gpio.s
-      At line 570 in file gpio.s
-      At line 579 in file gpio.s
+      At line 498 in file gpio.s
+      At line 508 in file gpio.s
+      At line 518 in file gpio.s
+      At line 528 in file gpio.s
+      At line 538 in file gpio.s
+      At line 548 in file gpio.s
+      At line 558 in file gpio.s
+      At line 568 in file gpio.s
+      At line 577 in file gpio.s
 
 aguarda 00000018
 
