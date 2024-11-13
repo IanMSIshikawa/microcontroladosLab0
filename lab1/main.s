@@ -71,19 +71,39 @@ MainLoop
 	
 wait1s
 	;Configura display A, B
-	MOV R1, R9
-	MOV R0, R8
+	MOV R0, R9
+	MOV R1, R8
 
+	;Mostra valores de R0 e R1 nos display DS1 e DS2, respectivamente
 	BL DSA_DSB_Output
 	
 	;Contador para esperar 1s
 	ADD R7, R7, #1
-	
 	CMP R7, R3
 	BNE wait1s
 	
-	ADD R9, R9, #1
+	;Verifica se DS2 chegou a 9 e reinicia caso sim
+	MOV R0, #9
+	CMP R9, R0
 	MOV R7, #0
+	BNE continua
+	MOV R9, #0
+	;Verifica se DS1 chegou a 9
+	MOV R0, #9
+	CMP R8, R0
+	BNE continua2
+	MOV R8, #0
+	B wait1s
+	
+	
+	
+continua	
+	ADD R9, R9, #1
+	B wait1s
+	
+continua2 
+	ADD R8, R8, #1
+
 	
 	
 ; ****************************************
