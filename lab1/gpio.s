@@ -468,10 +468,18 @@ DSA_DSB_Output
 ; Espera poucos ms
 	MOV R0, #1
 	BL SysTick_Wait1ms
-
+	
+	POP {LR}
+	BX LR									;Retorno
+	
+; -------------------------------------------------------------------------------
+; Função NumberToLedBin
+; Parâmetro de entrada: r0 -> valor a ser exibido no LED
+;						
+; Parâmetro de saída: Não tem
+NumberToLedBin
 	
 
-	POP {LR}
 	BX LR									;Retorno
 
 ; -------------------------------------------------------------------------------

@@ -63,6 +63,7 @@ Start
 	
 	MOV R0, #0     ; function parameter
 	MOV R1, #0     ; function parameter
+	MOV R6, #1	   ; estado anterior do botão	
 	MOV R7, #0     ;couter_update_disp
 	LDR R3, =500   ; max update dis
 	MOV R8, #0     ; decimal dig 1
@@ -89,12 +90,13 @@ update_counter
 	CMP R11, #1 ;ASCENDING ORDER?
 	BEQ Ascending_Order
 	BNE Decrease_Order
+	BL Check_Buttons ;verifica botões
 		
 	
 		
 end_of_increment
 
-	BL Check_Buttons
+	
 	
 	B update_counter
 ; ****************************************
@@ -133,12 +135,35 @@ Decrease_Order
 ; Parâmetro de entrada: Não tem
 ; Parâmetro de saída: Não tem
 Check_Buttons
+	MOV R1, #0;
+	MOV R6, #1
 	PUSH {LR}
 	
 	BL PortJ_Input ; call the subroutine that reads the state of the keys and places the result in R0
-	MOV R5, R0
-	LSL R5, #31
+	PUSH{R0}
+	AND R0, R0, #2_01 ;Verifica primeiro bit do port J, correspondente ao J0
 	
+	CMP R0, R6;compara estado anteior e atual
+	BEQ j0_not_changed;nao faz nada caso o estado se manteve
+	CMP R6, R1;verifica se é borda de subida, ou seja, se o estado anterior era zero
+	BNE j0_not_changed; nao faz nada caso seja borda de descda
+	
+	BL Check_Button_Ascending
+	
+j0_not_changed
+	
+	MOV R6, #2_10
+	POP{R0}
+	AND R0, R0, #2_10 ;Verifica segundo bit do port J, correspondente ao J1
+	
+	CMP R0, R6;compara estado anteior e atual
+	BEQ j1_not_changed;nao faz nada caso o estado se manteve
+	CMP R6, R1;verifica se é borda de subida, ou seja, se o estado anterior era zero
+	BNE j1_not_changed; nao faz nada caso seja borda de descda
+	
+	BL Check_Button_Step
+
+j1_not_changed
 	POP {LR}
 	BX LR
 ;--------------------------------------------------------------------------------
@@ -146,11 +171,11 @@ Check_Buttons
 ; Parâmetro de entrada: Não tem
 ; Parâmetro de saída: Não tem
 Check_Button_Ascending
-	CMP R4, #1
+	CMP R11, #1
 	IT EQ
-		MOVEQ R4, #0
+		MOVEQ R11, #0
 	IT NE
-		MOVNE R4, #1
+		MOVNE R11, #1
 	BX LR
 
 ; Função Check_Button_Step
