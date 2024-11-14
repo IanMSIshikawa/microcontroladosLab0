@@ -14,7 +14,9 @@
 ;<NOME>         EQU <VALOR>
 ; ========================
 ; Definições de Valores
-
+TRAN_PP5 EQU 2_00100000
+TRAN_PB4 EQU 2_00010000
+TRAN_PB5 EQU 2_00100000
 
 ; -------------------------------------------------------------------------------
 ; Área de Dados - Declarações de variáveis
@@ -59,57 +61,130 @@ Start
   	BL SysTick_Init              ;Chama a subrotina para inicializar o SysTick
 	BL GPIO_Init                 ;Chama a subrotina que inicializa os GPIO
 	
-	MOV R0, #0
-	MOV R1, #0
-	MOV R7, #0
-	LDR R3, =500
-	MOV R8, #0
-	MOV R9, #0
-	
+	MOV R0, #0     ; function parameter
+	MOV R1, #0     ; function parameter
+	MOV R7, #0     ;couter_update_disp
+	LDR R3, =500   ; max update dis
+	MOV R8, #0     ; decimal dig 1
+	MOV R9, #0     ; decimal dig 2
+	MOV R11, #1    ; ascending
+	MOV R12, #1    ; step
+	MOV R4, #0    ; general_counter [0 - 99]
 MainLoop
 ; ****************************************
 	
-wait1s
+update_counter
 	;Configura display A, B
 	MOV R0, R9
 	MOV R1, R8
 
 	;Mostra valores de R0 e R1 nos display DS1 e DS2, respectivamente
 	BL DSA_DSB_Output
-	
+	BL Show_Leds
 	;Contador para esperar 1s
 	ADD R7, R7, #1
 	CMP R7, R3
-	BNE wait1s
 	
-	;Verifica se DS2 chegou a 9 e reinicia caso sim
-	MOV R0, #9
-	CMP R9, R0
-	MOV R7, #0
-	BNE incrementaDS2
-	MOV R9, #0
-	;Verifica se DS1 chegou a 9
-	MOV R0, #9
-	CMP R8, R0
-	BNE incrementaDS1
-	MOV R8, #0
-	B wait1s
+	BNE update_counter ; increase the counter or not
+	CMP R11, #1 ;ASCENDING ORDER?
+	BEQ Ascending_Order
+	BNE Decrease_Order
+		
 	
-	
-	
-incrementaDS2	
-	ADD R9, R9, #1
-	B wait1s
-	
-incrementaDS1 
-	ADD R8, R8, #1
+		
+end_of_increment
 
+	BL Check_Buttons
 	
-	
+	B update_counter
 ; ****************************************
 	B MainLoop
 
 ;--------------------------------------------------------------------------------
+; Função Ascending_Order		
+; Parâmetro de entrada: R11 (COUNTER)
+; Parâmetro de saída: R9, R8
+Ascending_Order		
+	CMP R4, #99 ; counter == 0
+	IT EQ
+		MOVEQ R4, #0 ;reset counter
+	IT NE
+		ADDNE R4, R12  ;counter+=step
+	MOV R0, #10	
+	UDIV R8, R1, R0			  ;R8 recebe o divisor de R4 por 10
+	MLS R9, R8, R0, R4 		  ;R9 = R4 - (R8*10) para verificar se ? zero depois
+	B end_of_increment
+;--------------------------------------------------------------------------------
+; Função Decrease_Order
+; Parâmetro de entrada: R11 (COUNTER)
+; Parâmetro de saída: R9, R8
+Decrease_Order
+	CMP R4, #0 ; counter == 0
+	IT EQ
+		MOVEQ R4, #99 ;reset counter
+	IT NE	
+		SUBNE R4, R12  ;counter-=step
+	MOV R0, #10	
+	UDIV R8, R1, R0			  ;R8 recebe o divisor de R4 por 10
+	MLS R9, R8, R0, R4 		  ;R9 = R4 - (R8*10) para verificar se ? zero depois
+	B end_of_increment
+
+; Função Check_Buttons
+; Parâmetro de entrada: Não tem
+; Parâmetro de saída: Não tem
+Check_Buttons
+	PUSH {LR}
+	
+	BL PortJ_Input ; call the subroutine that reads the state of the keys and places the result in R0
+	MOV R5, R0
+	LSL R5, #31
+	
+	POP {LR}
+	BX LR
+;--------------------------------------------------------------------------------
+; Função Check_Button_Ascending
+; Parâmetro de entrada: Não tem
+; Parâmetro de saída: Não tem
+Check_Button_Ascending
+	CMP R4, #1
+	IT EQ
+		MOVEQ R4, #0
+	IT NE
+		MOVNE R4, #1
+	BX LR
+
+; Função Check_Button_Step
+; Parâmetro de entrada: Não tem
+; Parâmetro de saída: Não tem
+Check_Button_Step
+	CMP R12, #9
+	IT NE
+		ADDNE R12, R12, #1
+	IT EQ
+		MOVEQ R12, #1
+	BX LR
+; Função Show_Leds
+; Parâmetro de entrada: R4 (GENERAL COUNTER)
+; Parâmetro de saída: Não tem
+Show_Leds
+	PUSH {LR}
+
+	LDR R0, = TRAN_PP5 
+	BL PortP_Output ;enable LEDS transistor
+	
+	MOV R0, R4
+	BL PortQ_Output ;show R4 on the LEDS
+	BL PortA_Output ;show R4 on the LEDS
+	
+	MOV R0, #1
+	BL SysTick_Wait1ms
+	
+	;disable led transitor????
+	;MOV R0, #0 
+	;BL PortP_Output ;enable LEDS transistor
+	
+	POP {LR}
+	BX LR
 ; Função Pisca_LED
 ; Parâmetro de entrada: Não tem
 ; Parâmetro de saída: Não tem
