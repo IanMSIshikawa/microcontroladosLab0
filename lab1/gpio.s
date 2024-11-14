@@ -468,7 +468,8 @@ DSA_DSB_Output
 ; Espera poucos ms
 	MOV R0, #1
 	BL SysTick_Wait1ms
-
+	MOV R0, #2_000000
+	BL PortB_Output
 	
 
 	POP {LR}

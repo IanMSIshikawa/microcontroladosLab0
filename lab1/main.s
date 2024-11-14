@@ -64,11 +64,11 @@ Start
 	MOV R0, #0     ; function parameter
 	MOV R1, #0     ; function parameter
 	MOV R7, #0     ;couter_update_disp
-	LDR R3, =500   ; max update dis
+	LDR R3, =200   ; max update dis
 	MOV R8, #0     ; decimal dig 1
 	MOV R9, #0     ; decimal dig 2
-	MOV R11, #1    ; ascending
-	MOV R12, #1    ; step
+	MOV R11, #0    ; ascending
+	MOV R12, #2    ; step
 	MOV R4, #0    ; general_counter [0 - 99]
 MainLoop
 ; ****************************************
@@ -86,6 +86,7 @@ update_counter
 	CMP R7, R3
 	
 	BNE update_counter ; increase the counter or not
+	MOV R7, #0
 	CMP R11, #1 ;ASCENDING ORDER?
 	BEQ Ascending_Order
 	BNE Decrease_Order
@@ -111,7 +112,7 @@ Ascending_Order
 	IT NE
 		ADDNE R4, R12  ;counter+=step
 	MOV R0, #10	
-	UDIV R8, R1, R0			  ;R8 recebe o divisor de R4 por 10
+	UDIV R8, R4, R0			  ;R8 recebe o divisor de R4 por 10
 	MLS R9, R8, R0, R4 		  ;R9 = R4 - (R8*10) para verificar se ? zero depois
 	B end_of_increment
 ;--------------------------------------------------------------------------------
@@ -125,7 +126,7 @@ Decrease_Order
 	IT NE	
 		SUBNE R4, R12  ;counter-=step
 	MOV R0, #10	
-	UDIV R8, R1, R0			  ;R8 recebe o divisor de R4 por 10
+	UDIV R8, R4, R0			  ;R8 recebe o divisor de R4 por 10
 	MLS R9, R8, R0, R4 		  ;R9 = R4 - (R8*10) para verificar se ? zero depois
 	B end_of_increment
 
@@ -178,7 +179,8 @@ Show_Leds
 	
 	MOV R0, #1
 	BL SysTick_Wait1ms
-	
+	MOV R0, #0 
+	BL PortP_Output ;enable LEDS transistor
 	;disable led transitor????
 	;MOV R0, #0 
 	;BL PortP_Output ;enable LEDS transistor
