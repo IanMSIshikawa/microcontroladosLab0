@@ -65,7 +65,7 @@ Start
 	MOV R1, #0     ; function parameter
 	MOV R6, #2_11	   ; estado anterior do bot?o	
 	MOV R7, #0     ;couter_update_disp
-	LDR R3, =200   ; max update dis
+	LDR R3, =333   ; max update dis
 	MOV R8, #0     ; decimal dig 1
 	MOV R9, #0     ; decimal dig 2
 	MOV R11, #1    ; ascending
@@ -91,11 +91,11 @@ update_counter
 	CMP R11, #1 ;ASCENDING ORDER?
 	BEQ Ascending_Order
 	BNE Decrease_Order
-	BL Check_Buttons		
+			
 	
 		
 end_of_increment
-
+	BL Check_Buttons
 
 	
 	B update_counter
@@ -108,10 +108,10 @@ end_of_increment
 ; Parâmetro de saída: R9, R8
 Ascending_Order		
 	CMP R4, #99 ; counter == 0
-	IT EQ
-		MOVEQ R4, #0 ;reset counter
-	IT NE
-		ADDNE R4, R12  ;counter+=step
+	IT GT
+		MOVGT R4, #0 ;reset counter
+	IT LE
+		ADDLE R4, R12  ;counter+=step
 	MOV R0, #10	
 	UDIV R8, R4, R0			  ;R8 recebe o divisor de R4 por 10
 	MLS R9, R8, R0, R4 		  ;R9 = R4 - (R8*10) para verificar se ? zero depois
@@ -122,10 +122,10 @@ Ascending_Order
 ; Parâmetro de saída: R9, R8
 Decrease_Order
 	CMP R4, #0 ; counter == 0
-	IT EQ
-		MOVEQ R4, #99 ;reset counter
-	IT NE	
-		SUBNE R4, R12  ;counter-=step
+	IT LE
+		MOVLE R4, #99 ;reset counter
+	IT GT	
+		SUBGT R4, R12  ;counter-=step
 	MOV R0, #10	
 	UDIV R8, R4, R0			  ;R8 recebe o divisor de R4 por 10
 	MLS R9, R8, R0, R4 		  ;R9 = R4 - (R8*10) para verificar se ? zero depois
@@ -135,13 +135,16 @@ Decrease_Order
 ; Parâmetro de entrada: Não tem
 ; Parâmetro de saída: Não tem
 Check_Buttons
+<<<<<<< HEAD
 	MOV R1, #2_01;Compara com zero
+=======
+>>>>>>> 5e1eb80ae6c67bf3843fe7d84525794b13a124d4
 	PUSH {LR}
 	
 	BL PortJ_Input ; call the subroutine that reads the state of the keys and places the result in R0
 	PUSH{R0}
 	AND R0, R0, #2_01 ;Verifica primeiro bit do port J, correspondente ao J0
-	
+	MOV R1, #2_01;Compara com zero
 	PUSH{R6}
 	AND R6, R6, #2_01
 	CMP R0, R6;compara estado anteior e atual
@@ -152,13 +155,20 @@ Check_Buttons
 	BL Check_Button_Ascending
 	
 j0_not_ascending
+<<<<<<< HEAD
 	MOV R1, #2_10
+=======
+	MOV R1, #2_10;Compara com 1
+	
+>>>>>>> 5e1eb80ae6c67bf3843fe7d84525794b13a124d4
 	POP{R6}
 	ORR R6, R6, R0 
+	POP{R0}
 	PUSH{R6}
 	
 	AND R6, R6, #2_10
-	POP{R0}
+	
+
 	AND R0, R0, #2_10 ;Verifica segundo bit do port J, correspondente ao J1
 	
 	CMP R0, R6;compara estado anteior e atual

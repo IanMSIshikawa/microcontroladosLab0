@@ -152,18 +152,46 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
+<<<<<<< HEAD
           <LineNumber>138</LineNumber>
           <EnabledFlag>1</EnabledFlag>
           <Address>1514</Address>
+=======
+          <LineNumber>98</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>1456</Address>
+>>>>>>> 5e1eb80ae6c67bf3843fe7d84525794b13a124d4
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
+<<<<<<< HEAD
           <Filename>C:\Users\Robson Junior\Documents\micro_labs\microcontroladosLab0\lab1\main.s</Filename>
           <ExecCommand></ExecCommand>
           <Expression>\\gpio\main.s\138</Expression>
+=======
+          <Filename>.\main.s</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression>\\gpio\main.s\98</Expression>
+        </Bp>
+        <Bp>
+          <Number>1</Number>
+          <Type>0</Type>
+          <LineNumber>154</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>1548</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>.\main.s</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression>\\gpio\main.s\154</Expression>
+>>>>>>> 5e1eb80ae6c67bf3843fe7d84525794b13a124d4
         </Bp>
       </Breakpoint>
       <Tracepoint>
