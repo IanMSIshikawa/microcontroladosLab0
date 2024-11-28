@@ -63,7 +63,7 @@ Start
 	
 	MOV R0, #0     ; function parameter
 	MOV R1, #0     ; function parameter
-	MOV R6, #1	   ; estado anterior do bot?o	
+	MOV R6, #2_11	   ; estado anterior do bot?o	
 	MOV R7, #0     ;couter_update_disp
 	LDR R3, =200   ; max update dis
 	MOV R8, #0     ; decimal dig 1
@@ -135,7 +135,7 @@ Decrease_Order
 ; Parâmetro de entrada: Não tem
 ; Parâmetro de saída: Não tem
 Check_Buttons
-	MOV R1, #2_00;Compara com zero
+	MOV R1, #2_01;Compara com zero
 	PUSH {LR}
 	
 	BL PortJ_Input ; call the subroutine that reads the state of the keys and places the result in R0
@@ -146,12 +146,13 @@ Check_Buttons
 	AND R6, R6, #2_01
 	CMP R0, R6;compara estado anteior e atual
 	BEQ j0_not_ascending;nao faz nada caso o estado se manteve
-	CMP R6, R1;verifica se ? borda de subida, ou seja, se o estado anterior era zero
-	BNE j0_not_ascending; nao faz nada caso seja borda de descda
+	CMP R6, R1;verifica se ? borda de descida, ou seja, se o estado anterior era 1
+	BNE j0_not_ascending; nao faz nada caso seja borda de subida
 	
 	BL Check_Button_Ascending
 	
 j0_not_ascending
+	MOV R1, #2_10
 	POP{R6}
 	ORR R6, R6, R0 
 	PUSH{R6}
