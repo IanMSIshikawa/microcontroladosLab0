@@ -1,0 +1,941 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000         ; main.s
+    2 00000000         ; Desenvolvido para a placa EK-TM4C1294XL
+    3 00000000         ; Prof. Guilherme Peron
+    4 00000000         ; 24/08/2020
+    5 00000000         ; Este programa espera o usuário apertar a chave USR_SW1
+                       .
+    6 00000000         ; Caso o usuário pressione a chave, o LED1 piscará a cad
+                       a 0,5 segundo.
+    7 00000000         
+    8 00000000         ; ------------------------------------------------------
+                       -------------------------
+    9 00000000         ;                               TIMER REGISTERS
+   10 00000000         ; ------------------------------------------------------
+                       -------------------------
+   11 00000000 400FE604 
+                       SYSCTL_RCGCTIMER_R
+                               EQU              0x400FE604
+   12 00000000 400FEA04 
+                       SYSCTL_PRTIMER_R
+                               EQU              0x400FEA04
+   13 00000000 40030000 
+                       TIMER0_CFG_R
+                               EQU              0x40030000
+   14 00000000 40030004 
+                       TIMER0_TAMR_R
+                               EQU              0x40030004
+   15 00000000 40030008 
+                       TIMER0_TBMR_R
+                               EQU              0x40030008
+   16 00000000 4003000C 
+                       TIMER0_CTL_R
+                               EQU              0x4003000C
+   17 00000000 40030010 
+                       TIMER0_SYNC_R
+                               EQU              0x40030010
+   18 00000000 40030018 
+                       TIMER0_IMR_R
+                               EQU              0x40030018
+   19 00000000 4003001C 
+                       TIMER0_RIS_R
+                               EQU              0x4003001C
+   20 00000000 40030020 
+                       TIMER0_MIS_R
+                               EQU              0x40030020
+   21 00000000 40030024 
+                       TIMER0_ICR_R
+                               EQU              0x40030024
+   22 00000000 40030028 
+                       TIMER0_TAILR_R
+                               EQU              0x40030028
+   23 00000000 4003002C 
+                       TIMER0_TBILR_R
+                               EQU              0x4003002C
+   24 00000000 40030030 
+                       TIMER0_TAMATCHR_R
+                               EQU              0x40030030
+   25 00000000 40030034 
+                       TIMER0_TBMATCHR_R
+                               EQU              0x40030034
+
+
+
+ARM Macro Assembler    Page 2 
+
+
+   26 00000000 40030038 
+                       TIMER0_TAPR_R
+                               EQU              0x40030038
+   27 00000000 4003003C 
+                       TIMER0_TBPR_R
+                               EQU              0x4003003C
+   28 00000000 40030040 
+                       TIMER0_TAPMR_R
+                               EQU              0x40030040
+   29 00000000 40030044 
+                       TIMER0_TBPMR_R
+                               EQU              0x40030044
+   30 00000000 40030048 
+                       TIMER0_TAR_R
+                               EQU              0x40030048
+   31 00000000 4003004C 
+                       TIMER0_TBR_R
+                               EQU              0x4003004C
+   32 00000000 40030050 
+                       TIMER0_TAV_R
+                               EQU              0x40030050
+   33 00000000 40030054 
+                       TIMER0_TBV_R
+                               EQU              0x40030054
+   34 00000000 40030058 
+                       TIMER0_RTCPD_R
+                               EQU              0x40030058
+   35 00000000 4003005C 
+                       TIMER0_TAPS_R
+                               EQU              0x4003005C
+   36 00000000 40030060 
+                       TIMER0_TBPS_R
+                               EQU              0x40030060
+   37 00000000 4003006C 
+                       TIMER0_DMAEV_R
+                               EQU              0x4003006C
+   38 00000000 40030070 
+                       TIMER0_ADCEV_R
+                               EQU              0x40030070
+   39 00000000 40030FC0 
+                       TIMER0_PP_R
+                               EQU              0x40030FC0
+   40 00000000 40030FC8 
+                       TIMER0_CC_R
+                               EQU              0x40030FC8
+   41 00000000         
+   42 00000000 E000E410 
+                       NVIC_PRI4_R
+                               EQU              0xE000E410
+   43 00000000 E000E100 
+                       NVIC_EN0_R
+                               EQU              0xE000E100
+   44 00000000 E000E104 
+                       NVIC_EN1_R
+                               EQU              0xE000E104
+   45 00000000 E000E108 
+                       NVIC_EN2_R
+                               EQU              0xE000E108
+   46 00000000 E000E10C 
+
+
+
+ARM Macro Assembler    Page 3 
+
+
+                       NVIC_EN3_R
+                               EQU              0xE000E10C
+   47 00000000 E000E180 
+                       NVIC_DIS0_R
+                               EQU              0xE000E180
+   48 00000000         
+   49 00000000 00000022 
+                       INT_WATCHDOG
+                               EQU              34          ; Watchdog Timers 0
+                                                             and 1
+   50 00000000 00000023 
+                       INT_TIMER0A
+                               EQU              35          ; 16/32-Bit Timer 0
+                                                            A
+   51 00000000 00000024 
+                       INT_TIMER0B
+                               EQU              36          ; 16/32-Bit Timer 0
+                                                            B
+   52 00000000 00000025 
+                       INT_TIMER1A
+                               EQU              37          ; 16/32-Bit Timer 1
+                                                            A
+   53 00000000 00000026 
+                       INT_TIMER1B
+                               EQU              38          ; 16/32-Bit Timer 1
+                                                            B
+   54 00000000 00000027 
+                       INT_TIMER2A
+                               EQU              39          ; 16/32-Bit Timer 2
+                                                            A
+   55 00000000 00000028 
+                       INT_TIMER2B
+                               EQU              40          ; 16/32-Bit Timer 2
+                                                            B
+   56 00000000         
+   57 00000000         
+   58 00000000         ; ------------------------------------------------------
+                       -------------------------
+   59 00000000                 THUMB                        ; Instruções do tip
+                                                            o Thumb-2
+   60 00000000         ; ------------------------------------------------------
+                       -------------------------
+   61 00000000         
+   62 00000000         ; Declarações EQU - Defines
+   63 00000000         ;<NOME>         EQU <VALOR>
+   64 00000000         ; ========================
+   65 00000000         
+   66 00000000         ; ------------------------------------------------------
+                       -------------------------
+   67 00000000         ; Área de Dados - Declarações de variáveis
+   68 00000000                 AREA             DATA, ALIGN=2
+   69 00000000         ; Se alguma variável for chamada em outro arquivo
+   70 00000000         ;EXPORT  <var> [DATA,SIZE=<tam>]   ; Permite chamar a va
+                       riável <var> a 
+   71 00000000         ; partir de outro arquivo
+   72 00000000         ;<var> SPACE <tam>                        ; Declara uma 
+                       variável de nome <var>
+   73 00000000         ; de <tam> bytes a partir da primeira 
+   74 00000000         ; posição da RAM  
+
+
+
+ARM Macro Assembler    Page 4 
+
+
+   75 00000000         
+   76 00000000         ; ------------------------------------------------------
+                       -------------------------
+   77 00000000         ; Área de Código - Tudo abaixo da diretiva a seguir será
+                        armazenado na memória de 
+   78 00000000         ;                  código
+   79 00000000                 AREA             |.text|, CODE, READONLY, ALIGN=
+2
+   80 00000000         
+   81 00000000         ; Se alguma função do arquivo for chamada em outro arqui
+                       vo 
+   82 00000000                 EXPORT           Start       ; Permite chamar a 
+                                                            função Start a part
+                                                            ir de 
+   83 00000000         ; outro arquivo. No caso startup.s
+   84 00000000         
+   85 00000000         ; Se chamar alguma função externa 
+   86 00000000         ;IMPORT <func>              ; Permite chamar dentro dest
+                       e arquivo uma 
+   87 00000000         ; função <func>
+   88 00000000                 IMPORT           PLL_Init
+   89 00000000                 IMPORT           SysTick_Init
+   90 00000000                 IMPORT           SysTick_Wait1ms
+   91 00000000                 IMPORT           GPIO_Init
+   92 00000000                 IMPORT           PortN_Output
+   93 00000000                 IMPORT           PortJ_Input
+   94 00000000                 EXPORT           Timer0A_Handler
+   95 00000000         ; ------------------------------------------------------
+                       -------------------------
+   96 00000000         ; Função main()
+   97 00000000         Start
+   98 00000000 F7FF FFFE       BL               PLL_Init    ;Chama a subrotina 
+                                                            para alterar o cloc
+                                                            k do microcontrolad
+                                                            or para 80MHz
+   99 00000004 F7FF FFFE       BL               SysTick_Init
+  100 00000008 F7FF FFFE       BL               GPIO_Init   ;Chama a subrotina 
+                                                            que inicializa os G
+                                                            PIO
+  101 0000000C F000 F81C       BL               Timer0A_init ;Chama subrotina q
+                                                            ue inicializa e hab
+                                                            ilita interrupcao d
+                                                            o timer 0_A
+  102 00000010 F04F 0A00       MOV              R10, #0     ; Rigistrador que a
+                                                            rmazena o estado do
+                                                             LED
+  103 00000014         MainLoop
+  104 00000014         ; MOV R0, #500
+  105 00000014         ; BL SysTick_Wait1ms
+  106 00000014         ; PUSH {LR}
+  107 00000014         ; CMP R10, #0
+  108 00000014         ; IT EQ
+  109 00000014         ;  MOVEQ R10, #2_10
+  110 00000014         ; IT NE
+  111 00000014         ;  MOVNE R10, #2_00
+  112 00000014         ; MOV R0, R10
+  113 00000014         ; BL PortN_Output     ;Chamar a função para acender o LE
+                       D1      ;return
+  114 00000014         
+
+
+
+ARM Macro Assembler    Page 5 
+
+
+  115 00000014 E7FE            B                MainLoop    ;Volta para o laço 
+                                                            principal
+  116 00000016         
+  117 00000016         ;-------------------------------------------------------
+                       -------------------------
+  118 00000016         ; Função Pisca_LED
+  119 00000016         ; Parâmetro de entrada: Não tem
+  120 00000016         ; Parâmetro de saída: Não tem
+  121 00000016         Pisca_LED
+  122 00000016 B500            PUSH             {LR}
+  123 00000018 F1BA 0F00       CMP              R10, #0
+  124 0000001C BF08            IT               EQ
+  125 0000001E F04F 0A02       MOVEQ            R10, #2_10
+  126 00000022 BF18            IT               NE
+  127 00000024 F04F 0A00       MOVNE            R10, #2_00
+  128 00000028 4650            MOV              R0, R10
+  129 0000002A F7FF FFFE       BL               PortN_Output ;Chamar a função p
+                                                            ara acender o LED1
+  130 0000002E F85D EB04       POP              {LR}
+  131 00000032 4770            BX               LR
+  132 00000034         
+  133 00000034         ;-------------------------------------------------------
+                       -------------------------
+  134 00000034         ; Função Timer0A_Handler
+  135 00000034         ; Parâmetro de entrada: Não tem
+  136 00000034         ; Parâmetro de saída: Não tem
+  137 00000034         Timer0A_Handler
+  138 00000034 4922            LDR              R1, =TIMER0_ICR_R
+  139 00000036 F04F 0001       MOV              R0, #1
+  140 0000003A 6008            STR              R0, [R1]
+  141 0000003C B500            PUSH             {LR}
+  142 0000003E F7FF FFEA       BL               Pisca_LED
+  143 00000042 F85D EB04       POP              {LR}
+  144 00000046 4770            BX               LR
+  145 00000048         
+  146 00000048         
+  147 00000048         ; ------------------------------------------------------
+                       --------------------------------------------------------
+                       -----------
+  148 00000048         ; Funcao Timer0A_init (inicializacao do timer A0)
+  149 00000048         ; ------------------------------------------------------
+                       --------------------------------------------------------
+                       -----------
+  150 00000048         Timer0A_init
+  151 00000048 481E            LDR              R0, =SYSCTL_RCGCTIMER_R
+  152 0000004A F04F 0101       MOV              R1, #2_0000001
+  153 0000004E 6001            STR              R1, [R0]    ;Habilitar o TIMER 
+                                                            0 no registrador RC
+                                                            GCTIMER
+  154 00000050         
+  155 00000050 481D            LDR              R0, =SYSCTL_PRTIMER_R
+  156 00000052         Espera_PRTIMER
+  157 00000052 6801            LDR              R1, [R0]
+  158 00000054 F04F 0201       MOV              R2, #2_0000001
+  159 00000058 4211            TST              R1, R2      ;Testa o R1 com R2 
+                                                            fazendo R1 & R2
+  160 0000005A D0FA            BEQ              Espera_PRTIMER ;Se o flag Z=1, 
+                                                            volta para o laço. 
+                                                            Senão continua exec
+
+
+
+ARM Macro Assembler    Page 6 
+
+
+                                                            utando
+  161 0000005C         
+  162 0000005C 481B            LDR              R0, =TIMER0_CTL_R
+  163 0000005E F04F 0100       MOV              R1, #0X00
+  164 00000062 6001            STR              R1, [R0]    ;Desabilita TIMERS
+  165 00000064         
+  166 00000064 481A            LDR              R0, =TIMER0_CFG_R
+  167 00000066 F04F 0100       MOV              R1, #0X00
+  168 0000006A 6001            STR              R1, [R0]    ;Configura TIMER pa
+                                                            ra 32 bits
+  169 0000006C         
+  170 0000006C 4819            LDR              R0, =TIMER0_TAMR_R
+  171 0000006E F04F 0102       MOV              R1, #0X2
+  172 00000072 6001            STR              R1, [R0]    ;Habilita modo peri
+                                                            odico no TIMER A
+  173 00000074         
+  174 00000074 4818            LDR              R0, =TIMER0_TAILR_R
+  175 00000076 4919            LDR              R1, =55999999
+  176 00000078 6001            STR              R1, [R0]    ;Habilita contador 
+                                                            para o valor 700ms
+  177 0000007A         
+  178 0000007A 4819            LDR              R0, =TIMER0_TAPR_R
+  179 0000007C F04F 0100       MOV              R1, #0X00
+  180 00000080 6001            STR              R1, [R0]    ;Limpa o preescale 
+                                                            (zerado)
+  181 00000082         
+  182 00000082 480F            LDR              R0, =TIMER0_ICR_R
+  183 00000084 6801            LDR              R1, [R0]
+  184 00000086 F041 0101       ORR              R1, R1, #0X01
+  185 0000008A 6001            STR              R1, [R0]    ;Limpa a interrupca
+                                                            o do TIMER A
+  186 0000008C         
+  187 0000008C         
+  188 0000008C 4815            LDR              R0, =TIMER0_IMR_R
+  189 0000008E 6801            LDR              R1, [R0]
+  190 00000090 F041 0101       ORR              R1, R1, #0X01
+  191 00000094 6001            STR              R1, [R0]    ;Seta a interrupção
+                                                             do TimerA
+  192 00000096         
+  193 00000096 4814            LDR              R0, =NVIC_PRI4_R
+  194 00000098 6801            LDR              R1, [R0]
+  195 0000009A F04F 0204       MOV              R2, #4
+  196 0000009E EA4F 7242       LSL              R2, R2, #29
+  197 000000A2 EA41 0102       ORR              R1, R1, R2
+  198 000000A6 6001            STR              R1, [R0]    ;Seta a prioridade 
+                                                            do TIMER A0
+  199 000000A8         
+  200 000000A8 4810            LDR              R0, =NVIC_EN0_R
+  201 000000AA F04F 0101       MOV              R1, #1
+  202 000000AE EA4F 41C1       LSL              R1, R1, #19
+  203 000000B2 6001            STR              R1, [R0]    ;Habilita a interru
+                                                            pcao do TIMER A0
+  204 000000B4         
+  205 000000B4 4805            LDR              R0, =TIMER0_CTL_R
+  206 000000B6 F04F 0101       MOV              R1, #0X01
+  207 000000BA 6001            STR              R1, [R0]    ;Habilita TIMER A
+  208 000000BC         
+  209 000000BC 4770            BX               LR
+  210 000000BE         
+
+
+
+ARM Macro Assembler    Page 7 
+
+
+  211 000000BE         ; ------------------------------------------------------
+                       --------------------------------------------------------
+                       -----------
+  212 000000BE         ; Fim do Arquivo
+  213 000000BE         ; ------------------------------------------------------
+                       --------------------------------------------------------
+                       ----------- 
+  214 000000BE 00 00           ALIGN                        ;Garante que o fim 
+                                                            da seção está alinh
+                                                            ada 
+  215 000000C0                 END                          ;Fim do arquivo
+              40030024 
+              400FE604 
+              400FEA04 
+              4003000C 
+              40030000 
+              40030004 
+              40030028 
+              03567DFF 
+              40030038 
+              40030018 
+              E000E410 
+              E000E100 
+Command Line: --debug --xref --diag_suppress=9931,A1950W --cpu=Cortex-M4.fp.sp 
+--depend=.\objects\main.d -o.\objects\main.o -I"C:\Users\Robson Junior\AppData\
+Local\Arm\Packs\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C129" --predefine="__EVAL
+ SETA 1" --predefine="__UVISION_VERSION SETA 541" --predefine="TM4C1294NCPDT SE
+TA 1" --list=.\listings\main.lst main.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+DATA 00000000
+
+Symbol: DATA
+   Definitions
+      At line 68 in file main.s
+   Uses
+      None
+Comment: DATA unused
+1 symbol
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+.text 00000000
+
+Symbol: .text
+   Definitions
+      At line 79 in file main.s
+   Uses
+      None
+Comment: .text unused
+Espera_PRTIMER 00000052
+
+Symbol: Espera_PRTIMER
+   Definitions
+      At line 156 in file main.s
+   Uses
+      At line 160 in file main.s
+Comment: Espera_PRTIMER used once
+MainLoop 00000014
+
+Symbol: MainLoop
+   Definitions
+      At line 103 in file main.s
+   Uses
+      At line 115 in file main.s
+Comment: MainLoop used once
+Pisca_LED 00000016
+
+Symbol: Pisca_LED
+   Definitions
+      At line 121 in file main.s
+   Uses
+      At line 142 in file main.s
+Comment: Pisca_LED used once
+Start 00000000
+
+Symbol: Start
+   Definitions
+      At line 97 in file main.s
+   Uses
+      At line 82 in file main.s
+Comment: Start used once
+Timer0A_Handler 00000034
+
+Symbol: Timer0A_Handler
+   Definitions
+      At line 137 in file main.s
+   Uses
+      At line 94 in file main.s
+Comment: Timer0A_Handler used once
+Timer0A_init 00000048
+
+Symbol: Timer0A_init
+   Definitions
+      At line 150 in file main.s
+   Uses
+      At line 101 in file main.s
+Comment: Timer0A_init used once
+7 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Absolute symbols
+
+INT_TIMER0A 00000023
+
+Symbol: INT_TIMER0A
+   Definitions
+      At line 50 in file main.s
+   Uses
+      None
+Comment: INT_TIMER0A unused
+INT_TIMER0B 00000024
+
+Symbol: INT_TIMER0B
+   Definitions
+      At line 51 in file main.s
+   Uses
+      None
+Comment: INT_TIMER0B unused
+INT_TIMER1A 00000025
+
+Symbol: INT_TIMER1A
+   Definitions
+      At line 52 in file main.s
+   Uses
+      None
+Comment: INT_TIMER1A unused
+INT_TIMER1B 00000026
+
+Symbol: INT_TIMER1B
+   Definitions
+      At line 53 in file main.s
+   Uses
+      None
+Comment: INT_TIMER1B unused
+INT_TIMER2A 00000027
+
+Symbol: INT_TIMER2A
+   Definitions
+      At line 54 in file main.s
+   Uses
+      None
+Comment: INT_TIMER2A unused
+INT_TIMER2B 00000028
+
+Symbol: INT_TIMER2B
+   Definitions
+      At line 55 in file main.s
+   Uses
+      None
+Comment: INT_TIMER2B unused
+INT_WATCHDOG 00000022
+
+Symbol: INT_WATCHDOG
+   Definitions
+      At line 49 in file main.s
+   Uses
+      None
+Comment: INT_WATCHDOG unused
+NVIC_DIS0_R E000E180
+
+Symbol: NVIC_DIS0_R
+
+
+
+ARM Macro Assembler    Page 2 Alphabetic symbol ordering
+Absolute symbols
+
+   Definitions
+      At line 47 in file main.s
+   Uses
+      None
+Comment: NVIC_DIS0_R unused
+NVIC_EN0_R E000E100
+
+Symbol: NVIC_EN0_R
+   Definitions
+      At line 43 in file main.s
+   Uses
+      At line 200 in file main.s
+Comment: NVIC_EN0_R used once
+NVIC_EN1_R E000E104
+
+Symbol: NVIC_EN1_R
+   Definitions
+      At line 44 in file main.s
+   Uses
+      None
+Comment: NVIC_EN1_R unused
+NVIC_EN2_R E000E108
+
+Symbol: NVIC_EN2_R
+   Definitions
+      At line 45 in file main.s
+   Uses
+      None
+Comment: NVIC_EN2_R unused
+NVIC_EN3_R E000E10C
+
+Symbol: NVIC_EN3_R
+   Definitions
+      At line 46 in file main.s
+   Uses
+      None
+Comment: NVIC_EN3_R unused
+NVIC_PRI4_R E000E410
+
+Symbol: NVIC_PRI4_R
+   Definitions
+      At line 42 in file main.s
+   Uses
+      At line 193 in file main.s
+Comment: NVIC_PRI4_R used once
+SYSCTL_PRTIMER_R 400FEA04
+
+Symbol: SYSCTL_PRTIMER_R
+   Definitions
+      At line 12 in file main.s
+   Uses
+      At line 155 in file main.s
+Comment: SYSCTL_PRTIMER_R used once
+SYSCTL_RCGCTIMER_R 400FE604
+
+Symbol: SYSCTL_RCGCTIMER_R
+   Definitions
+      At line 11 in file main.s
+   Uses
+
+
+
+ARM Macro Assembler    Page 3 Alphabetic symbol ordering
+Absolute symbols
+
+      At line 151 in file main.s
+Comment: SYSCTL_RCGCTIMER_R used once
+TIMER0_ADCEV_R 40030070
+
+Symbol: TIMER0_ADCEV_R
+   Definitions
+      At line 38 in file main.s
+   Uses
+      None
+Comment: TIMER0_ADCEV_R unused
+TIMER0_CC_R 40030FC8
+
+Symbol: TIMER0_CC_R
+   Definitions
+      At line 40 in file main.s
+   Uses
+      None
+Comment: TIMER0_CC_R unused
+TIMER0_CFG_R 40030000
+
+Symbol: TIMER0_CFG_R
+   Definitions
+      At line 13 in file main.s
+   Uses
+      At line 166 in file main.s
+Comment: TIMER0_CFG_R used once
+TIMER0_CTL_R 4003000C
+
+Symbol: TIMER0_CTL_R
+   Definitions
+      At line 16 in file main.s
+   Uses
+      At line 162 in file main.s
+      At line 205 in file main.s
+
+TIMER0_DMAEV_R 4003006C
+
+Symbol: TIMER0_DMAEV_R
+   Definitions
+      At line 37 in file main.s
+   Uses
+      None
+Comment: TIMER0_DMAEV_R unused
+TIMER0_ICR_R 40030024
+
+Symbol: TIMER0_ICR_R
+   Definitions
+      At line 21 in file main.s
+   Uses
+      At line 138 in file main.s
+      At line 182 in file main.s
+
+TIMER0_IMR_R 40030018
+
+Symbol: TIMER0_IMR_R
+   Definitions
+      At line 18 in file main.s
+   Uses
+      At line 188 in file main.s
+
+
+
+ARM Macro Assembler    Page 4 Alphabetic symbol ordering
+Absolute symbols
+
+Comment: TIMER0_IMR_R used once
+TIMER0_MIS_R 40030020
+
+Symbol: TIMER0_MIS_R
+   Definitions
+      At line 20 in file main.s
+   Uses
+      None
+Comment: TIMER0_MIS_R unused
+TIMER0_PP_R 40030FC0
+
+Symbol: TIMER0_PP_R
+   Definitions
+      At line 39 in file main.s
+   Uses
+      None
+Comment: TIMER0_PP_R unused
+TIMER0_RIS_R 4003001C
+
+Symbol: TIMER0_RIS_R
+   Definitions
+      At line 19 in file main.s
+   Uses
+      None
+Comment: TIMER0_RIS_R unused
+TIMER0_RTCPD_R 40030058
+
+Symbol: TIMER0_RTCPD_R
+   Definitions
+      At line 34 in file main.s
+   Uses
+      None
+Comment: TIMER0_RTCPD_R unused
+TIMER0_SYNC_R 40030010
+
+Symbol: TIMER0_SYNC_R
+   Definitions
+      At line 17 in file main.s
+   Uses
+      None
+Comment: TIMER0_SYNC_R unused
+TIMER0_TAILR_R 40030028
+
+Symbol: TIMER0_TAILR_R
+   Definitions
+      At line 22 in file main.s
+   Uses
+      At line 174 in file main.s
+Comment: TIMER0_TAILR_R used once
+TIMER0_TAMATCHR_R 40030030
+
+Symbol: TIMER0_TAMATCHR_R
+   Definitions
+      At line 24 in file main.s
+   Uses
+      None
+Comment: TIMER0_TAMATCHR_R unused
+TIMER0_TAMR_R 40030004
+
+
+
+
+ARM Macro Assembler    Page 5 Alphabetic symbol ordering
+Absolute symbols
+
+Symbol: TIMER0_TAMR_R
+   Definitions
+      At line 14 in file main.s
+   Uses
+      At line 170 in file main.s
+Comment: TIMER0_TAMR_R used once
+TIMER0_TAPMR_R 40030040
+
+Symbol: TIMER0_TAPMR_R
+   Definitions
+      At line 28 in file main.s
+   Uses
+      None
+Comment: TIMER0_TAPMR_R unused
+TIMER0_TAPR_R 40030038
+
+Symbol: TIMER0_TAPR_R
+   Definitions
+      At line 26 in file main.s
+   Uses
+      At line 178 in file main.s
+Comment: TIMER0_TAPR_R used once
+TIMER0_TAPS_R 4003005C
+
+Symbol: TIMER0_TAPS_R
+   Definitions
+      At line 35 in file main.s
+   Uses
+      None
+Comment: TIMER0_TAPS_R unused
+TIMER0_TAR_R 40030048
+
+Symbol: TIMER0_TAR_R
+   Definitions
+      At line 30 in file main.s
+   Uses
+      None
+Comment: TIMER0_TAR_R unused
+TIMER0_TAV_R 40030050
+
+Symbol: TIMER0_TAV_R
+   Definitions
+      At line 32 in file main.s
+   Uses
+      None
+Comment: TIMER0_TAV_R unused
+TIMER0_TBILR_R 4003002C
+
+Symbol: TIMER0_TBILR_R
+   Definitions
+      At line 23 in file main.s
+   Uses
+      None
+Comment: TIMER0_TBILR_R unused
+TIMER0_TBMATCHR_R 40030034
+
+Symbol: TIMER0_TBMATCHR_R
+   Definitions
+      At line 25 in file main.s
+
+
+
+ARM Macro Assembler    Page 6 Alphabetic symbol ordering
+Absolute symbols
+
+   Uses
+      None
+Comment: TIMER0_TBMATCHR_R unused
+TIMER0_TBMR_R 40030008
+
+Symbol: TIMER0_TBMR_R
+   Definitions
+      At line 15 in file main.s
+   Uses
+      None
+Comment: TIMER0_TBMR_R unused
+TIMER0_TBPMR_R 40030044
+
+Symbol: TIMER0_TBPMR_R
+   Definitions
+      At line 29 in file main.s
+   Uses
+      None
+Comment: TIMER0_TBPMR_R unused
+TIMER0_TBPR_R 4003003C
+
+Symbol: TIMER0_TBPR_R
+   Definitions
+      At line 27 in file main.s
+   Uses
+      None
+Comment: TIMER0_TBPR_R unused
+TIMER0_TBPS_R 40030060
+
+Symbol: TIMER0_TBPS_R
+   Definitions
+      At line 36 in file main.s
+   Uses
+      None
+Comment: TIMER0_TBPS_R unused
+TIMER0_TBR_R 4003004C
+
+Symbol: TIMER0_TBR_R
+   Definitions
+      At line 31 in file main.s
+   Uses
+      None
+Comment: TIMER0_TBR_R unused
+TIMER0_TBV_R 40030054
+
+Symbol: TIMER0_TBV_R
+   Definitions
+      At line 33 in file main.s
+   Uses
+      None
+Comment: TIMER0_TBV_R unused
+43 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+External symbols
+
+GPIO_Init 00000000
+
+Symbol: GPIO_Init
+   Definitions
+      At line 91 in file main.s
+   Uses
+      At line 100 in file main.s
+Comment: GPIO_Init used once
+PLL_Init 00000000
+
+Symbol: PLL_Init
+   Definitions
+      At line 88 in file main.s
+   Uses
+      At line 98 in file main.s
+Comment: PLL_Init used once
+PortJ_Input 00000000
+
+Symbol: PortJ_Input
+   Definitions
+      At line 93 in file main.s
+   Uses
+      None
+Comment: PortJ_Input unused
+PortN_Output 00000000
+
+Symbol: PortN_Output
+   Definitions
+      At line 92 in file main.s
+   Uses
+      At line 129 in file main.s
+Comment: PortN_Output used once
+SysTick_Init 00000000
+
+Symbol: SysTick_Init
+   Definitions
+      At line 89 in file main.s
+   Uses
+      At line 99 in file main.s
+Comment: SysTick_Init used once
+SysTick_Wait1ms 00000000
+
+Symbol: SysTick_Wait1ms
+   Definitions
+      At line 90 in file main.s
+   Uses
+      None
+Comment: SysTick_Wait1ms unused
+6 symbols
+393 symbols in table
