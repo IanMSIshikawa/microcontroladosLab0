@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\Objects\gpio.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Objects\gpio.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 6220000: Last Updated: Thu Dec  5 08:26:34 2024
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 6220000: Last Updated: Thu Dec  5 09:48:12 2024
 <BR><P>
 <H3>Maximum Stack Usage =          0 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -13,15 +13,22 @@ Call chain for Maximum Stack Depth:</H3>
 Functions with no stack information
 </H3><UL>
  <LI><a href="#[0]">Reset_Handler</a>
+ <LI><a href="#[7a]">GPIO_Init</a>
+ <LI><a href="#[75]">PortM_Output</a>
+ <LI><a href="#[7b]">PortJ_Input</a>
+ <LI><a href="#[76]">PortL_Input</a>
+ <LI><a href="#[73]">PortA_Output</a>
+ <LI><a href="#[72]">PortQ_Output</a>
+ <LI><a href="#[74]">PortP_Output</a>
  <LI><a href="#[6b]">Start</a>
  <LI><a href="#[6c]">PLL_Init</a>
  <LI><a href="#[6d]">SysTick_Init</a>
  <LI><a href="#[71]">SysTick_Wait1ms</a>
- <LI><a href="#[74]">SysTick_Wait1us</a>
+ <LI><a href="#[79]">SysTick_Wait1us</a>
  <LI><a href="#[6e]">LCD_Init</a>
  <LI><a href="#[6f]">setup_LCD</a>
- <LI><a href="#[72]">send_comand_lcd</a>
- <LI><a href="#[73]">send_complex_comand_lcd</a>
+ <LI><a href="#[77]">send_comand_lcd</a>
+ <LI><a href="#[78]">send_complex_comand_lcd</a>
  <LI><a href="#[70]">send_data_lcd</a>
 </UL>
 </UL>
@@ -518,6 +525,30 @@ Global Symbols
 <P><STRONG><a name="[36]"></a>uDMA_Handler</STRONG> (Thumb, 0 bytes, Stack size 0 bytes, startup.o(RESET))
 <BR>[Address Reference Count : 1]<UL><LI> startup.o(RESET)
 </UL>
+<P><STRONG><a name="[7a]"></a>GPIO_Init</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, gpio.o(.text), UNUSED)
+
+<P><STRONG><a name="[75]"></a>PortM_Output</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, gpio.o(.text))
+<BR><BR>[Called By]<UL><LI><a href="#[6b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Start
+</UL>
+
+<P><STRONG><a name="[7b]"></a>PortJ_Input</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, gpio.o(.text), UNUSED)
+
+<P><STRONG><a name="[76]"></a>PortL_Input</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, gpio.o(.text))
+<BR><BR>[Called By]<UL><LI><a href="#[6b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Start
+</UL>
+
+<P><STRONG><a name="[73]"></a>PortA_Output</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, gpio.o(.text))
+<BR><BR>[Called By]<UL><LI><a href="#[6b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Start
+</UL>
+
+<P><STRONG><a name="[72]"></a>PortQ_Output</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, gpio.o(.text))
+<BR><BR>[Called By]<UL><LI><a href="#[6b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Start
+</UL>
+
+<P><STRONG><a name="[74]"></a>PortP_Output</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, gpio.o(.text))
+<BR><BR>[Called By]<UL><LI><a href="#[6b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Start
+</UL>
+
 <P><STRONG><a name="[6b]"></a>Start</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, main.o(.text))
 <BR><BR>[Calls]<UL><LI><a href="#[6f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;setup_LCD
 <LI><a href="#[70]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send_data_lcd
@@ -525,6 +556,11 @@ Global Symbols
 <LI><a href="#[6d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SysTick_Init
 <LI><a href="#[6c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PLL_Init
 <LI><a href="#[6e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;LCD_Init
+<LI><a href="#[74]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PortP_Output
+<LI><a href="#[72]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PortQ_Output
+<LI><a href="#[73]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PortA_Output
+<LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PortL_Input
+<LI><a href="#[75]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PortM_Output
 </UL>
 <BR>[Called By]<UL><LI><a href="#[0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Reset_Handler
 </UL>
@@ -541,10 +577,10 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[6b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Start
 </UL>
 
-<P><STRONG><a name="[74]"></a>SysTick_Wait1us</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, utils.o(.text))
+<P><STRONG><a name="[79]"></a>SysTick_Wait1us</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, utils.o(.text))
 <BR><BR>[Called By]<UL><LI><a href="#[70]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send_data_lcd
-<LI><a href="#[73]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send_complex_comand_lcd
-<LI><a href="#[72]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send_comand_lcd
+<LI><a href="#[78]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send_complex_comand_lcd
+<LI><a href="#[77]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send_comand_lcd
 </UL>
 
 <P><STRONG><a name="[6e]"></a>LCD_Init</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, lcd.o(.text))
@@ -552,26 +588,26 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[6f]"></a>setup_LCD</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, lcd.o(.text))
-<BR><BR>[Calls]<UL><LI><a href="#[73]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send_complex_comand_lcd
-<LI><a href="#[72]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send_comand_lcd
+<BR><BR>[Calls]<UL><LI><a href="#[78]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send_complex_comand_lcd
+<LI><a href="#[77]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;send_comand_lcd
 </UL>
 <BR>[Called By]<UL><LI><a href="#[6b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Start
 </UL>
 
-<P><STRONG><a name="[72]"></a>send_comand_lcd</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, lcd.o(.text))
-<BR><BR>[Calls]<UL><LI><a href="#[74]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SysTick_Wait1us
+<P><STRONG><a name="[77]"></a>send_comand_lcd</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, lcd.o(.text))
+<BR><BR>[Calls]<UL><LI><a href="#[79]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SysTick_Wait1us
 </UL>
 <BR>[Called By]<UL><LI><a href="#[6f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;setup_LCD
 </UL>
 
-<P><STRONG><a name="[73]"></a>send_complex_comand_lcd</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, lcd.o(.text))
-<BR><BR>[Calls]<UL><LI><a href="#[74]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SysTick_Wait1us
+<P><STRONG><a name="[78]"></a>send_complex_comand_lcd</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, lcd.o(.text))
+<BR><BR>[Calls]<UL><LI><a href="#[79]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SysTick_Wait1us
 </UL>
 <BR>[Called By]<UL><LI><a href="#[6f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;setup_LCD
 </UL>
 
 <P><STRONG><a name="[70]"></a>send_data_lcd</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, lcd.o(.text))
-<BR><BR>[Calls]<UL><LI><a href="#[74]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SysTick_Wait1us
+<BR><BR>[Calls]<UL><LI><a href="#[79]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SysTick_Wait1us
 </UL>
 <BR>[Called By]<UL><LI><a href="#[6b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Start
 </UL>

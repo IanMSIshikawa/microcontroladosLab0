@@ -647,55 +647,61 @@ ARM Macro Assembler    Page 10
   349 00000140 4770            BX               LR
   350 00000142         
   351 00000142         ; *******************************************
-  352 00000142         
+  352 00000142         ;Parametro: r0 -> string
 
 
 
 ARM Macro Assembler    Page 11 
 
 
-  353 00000142         PortM_Output
-  354 00000142 490C            LDR              R1, =GPIO_PORTM_DATA_R ;Carrega
+  353 00000142         
+  354 00000142         send_string_lcd
+  355 00000142         
+  356 00000142         
+  357 00000142         
+  358 00000142         
+  359 00000142         PortM_Output
+  360 00000142 490C            LDR              R1, =GPIO_PORTM_DATA_R ;Carrega
                                                              o valor do offset 
                                                             do data register
-  355 00000144         ;Read-Modify-Write para escrita
-  356 00000144 680A            LDR              R2, [R1]
-  357 00000146 F022 0207       BIC              R2, #2_00000111 ;Primeiro limpa
+  361 00000144         ;Read-Modify-Write para escrita
+  362 00000144 680A            LDR              R2, [R1]
+  363 00000146 F022 0207       BIC              R2, #2_00000111 ;Primeiro limpa
                                                             mos os dois bits do
                                                              lido da porta 
-  358 0000014A EA40 0002       ORR              R0, R0, R2  ;Fazer o OR do lido
+  364 0000014A EA40 0002       ORR              R0, R0, R2  ;Fazer o OR do lido
                                                              pela porta com o p
                                                             arÃ¢metro de entrad
                                                             a
-  359 0000014E 6008            STR              R0, [R1]    ;Escreve na porta F
+  365 0000014E 6008            STR              R0, [R1]    ;Escreve na porta F
                                                              o barramento de da
                                                             dos dos pinos
-  360 00000150         
-  361 00000150 4770            BX               LR
-  362 00000152         
-  363 00000152         PortK_Output
-  364 00000152 4909            LDR              R1, =GPIO_PORTK_DATA_R ;Carrega
+  366 00000150         
+  367 00000150 4770            BX               LR
+  368 00000152         
+  369 00000152         PortK_Output
+  370 00000152 4909            LDR              R1, =GPIO_PORTK_DATA_R ;Carrega
                                                              o valor do offset 
                                                             do data register
-  365 00000154         ;Read-Modify-Write para escrita
-  366 00000154 680A            LDR              R2, [R1]
-  367 00000156 F022 02FF       BIC              R2, #2_11111111 ;Primeiro limpa
+  371 00000154         ;Read-Modify-Write para escrita
+  372 00000154 680A            LDR              R2, [R1]
+  373 00000156 F022 02FF       BIC              R2, #2_11111111 ;Primeiro limpa
                                                             mos os dois bits do
                                                              lido da porta 
-  368 0000015A EA40 0002       ORR              R0, R0, R2  ;Fazer o OR do lido
+  374 0000015A EA40 0002       ORR              R0, R0, R2  ;Fazer o OR do lido
                                                              pela porta com o p
                                                             arÃ¢metro de entrad
                                                             a
-  369 0000015E 6008            STR              R0, [R1]    ;Escreve na porta F
+  375 0000015E 6008            STR              R0, [R1]    ;Escreve na porta F
                                                              o barramento de da
                                                             dos dos pinos
-  370 00000160         
-  371 00000160 4770            BX               LR
-  372 00000162         
-  373 00000162 00 00           ALIGN                        ; garante que o fim
+  376 00000160         
+  377 00000160 4770            BX               LR
+  378 00000162         
+  379 00000162 00 00           ALIGN                        ; garante que o fim
                                                              da seï¿½ï¿½o estï¿
                                                             ½ alinhada 
-  374 00000164                 END                          ; fim do arquivo
+  380 00000164                 END                          ; fim do arquivo
               400FE608 
               400FEA08 
               40063000 
@@ -733,7 +739,7 @@ PortK_Output 00000152
 
 Symbol: PortK_Output
    Definitions
-      At line 363 in file lcd.s
+      At line 369 in file lcd.s
    Uses
       At line 275 in file lcd.s
       At line 303 in file lcd.s
@@ -743,7 +749,7 @@ PortM_Output 00000142
 
 Symbol: PortM_Output
    Definitions
-      At line 353 in file lcd.s
+      At line 359 in file lcd.s
    Uses
       At line 279 in file lcd.s
       At line 287 in file lcd.s
@@ -795,6 +801,14 @@ Symbol: send_data_lcd
    Uses
       At line 150 in file lcd.s
 Comment: send_data_lcd used once
+send_string_lcd 00000142
+
+Symbol: send_string_lcd
+   Definitions
+      At line 354 in file lcd.s
+   Uses
+      None
+Comment: send_string_lcd unused
 setup_LCD 0000008E
 
 Symbol: setup_LCD
@@ -803,7 +817,7 @@ Symbol: setup_LCD
    Uses
       At line 147 in file lcd.s
 Comment: setup_LCD used once
-9 symbols
+10 symbols
 
 
 
@@ -1113,7 +1127,7 @@ Symbol: GPIO_PORTK_DATA_R
    Definitions
       At line 92 in file lcd.s
    Uses
-      At line 364 in file lcd.s
+      At line 370 in file lcd.s
 Comment: GPIO_PORTK_DATA_R used once
 GPIO_PORTK_DEN_R 4006151C
 
@@ -1427,7 +1441,7 @@ Symbol: GPIO_PORTM_DATA_R
    Definitions
       At line 58 in file lcd.s
    Uses
-      At line 354 in file lcd.s
+      At line 360 in file lcd.s
 Comment: GPIO_PORTM_DATA_R used once
 GPIO_PORTM_DEN_R 4006351C
 
@@ -1822,4 +1836,4 @@ Symbol: SysTick_Wait1us
       At line 345 in file lcd.s
 
 1 symbol
-457 symbols in table
+458 symbols in table

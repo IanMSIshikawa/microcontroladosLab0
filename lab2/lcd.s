@@ -349,6 +349,12 @@ send_data_lcd
     BX LR
 	
 ; *******************************************
+;Parametro: r0 -> string
+
+send_string_lcd
+    
+
+
 
 PortM_Output
 	LDR	R1, =GPIO_PORTM_DATA_R		    ;Carrega o valor do offset do data register
