@@ -5,16 +5,39 @@
 ; Ver 2 26/08/2018
 
 ; -------------------------------------------------------------------------------
-        THUMB                        ; Instruções do tipo Thumb-2
+        THUMB                        ; Instruï¿½ï¿½es do tipo Thumb-2
 ; -------------------------------------------------------------------------------
+; Declaraï¿½ï¿½es EQU - Defines
+;=======
+
 ; Declarações EQU - Defines
+
 ; ========================
 ; ========================
-; Definigções dos Registradores Gerais
+; Definiï¿½ï¿½es dos Registradores Gerais
 SYSCTL_RCGCGPIO_R	 EQU	0x400FE608
 SYSCTL_PRGPIO_R		 EQU    0x400FEA08
 ; ========================
-; Definições dos Ports
+; Definiï¿½ï¿½es dos Ports
+;DEFINIï¿½ï¿½O DOS TODOS OS PORTS
+GPIO_PORTA_BASE_R     EQU    0x40058000
+GPIO_PORTB_BASE_R     EQU    0x40059000
+GPIO_PORTC_BASE_R     EQU    0x4005A000
+GPIO_PORTD_BASE_R     EQU    0x4005B000
+GPIO_PORTE_BASE_R     EQU    0x4005C000
+GPIO_PORTF_BASE_R     EQU    0x4005D000
+GPIO_PORTG_BASE_R     EQU    0x4005E000
+GPIO_PORTH_BASE_R     EQU    0x4005F000
+GPIO_PORTJ_BASE_R     EQU    0x40060000
+GPIO_PORTK_BASE_R     EQU    0x40061000
+GPIO_PORTL_BASE_R     EQU    0x40062000
+GPIO_PORTM_BASE_R     EQU    0x40063000
+GPIO_PORTN_BASE_R     EQU    0x40064000
+GPIO_PORTP_BASE_R     EQU    0x40065000
+GPIO_PORTQ_BASE_R     EQU    0x40066000
+
+; ========================
+; Definiï¿½ï¿½es dos Ports
 
 ; PORT A
 GPIO_PORTA_AHB_DATA_BITS_R EQU 0x40058000
@@ -64,6 +87,8 @@ GPIO_PORTJ_AHB_MIS_R     EQU 0x40060418
 GPIO_PORTJ_AHB_ICR_R     EQU 0x4006041C
 GPIO_PORTJ_AHB_AFSEL_R   EQU 0x40060420
 GPIO_PORTJ_AHB_DR2R_R    EQU 0x40060500
+
+
 GPIO_PORTJ_AHB_DR4R_R    EQU 0x40060504
 GPIO_PORTJ_AHB_DR8R_R    EQU 0x40060508
 GPIO_PORTJ_AHB_ODR_R     EQU 0x4006050C
@@ -97,6 +122,78 @@ GPIO_PORTN_AHB_DEN_R     	EQU    0x4006451C
 GPIO_PORTN_AHB_PUR_R     	EQU    0x40064510	
 GPIO_PORTN_AHB_DATA_R    	EQU    0x400643FC
 GPIO_PORTN               	EQU    2_001000000000000	
+; PORT M
+GPIO_PORTM_DATA_BITS_R EQU  0x40063000
+GPIO_PORTM_DATA_R      EQU  0x400633FC
+GPIO_PORTM_DIR_R       EQU  0x40063400
+GPIO_PORTM_IS_R        EQU  0x40063404
+GPIO_PORTM_IBE_R       EQU  0x40063408
+GPIO_PORTM_IEV_R       EQU  0x4006340C
+GPIO_PORTM_IM_R        EQU  0x40063410
+GPIO_PORTM_RIS_R       EQU  0x40063414
+GPIO_PORTM_MIS_R       EQU  0x40063418
+GPIO_PORTM_ICR_R       EQU  0x4006341C
+GPIO_PORTM_AFSEL_R     EQU  0x40063420
+GPIO_PORTM_DR2R_R      EQU  0x40063500
+GPIO_PORTM_DR4R_R      EQU  0x40063504
+GPIO_PORTM_DR8R_R      EQU  0x40063508
+GPIO_PORTM_ODR_R       EQU  0x4006350C
+GPIO_PORTM_PUR_R       EQU  0x40063510
+GPIO_PORTM_PDR_R       EQU  0x40063514
+GPIO_PORTM_SLR_R       EQU  0x40063518
+GPIO_PORTM_DEN_R       EQU  0x4006351C
+GPIO_PORTM_LOCK_R      EQU  0x40063520
+GPIO_PORTM_CR_R        EQU  0x40063524
+GPIO_PORTM_AMSEL_R     EQU  0x40063528
+GPIO_PORTM_PCTL_R      EQU  0x4006352C
+GPIO_PORTM_ADCCTL_R    EQU  0x40063530
+GPIO_PORTM_DMACTL_R    EQU  0x40063534
+GPIO_PORTM_SI_R        EQU  0x40063538
+GPIO_PORTM_DR12R_R     EQU  0x4006353C
+GPIO_PORTM_WAKEPEN_R   EQU  0x40063540
+GPIO_PORTM_WAKELVL_R   EQU  0x40063544
+GPIO_PORTM_WAKESTAT_R  EQU  0x40063548
+GPIO_PORTM_PP_R        EQU  0x40063FC0
+GPIO_PORTM_PC_R        EQU  0x40063FC4
+GPIO_PORTM             EQU  2_000100000000000	
+; PORT K
+GPIO_PORTK_DATA_BITS_R  EQU 0x40061000
+GPIO_PORTK_DATA_R       EQU 0x400613FC
+GPIO_PORTK_DIR_R        EQU 0x40061400
+GPIO_PORTK_IS_R         EQU 0x40061404
+GPIO_PORTK_IBE_R        EQU 0x40061408
+GPIO_PORTK_IEV_R        EQU 0x4006140C
+GPIO_PORTK_IM_R         EQU 0x40061410
+GPIO_PORTK_RIS_R        EQU 0x40061414
+GPIO_PORTK_MIS_R        EQU 0x40061418
+GPIO_PORTK_ICR_R        EQU 0x4006141C
+GPIO_PORTK_AFSEL_R      EQU 0x40061420
+GPIO_PORTK_DR2R_R       EQU 0x40061500
+GPIO_PORTK_DR4R_R       EQU 0x40061504
+GPIO_PORTK_DR8R_R       EQU 0x40061508
+GPIO_PORTK_ODR_R        EQU 0x4006150C
+GPIO_PORTK_PUR_R        EQU 0x40061510
+GPIO_PORTK_PDR_R        EQU 0x40061514
+GPIO_PORTK_SLR_R        EQU 0x40061518
+GPIO_PORTK_DEN_R        EQU 0x4006151C
+GPIO_PORTK_LOCK_R       EQU 0x40061520
+GPIO_PORTK_CR_R         EQU 0x40061524
+GPIO_PORTK_AMSEL_R      EQU 0x40061528
+GPIO_PORTK_PCTL_R       EQU 0x4006152C
+GPIO_PORTK_ADCCTL_R     EQU 0x40061530
+GPIO_PORTK_DMACTL_R     EQU 0x40061534
+GPIO_PORTK_SI_R         EQU 0x40061538
+GPIO_PORTK_DR12R_R      EQU 0x4006153C
+GPIO_PORTK_WAKEPEN_R    EQU 0x40061540
+GPIO_PORTK_WAKELVL_R    EQU 0x40061544
+GPIO_PORTK_WAKESTAT_R   EQU 0x40061548
+GPIO_PORTK_PP_R         EQU 0x40061FC0
+GPIO_PORTK_PC_R         EQU 0x40061FC4
+GPIO_PORTK              EQU 2_000001000000000	
+
+
+
+
 
 ;// GPIO registers (PORTL)
 GPIO_PORTL_DATA_BITS_R  EQU 0x40062000
@@ -133,40 +230,6 @@ GPIO_PORTL_PP_R         EQU 0x40062FC0
 GPIO_PORTL_PC_R         EQU 0x40062FC4
 GPIO_PORTL              EQU 2_000010000000000	
 	
-;// GPIO registers (PORTM)
-GPIO_PORTM_DATA_BITS_R EQU 0x40063000
-GPIO_PORTM_DATA_R      EQU 0x400633FC
-GPIO_PORTM_DIR_R       EQU 0x40063400
-GPIO_PORTM_IS_R        EQU 0x40063404
-GPIO_PORTM_IBE_R       EQU 0x40063408
-GPIO_PORTM_IEV_R       EQU 0x4006340C
-GPIO_PORTM_IM_R        EQU 0x40063410
-GPIO_PORTM_RIS_R       EQU 0x40063414
-GPIO_PORTM_MIS_R       EQU 0x40063418
-GPIO_PORTM_ICR_R       EQU 0x4006341C
-GPIO_PORTM_AFSEL_R     EQU 0x40063420
-GPIO_PORTM_DR2R_R      EQU 0x40063500
-GPIO_PORTM_DR4R_R      EQU 0x40063504
-GPIO_PORTM_DR8R_R      EQU 0x40063508
-GPIO_PORTM_ODR_R       EQU 0x4006350C
-GPIO_PORTM_PUR_R       EQU 0x40063510
-GPIO_PORTM_PDR_R       EQU 0x40063514
-GPIO_PORTM_SLR_R       EQU 0x40063518
-GPIO_PORTM_DEN_R       EQU 0x4006351C
-GPIO_PORTM_LOCK_R      EQU 0x40063520
-GPIO_PORTM_CR_R        EQU 0x40063524
-GPIO_PORTM_AMSEL_R     EQU 0x40063528
-GPIO_PORTM_PCTL_R      EQU 0x4006352C
-GPIO_PORTM_ADCCTL_R    EQU 0x40063530
-GPIO_PORTM_DMACTL_R    EQU 0x40063534
-GPIO_PORTM_SI_R        EQU 0x40063538
-GPIO_PORTM_DR12R_R     EQU 0x4006353C
-GPIO_PORTM_WAKEPEN_R   EQU 0x40063540
-GPIO_PORTM_WAKELVL_R   EQU 0x40063544
-GPIO_PORTM_WAKESTAT_R  EQU 0x40063548
-GPIO_PORTM_PP_R        EQU 0x40063FC0
-GPIO_PORTM_PC_R        EQU 0x40063FC4
-GPIO_PORTM             EQU 2_000100000000000	
 	
 ; PORT P
 GPIO_PORTP_AHB_DATA_BITS_R EQU 0x40065000
@@ -237,23 +300,6 @@ GPIO_PORTQ_AHB_WAKESTAT_R EQU 0x40066548
 GPIO_PORTQ_AHB_PP_R EQU 0x40066FC0
 GPIO_PORTQ_AHB_PC_R EQU 0x40066FC4
 GPIO_PORTQ EQU 16384
-
-;DEFINI??O DOS TODOS OS PORTS
-GPIO_PORTA_BASE_R     EQU    0x40058000
-GPIO_PORTB_BASE_R     EQU    0x40059000
-GPIO_PORTC_BASE_R     EQU    0x4005A000
-GPIO_PORTD_BASE_R     EQU    0x4005B000
-GPIO_PORTE_BASE_R     EQU    0x4005C000
-GPIO_PORTF_BASE_R     EQU    0x4005D000
-GPIO_PORTG_BASE_R     EQU    0x4005E000
-GPIO_PORTH_BASE_R     EQU    0x4005F000
-GPIO_PORTJ_BASE_R     EQU    0x40060000
-GPIO_PORTK_BASE_R     EQU    0x40061000
-GPIO_PORTL_BASE_R     EQU    0x40062000
-GPIO_PORTM_BASE_R     EQU    0x40063000
-GPIO_PORTN_BASE_R     EQU    0x40064000
-GPIO_PORTP_BASE_R     EQU    0x40065000
-GPIO_PORTQ_BASE_R     EQU    0x40066000
 	
 ;DENIFI??O DOS OFFSETS DE CONFIG
 GPIO_LOCK_R    	EQU    0x00000520
@@ -272,11 +318,11 @@ NVIC_EN1_R      EQU	   0xE000E104
 
 
 ; -------------------------------------------------------------------------------
-; Área de Código - Tudo abaixo da diretiva a seguir será armazenado na memória de 
-;                  código
+; ï¿½rea de Cï¿½digo - Tudo abaixo da diretiva a seguir serï¿½ armazenado na memï¿½ria de 
+;                  cï¿½digo
         AREA    |.text|, CODE, READONLY, ALIGN=2
 
-		; Se alguma função do arquivo for chamada em outro arquivo	
+		; Se alguma funï¿½ï¿½o do arquivo for chamada em outro arquivo	
         EXPORT GPIO_Init            ; Permite chamar GPIO_Init de outro arquivo
 			;EXPORT PortN_Output			; Permite chamar PortN_Output de outro arquivo
 		EXPORT PortJ_Input          ; Permite chamar PortJ_Input de outro arquivo
@@ -288,13 +334,13 @@ NVIC_EN1_R      EQU	   0xE000E104
 			
 
 ;--------------------------------------------------------------------------------
-; Função GPIO_Init
-; Parâmetro de entrada: Não tem
-; Parâmetro de saída: Não tem
+; Funï¿½ï¿½o GPIO_Init
+; Parï¿½metro de entrada: Nï¿½o tem
+; Parï¿½metro de saï¿½da: Nï¿½o tem
 GPIO_Init
 ;=====================
 ; ****************************************
-; Escrever função de inicialização dos GPIO
+; Escrever funï¿½ï¿½o de inicializaï¿½ï¿½o dos GPIO
 ; Inicializar as portas M e L
 ; ****************************************
 	LDR     R0, =SYSCTL_RCGCGPIO_R  		
@@ -547,9 +593,9 @@ aguarda
 
 
 ; -------------------------------------------------------------------------------
-; Função PortM_Output
-; Parâmetro de entrada: R0 --> o valor da saida
-; Parâmetro de saída: Não tem
+; Funï¿½ï¿½o PortM_Output
+; Parï¿½metro de entrada: R0 --> o valor da saida
+; Parï¿½metro de saï¿½da: Nï¿½o tem
 PortM_Output
 ; ****************************************
 ; 
@@ -558,81 +604,81 @@ PortM_Output
 	;Read-Modify-Write para escrita
 	LDR R2, [R1]
 	BIC R2, #2_11110000                     ;Primeiro limpamos os dois bits do lido da porta R2 = R2 & 0000 1111
-	ORR R0, R0, R2                          ;Fazer o OR do lido pela porta com o parâmetro de entrada
+	ORR R0, R0, R2                          ;Fazer o OR do lido pela porta com o parï¿½metro de entrada
 	STR R0, [R1]                            ;Escreve na porta M o barramento de dados do pino M7-M4
 	BX LR									;Retorno
 
 	
 	BX LR
 ; -------------------------------------------------------------------------------
-; Função PortJ_Input
-; Parâmetro de entrada: Não tem
-; Parâmetro de saída: R0 --> o valor da leitura
+; Funï¿½ï¿½o PortJ_Input
+; Parï¿½metro de entrada: Nï¿½o tem
+; Parï¿½metro de saï¿½da: R0 --> o valor da leitura
 PortJ_Input
 ; ****************************************
-; Escrever função que lê a chave e retorna 
-; um registrador se está ativada ou não
+; Escrever funï¿½ï¿½o que lï¿½ a chave e retorna 
+; um registrador se estï¿½ ativada ou nï¿½o
 ; ****************************************
 	LDR	R1, =GPIO_PORTJ_AHB_DATA_R		    ;Carrega o valor do offset do data register
-	LDR R0, [R1]                            ;Lê no barramento de dados dos pinos [J0]
+	LDR R0, [R1]                            ;Lï¿½ no barramento de dados dos pinos [J0]
 	BX LR									;Retorno
 	
 							;Retorno
 ; -------------------------------------------------------------------------------
-; Função PortJ_Input
-; Parâmetro de entrada: Não tem
-; Parâmetro de saída: R0 --> o valor da leitura
+; Funï¿½ï¿½o PortJ_Input
+; Parï¿½metro de entrada: Nï¿½o tem
+; Parï¿½metro de saï¿½da: R0 --> o valor da leitura
 PortL_Input
 ; ****************************************
-; Escrever função que lê a chave e retorna 
-; um registrador se está ativada ou não
+; Escrever funï¿½ï¿½o que lï¿½ a chave e retorna 
+; um registrador se estï¿½ ativada ou nï¿½o
 ; ****************************************
 	LDR	R1, =GPIO_PORTL_DATA_R		    ;Carrega o valor do offset do data register
-	LDR R0, [R1]                            ;Lê no barramento de dados dos pinos [J0]
+	LDR R0, [R1]                            ;Lï¿½ no barramento de dados dos pinos [J0]
 	BX LR									;Retorno
 	
 							;Retorno							
 ; -------------------------------------------------------------------------------
-; Função PortA_Output
-; Parâmetro de entrada: R0 --> se os BIT5-6 estão ligado ou desligado
-; Parâmetro de saída: Não tem
+; Funï¿½ï¿½o PortA_Output
+; Parï¿½metro de entrada: R0 --> se os BIT5-6 estï¿½o ligado ou desligado
+; Parï¿½metro de saï¿½da: Nï¿½o tem
 PortA_Output
 	LDR	R1, =GPIO_PORTA_AHB_DATA_R		    ;Carrega o valor do offset do data register
 	;Read-Modify-Write para escrita
 	LDR R2, [R1]
 	BIC R2, #2_11110000                     ;Primeiro limpamos os dois bits do lido da porta R2 = R2 & 01110000
-	ORR R0, R0, R2                          ;Fazer o OR do lido pela porta com o parâmetro de entrada
+	ORR R0, R0, R2                          ;Fazer o OR do lido pela porta com o parï¿½metro de entrada
 	STR R0, [R1]                            ;Escreve na porta F o barramento de dados dos pinos F4 e F0
 	BX LR									;Retorno
 
 ; -------------------------------------------------------------------------------
-; Função PortQ_Output
-; Parâmetro de entrada: R0 --> se os BIT3-0 estão ligado ou desligado
-; Parâmetro de saída: Não tem
+; Funï¿½ï¿½o PortQ_Output
+; Parï¿½metro de entrada: R0 --> se os BIT3-0 estï¿½o ligado ou desligado
+; Parï¿½metro de saï¿½da: Nï¿½o tem
 PortQ_Output
 	LDR	R1, =GPIO_PORTQ_AHB_DATA_R		    ;Carrega o valor do offset do data register
 	;Read-Modify-Write para escrita
 	LDR R2, [R1]
 	BIC R2, #2_00001111                     ;Primeiro limpamos os dois bits do lido da porta R2 = R2 & 2_00001111
-	ORR R0, R0, R2                          ;Fazer o OR do lido pela porta com o parâmetro de entrada
+	ORR R0, R0, R2                          ;Fazer o OR do lido pela porta com o parï¿½metro de entrada
 	STR R0, [R1]                            ;Escreve na porta F o barramento de dados dos pinos F4 e F0
 	BX LR	
 
 ; -------------------------------------------------------------------------------
-; Função PortP_Output
-; Parâmetro de entrada: R0 --> se os BIT5 esta ligado ou desligado
-; Parâmetro de saída: Não tem
+; Funï¿½ï¿½o PortP_Output
+; Parï¿½metro de entrada: R0 --> se os BIT5 esta ligado ou desligado
+; Parï¿½metro de saï¿½da: Nï¿½o tem
 PortP_Output
 	LDR	R1, =GPIO_PORTP_AHB_DATA_R		    ;Carrega o valor do offset do data register
 	;Read-Modify-Write para escrita
 	LDR R2, [R1]
 	BIC R2, #2_00100000                     ;Primeiro limpamos os dois bits do lido da porta R2 = R2 & 2_00100000
-	ORR R0, R0, R2                          ;Fazer o OR do lido pela porta com o parâmetro de entrada
+	ORR R0, R0, R2                          ;Fazer o OR do lido pela porta com o parï¿½metro de entrada
 	STR R0, [R1]                            ;Escreve na porta F o barramento de dados dos pinos F4 e F0
 	BX LR
 
 
 
 
-    ALIGN                           ; garante que o fim da seção está alinhada 
+    ALIGN                           ; garante que o fim da seï¿½ï¿½o estï¿½ alinhada 
     END                             ; fim do arquivo
