@@ -367,42 +367,346 @@ ARM Macro Assembler    Page 6
                        GPIO_PORTK
                                EQU              2_000001000000000
   124 00000000         
-  125 00000000         
-  126 00000000         
-  127 00000000         
-  128 00000000         
-  129 00000000         
-  130 00000000         ; ------------------------------------------------------
-                       -------------------------
-  131 00000000         ; �rea de C�digo - Tudo abaixo da diretiva a seguir 
-                       ser� armazenado na mem�ria de 
-  132 00000000         ;                  c�digo
-  133 00000000                 AREA             |.text|, CODE, READONLY, ALIGN=
-2
-  134 00000000         
-  135 00000000         
-  136 00000000         
-  137 00000000         
-  138 00000000         
-  139 00000000         
-  140 00000000         
-  141 00000000         
-  142 00000000         
+  125 00000000         ;DENIFI��O DOS OFFSETS DE CONFIG
+  126 00000000 00000520 
+                       GPIO_LOCK_R
+                               EQU              0x00000520
+  127 00000000 00000524 
+                       GPIO_CR_R
+                               EQU              0x00000524
+  128 00000000 00000528 
+                       GPIO_AMSEL_R
+                               EQU              0x00000528
+  129 00000000 0000052C 
+                       GPIO_PCTL_R
+                               EQU              0x0000052C
+  130 00000000 00000400 
+                       GPIO_DIR_R
+                               EQU              0x00000400
+  131 00000000 00000420 
+                       GPIO_AFSEL_R
+                               EQU              0x00000420
+  132 00000000 0000051C 
+                       GPIO_DEN_R
 
 
 
 ARM Macro Assembler    Page 7 
 
 
-  143 00000000                 ALIGN                        ; garante que o fim
+                               EQU              0x0000051C
+  133 00000000 00000510 
+                       GPIO_PUR_R
+                               EQU              0x00000510
+  134 00000000         
+  135 00000000         
+  136 00000000         
+  137 00000000         
+  138 00000000         
+  139 00000000         
+  140 00000000         ; ------------------------------------------------------
+                       -------------------------
+  141 00000000         ; �rea de C�digo - Tudo abaixo da diretiva a seguir 
+                       ser� armazenado na mem�ria de 
+  142 00000000         ;                  c�digo
+  143 00000000                 AREA             |.text|, CODE, READONLY, ALIGN=
+2
+  144 00000000         
+  145 00000000         ; Se alguma fun��o do arquivo for chamada em outro a
+                       rquivo 
+  146 00000000                 EXPORT           LCD_Init    ; Permite chamar GP
+                                                            IO_Init de outro ar
+                                                            quivo
+  147 00000000                 EXPORT           setup_LCD   ; Configuração do
+                                                             LCD
+  148 00000000                 EXPORT           send_comand_lcd
+  149 00000000                 EXPORT           send_complex_comand_lcd
+  150 00000000                 EXPORT           send_data_lcd
+  151 00000000                 IMPORT           SysTick_Wait1us
+  152 00000000         
+  153 00000000         
+  154 00000000         
+  155 00000000         ;-------------------------------------------------------
+                       -------------------------
+  156 00000000         ; Fun��o LCD_Init
+  157 00000000         ; Par�metro de entrada: N�o tem
+  158 00000000         ; Par�metro de sa�da: N�o tem
+  159 00000000         LCD_Init
+  160 00000000         ;=====================
+  161 00000000         ; ****************************************
+  162 00000000         ; Escrever fun��o de inicializa��o dos GPIO
+  163 00000000         ; HABILITA O CLOCK NAS PORTAS
+  164 00000000 4858            LDR              R0, =SYSCTL_RCGCGPIO_R
+  165 00000002 F44F 6100       MOV              R1, #GPIO_PORTM
+  166 00000006 F441 7100       ORR              R1, #GPIO_PORTK
+  167 0000000A 6001            STR              R1, [R0]
+  168 0000000C         
+  169 0000000C         
+  170 0000000C         ;AGUARDA SYSCTL_PRGPIO_R FICAR PRONTO
+  171 0000000C         aguarda
+  172 0000000C 4A56            LDR              R2, =SYSCTL_PRGPIO_R
+  173 0000000E 6810            LDR              R0, [R2]
+  174 00000010 4288            CMP              R0, R1
+  175 00000012 D1FB            BNE              aguarda
+  176 00000014         ;SETANDO GPIOAMSEL PORTAS 
+  177 00000014 4855            LDR              R0,=GPIO_PORTM_BASE_R
+  178 00000016 F500 60A5       ADD              R0, R0, #GPIO_AMSEL_R
+  179 0000001A F04F 0100       LDR              R1, =2_00000000
+  180 0000001E 6001            STR              R1, [R0]
+
+
+
+ARM Macro Assembler    Page 8 
+
+
+  181 00000020         
+  182 00000020 4853            LDR              R0,=GPIO_PORTK_BASE_R
+  183 00000022 F500 60A5       ADD              R0, R0, #GPIO_AMSEL_R
+  184 00000026 F04F 0100       LDR              R1, =2_00000000
+  185 0000002A 6001            STR              R1, [R0]
+  186 0000002C         ;SETANDO GPIOPCTL DAS PORTAS 
+  187 0000002C         
+  188 0000002C 484F            LDR              R0,=GPIO_PORTM_BASE_R
+  189 0000002E F200 502C       ADD              R0, R0, #GPIO_PCTL_R
+  190 00000032 F04F 0100       MOV              R1, #0
+  191 00000036 6001            STR              R1, [R0]
+  192 00000038         
+  193 00000038 484D            LDR              R0,=GPIO_PORTK_BASE_R
+  194 0000003A F200 502C       ADD              R0, R0, #GPIO_PCTL_R
+  195 0000003E F04F 0100       MOV              R1, #0
+  196 00000042 6001            STR              R1, [R0]
+  197 00000044         ;SETANDO GPIODIR PARA AS PORTAS 
+  198 00000044         
+  199 00000044 4849            LDR              R0,=GPIO_PORTM_BASE_R
+  200 00000046 F500 6080       ADD              R0, R0, #GPIO_DIR_R
+  201 0000004A F04F 0107       MOV              R1, #2_111
+  202 0000004E 6001            STR              R1, [R0]
+  203 00000050         
+  204 00000050 4847            LDR              R0,=GPIO_PORTK_BASE_R
+  205 00000052 F500 6080       ADD              R0, R0, #GPIO_DIR_R
+  206 00000056 F04F 01FF       MOV              R1, #2_11111111
+  207 0000005A 6001            STR              R1, [R0]
+  208 0000005C         
+  209 0000005C         ;SETANDO GPIOAFSEL PARA AS PORTAS 
+  210 0000005C         
+  211 0000005C 4843            LDR              R0,=GPIO_PORTM_BASE_R
+  212 0000005E F500 6084       ADD              R0, R0, #GPIO_AFSEL_R
+  213 00000062 F04F 0100       MOV              R1, #2_00000000
+  214 00000066 6001            STR              R1, [R0]
+  215 00000068         
+  216 00000068 4841            LDR              R0,=GPIO_PORTK_BASE_R
+  217 0000006A F500 6084       ADD              R0, R0, #GPIO_AFSEL_R
+  218 0000006E F04F 0100       MOV              R1, #2_00000000
+  219 00000072 6001            STR              R1, [R0]
+  220 00000074         
+  221 00000074         ;SETANDO GPIO_DEN_R PARA AS PORTAS A, B, P, Q, J
+  222 00000074         
+  223 00000074 483D            LDR              R0,=GPIO_PORTM_BASE_R
+  224 00000076 F200 501C       ADD              R0, R0, #GPIO_DEN_R
+  225 0000007A F04F 0107       MOV              R1, #2_111
+  226 0000007E 6001            STR              R1, [R0]
+  227 00000080         
+  228 00000080 483B            LDR              R0,=GPIO_PORTK_BASE_R
+  229 00000082 F200 501C       ADD              R0, R0, #GPIO_DEN_R
+  230 00000086 F04F 01FF       MOV              R1, #2_11111111
+  231 0000008A 6001            STR              R1, [R0]
+  232 0000008C         
+  233 0000008C 4770            BX               LR
+  234 0000008E         ; ****************************************
+  235 0000008E         
+  236 0000008E         ; ****************************************
+  237 0000008E         
+  238 0000008E         setup_LCD
+  239 0000008E B500            PUSH{LR}
+
+
+
+ARM Macro Assembler    Page 9 
+
+
+  240 00000090         
+  241 00000090         ;Inicializar no modo 2 linhas / caracter matriz 5x7 (0x3
+                       8)
+  242 00000090 F04F 0038       MOV              R0, #0x38
+  243 00000094 F7FF FFFE       BL               send_comand_lcd
+  244 00000098         
+  245 00000098 F04F 000C       MOV              R0, #0x0C
+  246 0000009C F7FF FFFE       BL               send_complex_comand_lcd
+  247 000000A0         
+  248 000000A0         ;Cursor com autoincremento para direita (0x06)
+  249 000000A0 F04F 0006       MOV              R0, #0x06
+  250 000000A4 F7FF FFFE       BL               send_comand_lcd
+  251 000000A8         
+  252 000000A8         ;Resetar: Limpar o display e levar o cursor para o home 
+                       (0x01)
+  253 000000A8 F04F 0001       MOV              R0, #0x01
+  254 000000AC F7FF FFFE       BL               send_complex_comand_lcd
+  255 000000B0         
+  256 000000B0         ;Configurar o cursor (habilitar o display + cursor pisca
+                       ) (0x0F) 
+  257 000000B0 F04F 000F       MOV              R0, #0x0F
+  258 000000B4 F7FF FFFE       BL               send_comand_lcd
+  259 000000B8         
+  260 000000B8         
+  261 000000B8         
+  262 000000B8         
+  263 000000B8 F85D EB04       POP{LR}
+  264 000000BC 4770            BX               LR
+  265 000000BE         
+  266 000000BE         ; *******************************
+  267 000000BE         ;r0 -> comando a ser executado
+  268 000000BE         send_comand_lcd
+  269 000000BE B500            PUSH{LR}
+  270 000000C0         ;pm0 -> INTRUÇÃO/DADO (0/1)
+  271 000000C0         ;pm1 -> write/read (0/1)
+  272 000000C0         ;pm2 -> enable
+  273 000000C0         
+  274 000000C0         ;carrega comando 
+  275 000000C0 F000 F847       BL               PortK_Output
+  276 000000C4         
+  277 000000C4         ;seta pinos pm0, pm1, pm2 para intrução, write, enable
+                       
+  278 000000C4 F04F 0004       MOV              R0, #2_100
+  279 000000C8 F000 F83B       BL               PortM_Output
+  280 000000CC         
+  281 000000CC         ;espera por 10us
+  282 000000CC F04F 000A       MOV              R0, #10
+  283 000000D0 F7FF FFFE       BL               SysTick_Wait1us
+  284 000000D4         
+  285 000000D4         ;desabilita e espera 40us
+  286 000000D4 F04F 0000       MOV              R0, #2_000
+  287 000000D8 F000 F833       BL               PortM_Output
+  288 000000DC F04F 0028       MOV              R0, #40
+  289 000000E0 F7FF FFFE       BL               SysTick_Wait1us
+  290 000000E4         
+  291 000000E4 F85D EB04       POP{LR}
+  292 000000E8 4770            BX               LR
+  293 000000EA         
+  294 000000EA         ; *******************************
+
+
+
+ARM Macro Assembler    Page 10 
+
+
+  295 000000EA         ;r0 -> comando a ser executado
+  296 000000EA         send_complex_comand_lcd
+  297 000000EA B500            PUSH{LR}
+  298 000000EC         ;pm0 -> INTRUÇÃO/DADO (0/1)
+  299 000000EC         ;pm1 -> write/read (0/1)
+  300 000000EC         ;pm2 -> enable
+  301 000000EC         
+  302 000000EC         ;carrega comando 
+  303 000000EC F000 F831       BL               PortK_Output
+  304 000000F0         
+  305 000000F0         ;seta pinos pm0, pm1, pm2 para intrução, write, enable
+                       
+  306 000000F0 F04F 0004       MOV              R0, #2_100
+  307 000000F4 F000 F825       BL               PortM_Output
+  308 000000F8         
+  309 000000F8         ;espera por 10us
+  310 000000F8 F04F 000A       MOV              R0, #10
+  311 000000FC F7FF FFFE       BL               SysTick_Wait1us
+  312 00000100         
+  313 00000100         ;desabilita e espera 1,64ms
+  314 00000100 F04F 0000       MOV              R0, #2_000
+  315 00000104 F000 F81D       BL               PortM_Output
+  316 00000108 F44F 60CD       MOV              R0, #1640
+  317 0000010C F7FF FFFE       BL               SysTick_Wait1us
+  318 00000110         
+  319 00000110 F85D EB04       POP{LR}
+  320 00000114 4770            BX               LR
+  321 00000116         
+  322 00000116         ; *******************************
+  323 00000116         ;r0 -> comando a ser executado
+  324 00000116         send_data_lcd
+  325 00000116 B500            PUSH{LR}
+  326 00000118         ;pm0 -> INTRUÇÃO/DADO (0/1)
+  327 00000118         ;pm1 -> write/read (0/1)
+  328 00000118         ;pm2 -> enable
+  329 00000118         
+  330 00000118         ;carrega dado 
+  331 00000118 F000 F81B       BL               PortK_Output
+  332 0000011C         
+  333 0000011C         ;seta pinos pm0, pm1, pm2 para dado, write, enable
+  334 0000011C F04F 0005       MOV              R0, #2_101
+  335 00000120 F000 F80F       BL               PortM_Output
+  336 00000124         
+  337 00000124         ;espera por 10us
+  338 00000124 F04F 000A       MOV              R0, #10
+  339 00000128 F7FF FFFE       BL               SysTick_Wait1us
+  340 0000012C         
+  341 0000012C         ;desabilita e espera 40us
+  342 0000012C F04F 0000       MOV              R0, #2_000
+  343 00000130 F000 F807       BL               PortM_Output
+  344 00000134 F04F 0028       MOV              R0, #40
+  345 00000138 F7FF FFFE       BL               SysTick_Wait1us
+  346 0000013C         
+  347 0000013C         
+  348 0000013C F85D EB04       POP{LR}
+  349 00000140 4770            BX               LR
+  350 00000142         
+  351 00000142         ; *******************************************
+  352 00000142         
+
+
+
+ARM Macro Assembler    Page 11 
+
+
+  353 00000142         PortM_Output
+  354 00000142 490C            LDR              R1, =GPIO_PORTM_DATA_R ;Carrega
+                                                             o valor do offset 
+                                                            do data register
+  355 00000144         ;Read-Modify-Write para escrita
+  356 00000144 680A            LDR              R2, [R1]
+  357 00000146 F022 0207       BIC              R2, #2_00000111 ;Primeiro limpa
+                                                            mos os dois bits do
+                                                             lido da porta 
+  358 0000014A EA40 0002       ORR              R0, R0, R2  ;Fazer o OR do lido
+                                                             pela porta com o p
+                                                            arâmetro de entrad
+                                                            a
+  359 0000014E 6008            STR              R0, [R1]    ;Escreve na porta F
+                                                             o barramento de da
+                                                            dos dos pinos
+  360 00000150         
+  361 00000150 4770            BX               LR
+  362 00000152         
+  363 00000152         PortK_Output
+  364 00000152 4909            LDR              R1, =GPIO_PORTK_DATA_R ;Carrega
+                                                             o valor do offset 
+                                                            do data register
+  365 00000154         ;Read-Modify-Write para escrita
+  366 00000154 680A            LDR              R2, [R1]
+  367 00000156 F022 02FF       BIC              R2, #2_11111111 ;Primeiro limpa
+                                                            mos os dois bits do
+                                                             lido da porta 
+  368 0000015A EA40 0002       ORR              R0, R0, R2  ;Fazer o OR do lido
+                                                             pela porta com o p
+                                                            arâmetro de entrad
+                                                            a
+  369 0000015E 6008            STR              R0, [R1]    ;Escreve na porta F
+                                                             o barramento de da
+                                                            dos dos pinos
+  370 00000160         
+  371 00000160 4770            BX               LR
+  372 00000162         
+  373 00000162 00 00           ALIGN                        ; garante que o fim
                                                              da se��o est�
                                                             � alinhada 
-  144 00000000                 END                          ; fim do arquivo
+  374 00000164                 END                          ; fim do arquivo
+              400FE608 
+              400FEA08 
+              40063000 
+              40061000 
+              400633FC 
+              400613FC 
 Command Line: --debug --xref --diag_suppress=9931,A1950W --cpu=Cortex-M4.fp.sp 
---depend=.\objects\gpio.d -o.\objects\gpio.o -IC:\Users\IanIshikawa\AppData\Loc
-al\Arm\Packs\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C129 --predefine="__EVAL SET
-A 1" --predefine="__UVISION_VERSION SETA 541" --predefine="TM4C1294NCPDT SETA 1
-" --list=.\listings\gpio.lst gpio.s
+--depend=.\objects\lcd.d -o.\objects\lcd.o -IC:\Users\IanIshikawa\AppData\Local
+\Arm\Packs\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C129 --predefine="__EVAL SETA 
+1" --predefine="__UVISION_VERSION SETA 541" --predefine="TM4C1294NCPDT SETA 1" 
+--list=.\listings\lcd.lst lcd.s
 
 
 
@@ -413,22 +717,171 @@ Relocatable symbols
 
 Symbol: .text
    Definitions
-      At line 133 in file gpio.s
+      At line 143 in file lcd.s
    Uses
       None
 Comment: .text unused
-1 symbol
+LCD_Init 00000000
+
+Symbol: LCD_Init
+   Definitions
+      At line 159 in file lcd.s
+   Uses
+      At line 146 in file lcd.s
+Comment: LCD_Init used once
+PortK_Output 00000152
+
+Symbol: PortK_Output
+   Definitions
+      At line 363 in file lcd.s
+   Uses
+      At line 275 in file lcd.s
+      At line 303 in file lcd.s
+      At line 331 in file lcd.s
+
+PortM_Output 00000142
+
+Symbol: PortM_Output
+   Definitions
+      At line 353 in file lcd.s
+   Uses
+      At line 279 in file lcd.s
+      At line 287 in file lcd.s
+      At line 307 in file lcd.s
+      At line 315 in file lcd.s
+      At line 335 in file lcd.s
+      At line 343 in file lcd.s
+
+aguarda 0000000C
+
+Symbol: aguarda
+   Definitions
+      At line 171 in file lcd.s
+   Uses
+      At line 175 in file lcd.s
+Comment: aguarda used once
+send_comand_lcd 000000BE
+
+Symbol: send_comand_lcd
+   Definitions
+      At line 268 in file lcd.s
+   Uses
+      At line 148 in file lcd.s
+      At line 243 in file lcd.s
+      At line 250 in file lcd.s
+      At line 258 in file lcd.s
+
+send_complex_comand_lcd 000000EA
+
+
+
+ARM Macro Assembler    Page 2 Alphabetic symbol ordering
+Relocatable symbols
+
+
+Symbol: send_complex_comand_lcd
+   Definitions
+      At line 296 in file lcd.s
+   Uses
+      At line 149 in file lcd.s
+      At line 246 in file lcd.s
+      At line 254 in file lcd.s
+
+send_data_lcd 00000116
+
+Symbol: send_data_lcd
+   Definitions
+      At line 324 in file lcd.s
+   Uses
+      At line 150 in file lcd.s
+Comment: send_data_lcd used once
+setup_LCD 0000008E
+
+Symbol: setup_LCD
+   Definitions
+      At line 238 in file lcd.s
+   Uses
+      At line 147 in file lcd.s
+Comment: setup_LCD used once
+9 symbols
 
 
 
 ARM Macro Assembler    Page 1 Alphabetic symbol ordering
 Absolute symbols
 
+GPIO_AFSEL_R 00000420
+
+Symbol: GPIO_AFSEL_R
+   Definitions
+      At line 131 in file lcd.s
+   Uses
+      At line 212 in file lcd.s
+      At line 217 in file lcd.s
+
+GPIO_AMSEL_R 00000528
+
+Symbol: GPIO_AMSEL_R
+   Definitions
+      At line 128 in file lcd.s
+   Uses
+      At line 178 in file lcd.s
+      At line 183 in file lcd.s
+
+GPIO_CR_R 00000524
+
+Symbol: GPIO_CR_R
+   Definitions
+      At line 127 in file lcd.s
+   Uses
+      None
+Comment: GPIO_CR_R unused
+GPIO_DEN_R 0000051C
+
+Symbol: GPIO_DEN_R
+   Definitions
+      At line 132 in file lcd.s
+   Uses
+      At line 224 in file lcd.s
+      At line 229 in file lcd.s
+
+GPIO_DIR_R 00000400
+
+Symbol: GPIO_DIR_R
+   Definitions
+      At line 130 in file lcd.s
+   Uses
+      At line 200 in file lcd.s
+      At line 205 in file lcd.s
+
+GPIO_LOCK_R 00000520
+
+Symbol: GPIO_LOCK_R
+   Definitions
+      At line 126 in file lcd.s
+   Uses
+      None
+Comment: GPIO_LOCK_R unused
+GPIO_PCTL_R 0000052C
+
+Symbol: GPIO_PCTL_R
+   Definitions
+      At line 129 in file lcd.s
+   Uses
+      At line 189 in file lcd.s
+
+
+
+ARM Macro Assembler    Page 2 Alphabetic symbol ordering
+Absolute symbols
+
+      At line 194 in file lcd.s
+
 GPIO_PORTA_BASE_R 40058000
 
 Symbol: GPIO_PORTA_BASE_R
    Definitions
-      At line 19 in file gpio.s
+      At line 19 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTA_BASE_R unused
@@ -436,7 +889,7 @@ GPIO_PORTB_BASE_R 40059000
 
 Symbol: GPIO_PORTB_BASE_R
    Definitions
-      At line 20 in file gpio.s
+      At line 20 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTB_BASE_R unused
@@ -444,7 +897,7 @@ GPIO_PORTC_BASE_R 4005A000
 
 Symbol: GPIO_PORTC_BASE_R
    Definitions
-      At line 21 in file gpio.s
+      At line 21 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTC_BASE_R unused
@@ -452,7 +905,7 @@ GPIO_PORTD_BASE_R 4005B000
 
 Symbol: GPIO_PORTD_BASE_R
    Definitions
-      At line 22 in file gpio.s
+      At line 22 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTD_BASE_R unused
@@ -460,7 +913,7 @@ GPIO_PORTE_BASE_R 4005C000
 
 Symbol: GPIO_PORTE_BASE_R
    Definitions
-      At line 23 in file gpio.s
+      At line 23 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTE_BASE_R unused
@@ -468,7 +921,7 @@ GPIO_PORTF_BASE_R 4005D000
 
 Symbol: GPIO_PORTF_BASE_R
    Definitions
-      At line 24 in file gpio.s
+      At line 24 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTF_BASE_R unused
@@ -476,21 +929,21 @@ GPIO_PORTG_BASE_R 4005E000
 
 Symbol: GPIO_PORTG_BASE_R
    Definitions
-      At line 25 in file gpio.s
+      At line 25 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTG_BASE_R unused
 GPIO_PORTH_BASE_R 4005F000
 
-Symbol: GPIO_PORTH_BASE_R
 
 
-
-ARM Macro Assembler    Page 2 Alphabetic symbol ordering
+ARM Macro Assembler    Page 3 Alphabetic symbol ordering
 Absolute symbols
 
+
+Symbol: GPIO_PORTH_BASE_R
    Definitions
-      At line 26 in file gpio.s
+      At line 26 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTH_BASE_R unused
@@ -498,7 +951,7 @@ GPIO_PORTJ 00000100
 
 Symbol: GPIO_PORTJ
    Definitions
-      At line 44 in file gpio.s
+      At line 44 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTJ unused
@@ -506,7 +959,7 @@ GPIO_PORTJ_AHB_AFSEL_R 40060420
 
 Symbol: GPIO_PORTJ_AHB_AFSEL_R
    Definitions
-      At line 40 in file gpio.s
+      At line 40 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTJ_AHB_AFSEL_R unused
@@ -514,7 +967,7 @@ GPIO_PORTJ_AHB_AMSEL_R 40060528
 
 Symbol: GPIO_PORTJ_AHB_AMSEL_R
    Definitions
-      At line 37 in file gpio.s
+      At line 37 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTJ_AHB_AMSEL_R unused
@@ -522,7 +975,7 @@ GPIO_PORTJ_AHB_CR_R 40060524
 
 Symbol: GPIO_PORTJ_AHB_CR_R
    Definitions
-      At line 36 in file gpio.s
+      At line 36 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTJ_AHB_CR_R unused
@@ -530,7 +983,7 @@ GPIO_PORTJ_AHB_DATA_R 400603FC
 
 Symbol: GPIO_PORTJ_AHB_DATA_R
    Definitions
-      At line 43 in file gpio.s
+      At line 43 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTJ_AHB_DATA_R unused
@@ -538,7 +991,7 @@ GPIO_PORTJ_AHB_DEN_R 4006051C
 
 Symbol: GPIO_PORTJ_AHB_DEN_R
    Definitions
-      At line 41 in file gpio.s
+      At line 41 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTJ_AHB_DEN_R unused
@@ -546,21 +999,21 @@ GPIO_PORTJ_AHB_DIR_R 40060400
 
 Symbol: GPIO_PORTJ_AHB_DIR_R
    Definitions
-      At line 39 in file gpio.s
-   Uses
 
 
 
-ARM Macro Assembler    Page 3 Alphabetic symbol ordering
+ARM Macro Assembler    Page 4 Alphabetic symbol ordering
 Absolute symbols
 
+      At line 39 in file lcd.s
+   Uses
       None
 Comment: GPIO_PORTJ_AHB_DIR_R unused
 GPIO_PORTJ_AHB_LOCK_R 40060520
 
 Symbol: GPIO_PORTJ_AHB_LOCK_R
    Definitions
-      At line 35 in file gpio.s
+      At line 35 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTJ_AHB_LOCK_R unused
@@ -568,7 +1021,7 @@ GPIO_PORTJ_AHB_PCTL_R 4006052C
 
 Symbol: GPIO_PORTJ_AHB_PCTL_R
    Definitions
-      At line 38 in file gpio.s
+      At line 38 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTJ_AHB_PCTL_R unused
@@ -576,7 +1029,7 @@ GPIO_PORTJ_AHB_PUR_R 40060510
 
 Symbol: GPIO_PORTJ_AHB_PUR_R
    Definitions
-      At line 42 in file gpio.s
+      At line 42 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTJ_AHB_PUR_R unused
@@ -584,7 +1037,7 @@ GPIO_PORTJ_BASE_R 40060000
 
 Symbol: GPIO_PORTJ_BASE_R
    Definitions
-      At line 27 in file gpio.s
+      At line 27 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTJ_BASE_R unused
@@ -592,15 +1045,15 @@ GPIO_PORTK 00000200
 
 Symbol: GPIO_PORTK
    Definitions
-      At line 123 in file gpio.s
+      At line 123 in file lcd.s
    Uses
-      None
-Comment: GPIO_PORTK unused
+      At line 166 in file lcd.s
+Comment: GPIO_PORTK used once
 GPIO_PORTK_ADCCTL_R 40061530
 
 Symbol: GPIO_PORTK_ADCCTL_R
    Definitions
-      At line 114 in file gpio.s
+      At line 114 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTK_ADCCTL_R unused
@@ -608,21 +1061,21 @@ GPIO_PORTK_AFSEL_R 40061420
 
 Symbol: GPIO_PORTK_AFSEL_R
    Definitions
-      At line 101 in file gpio.s
+      At line 101 in file lcd.s
    Uses
       None
+
+
+
+ARM Macro Assembler    Page 5 Alphabetic symbol ordering
+Absolute symbols
+
 Comment: GPIO_PORTK_AFSEL_R unused
 GPIO_PORTK_AMSEL_R 40061528
 
-
-
-ARM Macro Assembler    Page 4 Alphabetic symbol ordering
-Absolute symbols
-
-
 Symbol: GPIO_PORTK_AMSEL_R
    Definitions
-      At line 112 in file gpio.s
+      At line 112 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTK_AMSEL_R unused
@@ -630,15 +1083,19 @@ GPIO_PORTK_BASE_R 40061000
 
 Symbol: GPIO_PORTK_BASE_R
    Definitions
-      At line 28 in file gpio.s
+      At line 28 in file lcd.s
    Uses
-      None
-Comment: GPIO_PORTK_BASE_R unused
+      At line 182 in file lcd.s
+      At line 193 in file lcd.s
+      At line 204 in file lcd.s
+      At line 216 in file lcd.s
+      At line 228 in file lcd.s
+
 GPIO_PORTK_CR_R 40061524
 
 Symbol: GPIO_PORTK_CR_R
    Definitions
-      At line 111 in file gpio.s
+      At line 111 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTK_CR_R unused
@@ -646,7 +1103,7 @@ GPIO_PORTK_DATA_BITS_R 40061000
 
 Symbol: GPIO_PORTK_DATA_BITS_R
    Definitions
-      At line 91 in file gpio.s
+      At line 91 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTK_DATA_BITS_R unused
@@ -654,15 +1111,15 @@ GPIO_PORTK_DATA_R 400613FC
 
 Symbol: GPIO_PORTK_DATA_R
    Definitions
-      At line 92 in file gpio.s
+      At line 92 in file lcd.s
    Uses
-      None
-Comment: GPIO_PORTK_DATA_R unused
+      At line 364 in file lcd.s
+Comment: GPIO_PORTK_DATA_R used once
 GPIO_PORTK_DEN_R 4006151C
 
 Symbol: GPIO_PORTK_DEN_R
    Definitions
-      At line 109 in file gpio.s
+      At line 109 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTK_DEN_R unused
@@ -670,21 +1127,21 @@ GPIO_PORTK_DIR_R 40061400
 
 Symbol: GPIO_PORTK_DIR_R
    Definitions
-      At line 93 in file gpio.s
+      At line 93 in file lcd.s
    Uses
+
+
+
+ARM Macro Assembler    Page 6 Alphabetic symbol ordering
+Absolute symbols
+
       None
 Comment: GPIO_PORTK_DIR_R unused
 GPIO_PORTK_DMACTL_R 40061534
 
 Symbol: GPIO_PORTK_DMACTL_R
    Definitions
-
-
-
-ARM Macro Assembler    Page 5 Alphabetic symbol ordering
-Absolute symbols
-
-      At line 115 in file gpio.s
+      At line 115 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTK_DMACTL_R unused
@@ -692,7 +1149,7 @@ GPIO_PORTK_DR12R_R 4006153C
 
 Symbol: GPIO_PORTK_DR12R_R
    Definitions
-      At line 117 in file gpio.s
+      At line 117 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTK_DR12R_R unused
@@ -700,7 +1157,7 @@ GPIO_PORTK_DR2R_R 40061500
 
 Symbol: GPIO_PORTK_DR2R_R
    Definitions
-      At line 102 in file gpio.s
+      At line 102 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTK_DR2R_R unused
@@ -708,7 +1165,7 @@ GPIO_PORTK_DR4R_R 40061504
 
 Symbol: GPIO_PORTK_DR4R_R
    Definitions
-      At line 103 in file gpio.s
+      At line 103 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTK_DR4R_R unused
@@ -716,7 +1173,7 @@ GPIO_PORTK_DR8R_R 40061508
 
 Symbol: GPIO_PORTK_DR8R_R
    Definitions
-      At line 104 in file gpio.s
+      At line 104 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTK_DR8R_R unused
@@ -724,7 +1181,7 @@ GPIO_PORTK_IBE_R 40061408
 
 Symbol: GPIO_PORTK_IBE_R
    Definitions
-      At line 95 in file gpio.s
+      At line 95 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTK_IBE_R unused
@@ -732,29 +1189,29 @@ GPIO_PORTK_ICR_R 4006141C
 
 Symbol: GPIO_PORTK_ICR_R
    Definitions
-      At line 100 in file gpio.s
+      At line 100 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTK_ICR_R unused
 GPIO_PORTK_IEV_R 4006140C
 
-Symbol: GPIO_PORTK_IEV_R
-   Definitions
-      At line 96 in file gpio.s
-   Uses
-      None
 
 
-
-ARM Macro Assembler    Page 6 Alphabetic symbol ordering
+ARM Macro Assembler    Page 7 Alphabetic symbol ordering
 Absolute symbols
 
+
+Symbol: GPIO_PORTK_IEV_R
+   Definitions
+      At line 96 in file lcd.s
+   Uses
+      None
 Comment: GPIO_PORTK_IEV_R unused
 GPIO_PORTK_IM_R 40061410
 
 Symbol: GPIO_PORTK_IM_R
    Definitions
-      At line 97 in file gpio.s
+      At line 97 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTK_IM_R unused
@@ -762,7 +1219,7 @@ GPIO_PORTK_IS_R 40061404
 
 Symbol: GPIO_PORTK_IS_R
    Definitions
-      At line 94 in file gpio.s
+      At line 94 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTK_IS_R unused
@@ -770,7 +1227,7 @@ GPIO_PORTK_LOCK_R 40061520
 
 Symbol: GPIO_PORTK_LOCK_R
    Definitions
-      At line 110 in file gpio.s
+      At line 110 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTK_LOCK_R unused
@@ -778,7 +1235,7 @@ GPIO_PORTK_MIS_R 40061418
 
 Symbol: GPIO_PORTK_MIS_R
    Definitions
-      At line 99 in file gpio.s
+      At line 99 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTK_MIS_R unused
@@ -786,7 +1243,7 @@ GPIO_PORTK_ODR_R 4006150C
 
 Symbol: GPIO_PORTK_ODR_R
    Definitions
-      At line 105 in file gpio.s
+      At line 105 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTK_ODR_R unused
@@ -794,7 +1251,7 @@ GPIO_PORTK_PCTL_R 4006152C
 
 Symbol: GPIO_PORTK_PCTL_R
    Definitions
-      At line 113 in file gpio.s
+      At line 113 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTK_PCTL_R unused
@@ -802,21 +1259,21 @@ GPIO_PORTK_PC_R 40061FC4
 
 Symbol: GPIO_PORTK_PC_R
    Definitions
-      At line 122 in file gpio.s
+
+
+
+ARM Macro Assembler    Page 8 Alphabetic symbol ordering
+Absolute symbols
+
+      At line 122 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTK_PC_R unused
 GPIO_PORTK_PDR_R 40061514
 
-
-
-
-ARM Macro Assembler    Page 7 Alphabetic symbol ordering
-Absolute symbols
-
 Symbol: GPIO_PORTK_PDR_R
    Definitions
-      At line 107 in file gpio.s
+      At line 107 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTK_PDR_R unused
@@ -824,7 +1281,7 @@ GPIO_PORTK_PP_R 40061FC0
 
 Symbol: GPIO_PORTK_PP_R
    Definitions
-      At line 121 in file gpio.s
+      At line 121 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTK_PP_R unused
@@ -832,7 +1289,7 @@ GPIO_PORTK_PUR_R 40061510
 
 Symbol: GPIO_PORTK_PUR_R
    Definitions
-      At line 106 in file gpio.s
+      At line 106 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTK_PUR_R unused
@@ -840,7 +1297,7 @@ GPIO_PORTK_RIS_R 40061414
 
 Symbol: GPIO_PORTK_RIS_R
    Definitions
-      At line 98 in file gpio.s
+      At line 98 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTK_RIS_R unused
@@ -848,7 +1305,7 @@ GPIO_PORTK_SI_R 40061538
 
 Symbol: GPIO_PORTK_SI_R
    Definitions
-      At line 116 in file gpio.s
+      At line 116 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTK_SI_R unused
@@ -856,7 +1313,7 @@ GPIO_PORTK_SLR_R 40061518
 
 Symbol: GPIO_PORTK_SLR_R
    Definitions
-      At line 108 in file gpio.s
+      At line 108 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTK_SLR_R unused
@@ -864,21 +1321,21 @@ GPIO_PORTK_WAKELVL_R 40061544
 
 Symbol: GPIO_PORTK_WAKELVL_R
    Definitions
-      At line 119 in file gpio.s
+      At line 119 in file lcd.s
    Uses
       None
+
+
+
+ARM Macro Assembler    Page 9 Alphabetic symbol ordering
+Absolute symbols
+
 Comment: GPIO_PORTK_WAKELVL_R unused
 GPIO_PORTK_WAKEPEN_R 40061540
 
 Symbol: GPIO_PORTK_WAKEPEN_R
    Definitions
-      At line 118 in file gpio.s
-
-
-
-ARM Macro Assembler    Page 8 Alphabetic symbol ordering
-Absolute symbols
-
+      At line 118 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTK_WAKEPEN_R unused
@@ -886,7 +1343,7 @@ GPIO_PORTK_WAKESTAT_R 40061548
 
 Symbol: GPIO_PORTK_WAKESTAT_R
    Definitions
-      At line 120 in file gpio.s
+      At line 120 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTK_WAKESTAT_R unused
@@ -894,7 +1351,7 @@ GPIO_PORTL_BASE_R 40062000
 
 Symbol: GPIO_PORTL_BASE_R
    Definitions
-      At line 29 in file gpio.s
+      At line 29 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTL_BASE_R unused
@@ -902,15 +1359,15 @@ GPIO_PORTM 00000800
 
 Symbol: GPIO_PORTM
    Definitions
-      At line 89 in file gpio.s
+      At line 89 in file lcd.s
    Uses
-      None
-Comment: GPIO_PORTM unused
+      At line 165 in file lcd.s
+Comment: GPIO_PORTM used once
 GPIO_PORTM_ADCCTL_R 40063530
 
 Symbol: GPIO_PORTM_ADCCTL_R
    Definitions
-      At line 80 in file gpio.s
+      At line 80 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTM_ADCCTL_R unused
@@ -918,7 +1375,7 @@ GPIO_PORTM_AFSEL_R 40063420
 
 Symbol: GPIO_PORTM_AFSEL_R
    Definitions
-      At line 67 in file gpio.s
+      At line 67 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTM_AFSEL_R unused
@@ -926,29 +1383,33 @@ GPIO_PORTM_AMSEL_R 40063528
 
 Symbol: GPIO_PORTM_AMSEL_R
    Definitions
-      At line 78 in file gpio.s
+      At line 78 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTM_AMSEL_R unused
 GPIO_PORTM_BASE_R 40063000
 
+
+
+
+ARM Macro Assembler    Page 10 Alphabetic symbol ordering
+Absolute symbols
+
 Symbol: GPIO_PORTM_BASE_R
    Definitions
-      At line 30 in file gpio.s
+      At line 30 in file lcd.s
    Uses
-      None
-Comment: GPIO_PORTM_BASE_R unused
-
-
-
-ARM Macro Assembler    Page 9 Alphabetic symbol ordering
-Absolute symbols
+      At line 177 in file lcd.s
+      At line 188 in file lcd.s
+      At line 199 in file lcd.s
+      At line 211 in file lcd.s
+      At line 223 in file lcd.s
 
 GPIO_PORTM_CR_R 40063524
 
 Symbol: GPIO_PORTM_CR_R
    Definitions
-      At line 77 in file gpio.s
+      At line 77 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTM_CR_R unused
@@ -956,7 +1417,7 @@ GPIO_PORTM_DATA_BITS_R 40063000
 
 Symbol: GPIO_PORTM_DATA_BITS_R
    Definitions
-      At line 57 in file gpio.s
+      At line 57 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTM_DATA_BITS_R unused
@@ -964,15 +1425,15 @@ GPIO_PORTM_DATA_R 400633FC
 
 Symbol: GPIO_PORTM_DATA_R
    Definitions
-      At line 58 in file gpio.s
+      At line 58 in file lcd.s
    Uses
-      None
-Comment: GPIO_PORTM_DATA_R unused
+      At line 354 in file lcd.s
+Comment: GPIO_PORTM_DATA_R used once
 GPIO_PORTM_DEN_R 4006351C
 
 Symbol: GPIO_PORTM_DEN_R
    Definitions
-      At line 75 in file gpio.s
+      At line 75 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTM_DEN_R unused
@@ -980,7 +1441,7 @@ GPIO_PORTM_DIR_R 40063400
 
 Symbol: GPIO_PORTM_DIR_R
    Definitions
-      At line 59 in file gpio.s
+      At line 59 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTM_DIR_R unused
@@ -988,29 +1449,29 @@ GPIO_PORTM_DMACTL_R 40063534
 
 Symbol: GPIO_PORTM_DMACTL_R
    Definitions
-      At line 81 in file gpio.s
+      At line 81 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTM_DMACTL_R unused
 GPIO_PORTM_DR12R_R 4006353C
 
+
+
+ARM Macro Assembler    Page 11 Alphabetic symbol ordering
+Absolute symbols
+
+
 Symbol: GPIO_PORTM_DR12R_R
    Definitions
-      At line 83 in file gpio.s
+      At line 83 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTM_DR12R_R unused
 GPIO_PORTM_DR2R_R 40063500
 
 Symbol: GPIO_PORTM_DR2R_R
-
-
-
-ARM Macro Assembler    Page 10 Alphabetic symbol ordering
-Absolute symbols
-
    Definitions
-      At line 68 in file gpio.s
+      At line 68 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTM_DR2R_R unused
@@ -1018,7 +1479,7 @@ GPIO_PORTM_DR4R_R 40063504
 
 Symbol: GPIO_PORTM_DR4R_R
    Definitions
-      At line 69 in file gpio.s
+      At line 69 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTM_DR4R_R unused
@@ -1026,7 +1487,7 @@ GPIO_PORTM_DR8R_R 40063508
 
 Symbol: GPIO_PORTM_DR8R_R
    Definitions
-      At line 70 in file gpio.s
+      At line 70 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTM_DR8R_R unused
@@ -1034,7 +1495,7 @@ GPIO_PORTM_IBE_R 40063408
 
 Symbol: GPIO_PORTM_IBE_R
    Definitions
-      At line 61 in file gpio.s
+      At line 61 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTM_IBE_R unused
@@ -1042,7 +1503,7 @@ GPIO_PORTM_ICR_R 4006341C
 
 Symbol: GPIO_PORTM_ICR_R
    Definitions
-      At line 66 in file gpio.s
+      At line 66 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTM_ICR_R unused
@@ -1050,7 +1511,7 @@ GPIO_PORTM_IEV_R 4006340C
 
 Symbol: GPIO_PORTM_IEV_R
    Definitions
-      At line 62 in file gpio.s
+      At line 62 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTM_IEV_R unused
@@ -1058,7 +1519,13 @@ GPIO_PORTM_IM_R 40063410
 
 Symbol: GPIO_PORTM_IM_R
    Definitions
-      At line 63 in file gpio.s
+
+
+
+ARM Macro Assembler    Page 12 Alphabetic symbol ordering
+Absolute symbols
+
+      At line 63 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTM_IM_R unused
@@ -1066,21 +1533,15 @@ GPIO_PORTM_IS_R 40063404
 
 Symbol: GPIO_PORTM_IS_R
    Definitions
-      At line 60 in file gpio.s
+      At line 60 in file lcd.s
    Uses
-
-
-
-ARM Macro Assembler    Page 11 Alphabetic symbol ordering
-Absolute symbols
-
       None
 Comment: GPIO_PORTM_IS_R unused
 GPIO_PORTM_LOCK_R 40063520
 
 Symbol: GPIO_PORTM_LOCK_R
    Definitions
-      At line 76 in file gpio.s
+      At line 76 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTM_LOCK_R unused
@@ -1088,7 +1549,7 @@ GPIO_PORTM_MIS_R 40063418
 
 Symbol: GPIO_PORTM_MIS_R
    Definitions
-      At line 65 in file gpio.s
+      At line 65 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTM_MIS_R unused
@@ -1096,7 +1557,7 @@ GPIO_PORTM_ODR_R 4006350C
 
 Symbol: GPIO_PORTM_ODR_R
    Definitions
-      At line 71 in file gpio.s
+      At line 71 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTM_ODR_R unused
@@ -1104,7 +1565,7 @@ GPIO_PORTM_PCTL_R 4006352C
 
 Symbol: GPIO_PORTM_PCTL_R
    Definitions
-      At line 79 in file gpio.s
+      At line 79 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTM_PCTL_R unused
@@ -1112,7 +1573,7 @@ GPIO_PORTM_PC_R 40063FC4
 
 Symbol: GPIO_PORTM_PC_R
    Definitions
-      At line 88 in file gpio.s
+      At line 88 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTM_PC_R unused
@@ -1120,29 +1581,29 @@ GPIO_PORTM_PDR_R 40063514
 
 Symbol: GPIO_PORTM_PDR_R
    Definitions
-      At line 73 in file gpio.s
+      At line 73 in file lcd.s
    Uses
       None
+
+
+
+ARM Macro Assembler    Page 13 Alphabetic symbol ordering
+Absolute symbols
+
 Comment: GPIO_PORTM_PDR_R unused
 GPIO_PORTM_PP_R 40063FC0
 
 Symbol: GPIO_PORTM_PP_R
    Definitions
-      At line 87 in file gpio.s
+      At line 87 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTM_PP_R unused
 GPIO_PORTM_PUR_R 40063510
 
-
-
-ARM Macro Assembler    Page 12 Alphabetic symbol ordering
-Absolute symbols
-
-
 Symbol: GPIO_PORTM_PUR_R
    Definitions
-      At line 72 in file gpio.s
+      At line 72 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTM_PUR_R unused
@@ -1150,7 +1611,7 @@ GPIO_PORTM_RIS_R 40063414
 
 Symbol: GPIO_PORTM_RIS_R
    Definitions
-      At line 64 in file gpio.s
+      At line 64 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTM_RIS_R unused
@@ -1158,7 +1619,7 @@ GPIO_PORTM_SI_R 40063538
 
 Symbol: GPIO_PORTM_SI_R
    Definitions
-      At line 82 in file gpio.s
+      At line 82 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTM_SI_R unused
@@ -1166,7 +1627,7 @@ GPIO_PORTM_SLR_R 40063518
 
 Symbol: GPIO_PORTM_SLR_R
    Definitions
-      At line 74 in file gpio.s
+      At line 74 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTM_SLR_R unused
@@ -1174,7 +1635,7 @@ GPIO_PORTM_WAKELVL_R 40063544
 
 Symbol: GPIO_PORTM_WAKELVL_R
    Definitions
-      At line 85 in file gpio.s
+      At line 85 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTM_WAKELVL_R unused
@@ -1182,15 +1643,21 @@ GPIO_PORTM_WAKEPEN_R 40063540
 
 Symbol: GPIO_PORTM_WAKEPEN_R
    Definitions
-      At line 84 in file gpio.s
+      At line 84 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTM_WAKEPEN_R unused
 GPIO_PORTM_WAKESTAT_R 40063548
 
+
+
+
+ARM Macro Assembler    Page 14 Alphabetic symbol ordering
+Absolute symbols
+
 Symbol: GPIO_PORTM_WAKESTAT_R
    Definitions
-      At line 86 in file gpio.s
+      At line 86 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTM_WAKESTAT_R unused
@@ -1198,13 +1665,7 @@ GPIO_PORTN 00001000
 
 Symbol: GPIO_PORTN
    Definitions
-
-
-
-ARM Macro Assembler    Page 13 Alphabetic symbol ordering
-Absolute symbols
-
-      At line 55 in file gpio.s
+      At line 55 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTN unused
@@ -1212,7 +1673,7 @@ GPIO_PORTN_AHB_AFSEL_R 40064420
 
 Symbol: GPIO_PORTN_AHB_AFSEL_R
    Definitions
-      At line 51 in file gpio.s
+      At line 51 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTN_AHB_AFSEL_R unused
@@ -1220,7 +1681,7 @@ GPIO_PORTN_AHB_AMSEL_R 40064528
 
 Symbol: GPIO_PORTN_AHB_AMSEL_R
    Definitions
-      At line 48 in file gpio.s
+      At line 48 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTN_AHB_AMSEL_R unused
@@ -1228,7 +1689,7 @@ GPIO_PORTN_AHB_CR_R 40064524
 
 Symbol: GPIO_PORTN_AHB_CR_R
    Definitions
-      At line 47 in file gpio.s
+      At line 47 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTN_AHB_CR_R unused
@@ -1236,7 +1697,7 @@ GPIO_PORTN_AHB_DATA_R 400643FC
 
 Symbol: GPIO_PORTN_AHB_DATA_R
    Definitions
-      At line 54 in file gpio.s
+      At line 54 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTN_AHB_DATA_R unused
@@ -1244,7 +1705,7 @@ GPIO_PORTN_AHB_DEN_R 4006451C
 
 Symbol: GPIO_PORTN_AHB_DEN_R
    Definitions
-      At line 52 in file gpio.s
+      At line 52 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTN_AHB_DEN_R unused
@@ -1252,7 +1713,13 @@ GPIO_PORTN_AHB_DIR_R 40064400
 
 Symbol: GPIO_PORTN_AHB_DIR_R
    Definitions
-      At line 50 in file gpio.s
+      At line 50 in file lcd.s
+
+
+
+ARM Macro Assembler    Page 15 Alphabetic symbol ordering
+Absolute symbols
+
    Uses
       None
 Comment: GPIO_PORTN_AHB_DIR_R unused
@@ -1260,21 +1727,15 @@ GPIO_PORTN_AHB_LOCK_R 40064520
 
 Symbol: GPIO_PORTN_AHB_LOCK_R
    Definitions
-      At line 46 in file gpio.s
+      At line 46 in file lcd.s
    Uses
       None
-
-
-
-ARM Macro Assembler    Page 14 Alphabetic symbol ordering
-Absolute symbols
-
 Comment: GPIO_PORTN_AHB_LOCK_R unused
 GPIO_PORTN_AHB_PCTL_R 4006452C
 
 Symbol: GPIO_PORTN_AHB_PCTL_R
    Definitions
-      At line 49 in file gpio.s
+      At line 49 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTN_AHB_PCTL_R unused
@@ -1282,7 +1743,7 @@ GPIO_PORTN_AHB_PUR_R 40064510
 
 Symbol: GPIO_PORTN_AHB_PUR_R
    Definitions
-      At line 53 in file gpio.s
+      At line 53 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTN_AHB_PUR_R unused
@@ -1290,7 +1751,7 @@ GPIO_PORTN_BASE_R 40064000
 
 Symbol: GPIO_PORTN_BASE_R
    Definitions
-      At line 31 in file gpio.s
+      At line 31 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTN_BASE_R unused
@@ -1298,7 +1759,7 @@ GPIO_PORTP_BASE_R 40065000
 
 Symbol: GPIO_PORTP_BASE_R
    Definitions
-      At line 32 in file gpio.s
+      At line 32 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTP_BASE_R unused
@@ -1306,25 +1767,59 @@ GPIO_PORTQ_BASE_R 40066000
 
 Symbol: GPIO_PORTQ_BASE_R
    Definitions
-      At line 33 in file gpio.s
+      At line 33 in file lcd.s
    Uses
       None
 Comment: GPIO_PORTQ_BASE_R unused
+GPIO_PUR_R 00000510
+
+Symbol: GPIO_PUR_R
+   Definitions
+      At line 133 in file lcd.s
+   Uses
+      None
+Comment: GPIO_PUR_R unused
+
+
+
+ARM Macro Assembler    Page 16 Alphabetic symbol ordering
+Absolute symbols
+
 SYSCTL_PRGPIO_R 400FEA08
 
 Symbol: SYSCTL_PRGPIO_R
    Definitions
-      At line 15 in file gpio.s
+      At line 15 in file lcd.s
    Uses
-      None
-Comment: SYSCTL_PRGPIO_R unused
+      At line 172 in file lcd.s
+Comment: SYSCTL_PRGPIO_R used once
 SYSCTL_RCGCGPIO_R 400FE608
 
 Symbol: SYSCTL_RCGCGPIO_R
    Definitions
-      At line 14 in file gpio.s
+      At line 14 in file lcd.s
    Uses
-      None
-Comment: SYSCTL_RCGCGPIO_R unused
-103 symbols
-437 symbols in table
+      At line 164 in file lcd.s
+Comment: SYSCTL_RCGCGPIO_R used once
+111 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+External symbols
+
+SysTick_Wait1us 00000000
+
+Symbol: SysTick_Wait1us
+   Definitions
+      At line 151 in file lcd.s
+   Uses
+      At line 283 in file lcd.s
+      At line 289 in file lcd.s
+      At line 311 in file lcd.s
+      At line 317 in file lcd.s
+      At line 339 in file lcd.s
+      At line 345 in file lcd.s
+
+1 symbol
+457 symbols in table

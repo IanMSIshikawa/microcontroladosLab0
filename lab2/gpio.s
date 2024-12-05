@@ -132,31 +132,11 @@ GPIO_PORTK              EQU 2_000001000000000
 ;                  c�digo
         AREA    |.text|, CODE, READONLY, ALIGN=2
 
-		; Se alguma fun��o do arquivo for chamada em outro arquivo	
-		EXPORT PortM_Output			; Permite chamar PortN_Output de outro arquivo
-		EXPORT PortK_Output          ; Permite chamar PortJ_Input de outro arquivo
+
 									
 
 
-PortM_Output
-	LDR	R1, =GPIO_PORTM_DATA_R		    ;Carrega o valor do offset do data register
-	;Read-Modify-Write para escrita
-	LDR R2, [R1]
-	BIC R2, #2_00000111                     ;Primeiro limpamos os dois bits do lido da porta 
-	ORR R0, R0, R2                          ;Fazer o OR do lido pela porta com o parâmetro de entrada
-	STR R0, [R1]                            ;Escreve na porta F o barramento de dados dos pinos
 
-	BX LR
-
-PortK_Output
-	LDR	R1, =GPIO_PORTK_DATA_R		    ;Carrega o valor do offset do data register
-	;Read-Modify-Write para escrita
-	LDR R2, [R1]
-	BIC R2, #2_11111111                     ;Primeiro limpamos os dois bits do lido da porta 
-	ORR R0, R0, R2                          ;Fazer o OR do lido pela porta com o parâmetro de entrada
-	STR R0, [R1]                            ;Escreve na porta F o barramento de dados dos pinos
-
-	BX LR
 
 
 
