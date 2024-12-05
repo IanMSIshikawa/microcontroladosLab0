@@ -2,8 +2,8 @@
 ; Desenvolvido para a placa EK-TM4C1294XL
 ; Prof. Guilherme Peron
 ; 24/08/2020
-; Este programa espera o usuário apertar a chave USR_SW1.
-; Caso o usuário pressione a chave, o LED1 piscará a cada 0,5 segundo.
+; Este programa espera o usuï¿½rio apertar a chave USR_SW1.
+; Caso o usuï¿½rio pressione a chave, o LED1 piscarï¿½ a cada 0,5 segundo.
 
 ; -------------------------------------------------------------------------------
 ;                               TIMER REGISTERS
@@ -54,37 +54,50 @@ INT_TIMER1B       EQU      38          ; 16/32-Bit Timer 1B
 INT_TIMER2A       EQU      39          ; 16/32-Bit Timer 2A
 INT_TIMER2B       EQU      40          ; 16/32-Bit Timer 2B
 	
+CONTAGEM_100_MS   EQU      7999999
+CONTAGEM_200_MS   EQU      15999999
+CONTAGEM_300_MS   EQU      23999999
+CONTAGEM_400_MS   EQU      31999999
+CONTAGEM_500_MS   EQU      39999999
+CONTAGEM_600_MS   EQU      47999999
+CONTAGEM_700_MS   EQU      55999999
+CONTAGEM_800_MS   EQU      63999999
+CONTAGEM_900_MS   EQU      71999999
 
+ADDRESS_MEMORY_CONTAGEM EQU 0x20001000
+ADDRESS_MEMORY_OFFSET   EQU 0x04
+
+ADDRESS_MEMORY_TMP EQU 0x20001A00
 ; -------------------------------------------------------------------------------
-        THUMB                        ; Instruções do tipo Thumb-2
+        THUMB                        ; Instruï¿½ï¿½es do tipo Thumb-2
 ; -------------------------------------------------------------------------------
 		
-; Declarações EQU - Defines
+; Declaraï¿½ï¿½es EQU - Defines
 ;<NOME>         EQU <VALOR>
 ; ========================
 
 ; -------------------------------------------------------------------------------
-; Área de Dados - Declarações de variáveis
+; ï¿½rea de Dados - Declaraï¿½ï¿½es de variï¿½veis
 		AREA  DATA, ALIGN=2
-		; Se alguma variável for chamada em outro arquivo
-		;EXPORT  <var> [DATA,SIZE=<tam>]   ; Permite chamar a variável <var> a 
+		; Se alguma variï¿½vel for chamada em outro arquivo
+		;EXPORT  <var> [DATA,SIZE=<tam>]   ; Permite chamar a variï¿½vel <var> a 
 		                                   ; partir de outro arquivo
-;<var>	SPACE <tam>                        ; Declara uma variável de nome <var>
+;<var>	SPACE <tam>                        ; Declara uma variï¿½vel de nome <var>
                                            ; de <tam> bytes a partir da primeira 
-                                           ; posição da RAM		
+                                           ; posiï¿½ï¿½o da RAM		
 
 ; -------------------------------------------------------------------------------
-; Área de Código - Tudo abaixo da diretiva a seguir será armazenado na memória de 
-;                  código
+; ï¿½rea de Cï¿½digo - Tudo abaixo da diretiva a seguir serï¿½ armazenado na memï¿½ria de 
+;                  cï¿½digo
         AREA    |.text|, CODE, READONLY, ALIGN=2
 
-		; Se alguma função do arquivo for chamada em outro arquivo	
-        EXPORT Start                ; Permite chamar a função Start a partir de 
+		; Se alguma funï¿½ï¿½o do arquivo for chamada em outro arquivo	
+        EXPORT Start                ; Permite chamar a funï¿½ï¿½o Start a partir de 
 			                        ; outro arquivo. No caso startup.s
 									
-		; Se chamar alguma função externa	
+		; Se chamar alguma funï¿½ï¿½o externa	
         ;IMPORT <func>              ; Permite chamar dentro deste arquivo uma 
-									; função <func>
+									; funï¿½ï¿½o <func>
 		IMPORT  PLL_Init
 		IMPORT  SysTick_Init
 		IMPORT  SysTick_Wait1ms			
@@ -93,47 +106,126 @@ INT_TIMER2B       EQU      40          ; 16/32-Bit Timer 2B
         IMPORT  PortJ_Input	
 		EXPORT Timer0A_Handler
 ; -------------------------------------------------------------------------------
-; Função main()
+; Funï¿½ï¿½o main()
 Start  		
 	BL PLL_Init                  ;Chama a subrotina para alterar o clock do microcontrolador para 80MHz
 	BL SysTick_Init
 	BL GPIO_Init                 ;Chama a subrotina que inicializa os GPIO
+	BL Load_Contagem_Memoria     ;Chama a subrotina que grava na memoria os valores da contagem
 	BL Timer0A_init      ;Chama subrotina que inicializa e habilita interrupcao do timer 0_A
 	MOV R10, #0                   ; Rigistrador que armazena o estado do LED
+	MOV R11, #0                   ; Registrador que armazena a quantidade de piscadas
+	MOV R4,  #1                   ; Registrador que armazena o estado do contador (1 -9)
 MainLoop
-;	MOV R0, #500
-;	BL SysTick_Wait1ms
-;	PUSH {LR}
-;	CMP R10, #0
-;	IT EQ
-;		MOVEQ R10, #2_10
-;	IT NE
-;		MOVNE R10, #2_00
-;	MOV R0, R10
-;	BL PortN_Output				 ;Chamar a função para acender o LED1					 ;return
+ 
+	CMP R11, #2 ;SE PISCOU MAIS DE 10 VEZES
+	IT LS
+		BLS MainLoop
+		
+	MOV R11, #0
+	ADD R4, R4, #1
+	BL Check_State
+	MOV R0, R4
+	BL Set_Contagem_timer
 
-	B MainLoop                   ;Volta para o laço principal
+	B MainLoop                   ;Volta para o laï¿½o principal
 
 ;--------------------------------------------------------------------------------
-; Função Pisca_LED
-; Parâmetro de entrada: Não tem
-; Parâmetro de saída: Não tem
+; Funï¿½ï¿½o Check_State
+; Parï¿½metro de entrada: Nï¿½o tem
+; Parï¿½metro de saï¿½da: Nï¿½o tem
+Check_State
+	CMP R4, #9 ;SE o estado eh maior que 9 volta para 1
+	IT HI
+		MOVHI R4, #1
+	BX LR
+;--------------------------------------------------------------------------------
+; Funï¿½ï¿½o Pisca_LED
+; Parï¿½metro de entrada: Nï¿½o tem
+; Parï¿½metro de saï¿½da: Nï¿½o tem
 Pisca_LED
 	PUSH {LR}
+	ADD R11, R11, #1
 	CMP R10, #0
 	IT EQ
 		MOVEQ R10, #2_10
 	IT NE
 		MOVNE R10, #2_00
 	MOV R0, R10
-	BL PortN_Output				 ;Chamar a função para acender o LED1
+	BL PortN_Output				 ;Chamar a funï¿½ï¿½o para acender o LED1
 	POP {LR}
 	BX LR
 
 ;--------------------------------------------------------------------------------
-; Função Timer0A_Handler
-; Parâmetro de entrada: Não tem
-; Parâmetro de saída: Não tem
+; Funï¿½ï¿½o Set_Contagem_timer
+; Parï¿½metro de entrada: R0 ( 1- 100 ms, 2 -200ms, ..., 9 - 900ms)
+; Parï¿½metro de saï¿½da: Nï¿½o tem
+Set_Contagem_timer
+	PUSH {R0, R1, R2}
+	
+	MOV R2, R0                            ;Salva o parametro de entrada em R2
+	SUB R2, R2, #1
+
+	LDR R0, =ADDRESS_MEMORY_CONTAGEM
+	LDR R1, =ADDRESS_MEMORY_OFFSET
+	MUL R2, R2, R1
+	ADD R2, R2, R0
+	LDR R1, [R2]   
+	
+	LDR R0, =TIMER0_TAILR_R                         
+	STR R1, [R0]                          ;Seta o contador para o valor requerido
+
+	POP {R0, R1, R2}
+	BX LR
+	
+;--------------------------------------------------------------------------------
+; Funï¿½ï¿½o Set_Contagem_timer
+; Parï¿½metro de entrada: R0 ( 1- 100 ms, 2 -200ms, ..., 9 - 900ms)
+; Parï¿½metro de saï¿½da: Nï¿½o tem
+Load_Contagem_Memoria
+	PUSH {R0, R1, LR}
+	LDR R0, =ADDRESS_MEMORY_CONTAGEM 
+	LDR R1, =CONTAGEM_100_MS                         
+	STR R1, [R0]                          ;Carrega o valor de contagem de 100 ms no endereco R0
+	
+	ADD R0, R0, #ADDRESS_MEMORY_OFFSET
+	LDR R1, =CONTAGEM_200_MS                         
+	STR R1, [R0]                          ;Carrega o valor de contagem de 200 ms no endereco R0
+	
+	ADD R0, R0, #ADDRESS_MEMORY_OFFSET
+	LDR R1, =CONTAGEM_300_MS                         
+	STR R1, [R0]                          ;Carrega o valor de contagem de 300 ms no endereco R0
+	
+	ADD R0, R0, #ADDRESS_MEMORY_OFFSET
+	LDR R1, =CONTAGEM_400_MS                         
+	STR R1, [R0]                          ;Carrega o valor de contagem de 400 ms no endereco R0
+	
+	ADD R0, R0, #ADDRESS_MEMORY_OFFSET
+	LDR R1, =CONTAGEM_500_MS                         
+	STR R1, [R0]                          ;Carrega o valor de contagem de 500 ms no endereco R0
+	
+	ADD R0, R0, #ADDRESS_MEMORY_OFFSET
+	LDR R1, =CONTAGEM_600_MS                         
+	STR R1, [R0]                          ;Carrega o valor de contagem de 600 ms no endereco R0
+	
+	ADD R0, R0, #ADDRESS_MEMORY_OFFSET
+	LDR R1, =CONTAGEM_700_MS                         
+	STR R1, [R0]                          ;Carrega o valor de contagem de 700 ms no endereco R0
+
+	ADD R0, R0, #ADDRESS_MEMORY_OFFSET
+	LDR R1, =CONTAGEM_800_MS                         
+	STR R1, [R0]                          ;Carrega o valor de contagem de 800 ms no endereco R0
+	
+	ADD R0, R0, #ADDRESS_MEMORY_OFFSET
+	LDR R1, =CONTAGEM_900_MS                         
+	STR R1, [R0]                          ;Carrega o valor de contagem de 900 ms no endereco R0	
+	
+	POP {R0, R1, LR}
+	BX LR	
+;--------------------------------------------------------------------------------
+; Funï¿½ï¿½o Timer0A_Handler
+; Parï¿½metro de entrada: Nï¿½o tem
+; Parï¿½metro de saï¿½da: Nï¿½o tem
 Timer0A_Handler
 	LDR R1, =TIMER0_ICR_R
 	MOV R0, #1
@@ -157,7 +249,7 @@ Espera_PRTIMER
 	LDR R1, [R0]
 	MOV R2, #2_0000001
 	TST     R1, R2							;Testa o R1 com R2 fazendo R1 & R2
-	BEQ     Espera_PRTIMER					;Se o flag Z=1, volta para o laço. Senão continua executando
+	BEQ     Espera_PRTIMER					;Se o flag Z=1, volta para o laï¿½o. Senï¿½o continua executando
 	
 	LDR R0, =TIMER0_CTL_R
 	MOV R1, #0X00                          
@@ -172,8 +264,8 @@ Espera_PRTIMER
 	STR R1, [R0]                          ;Habilita modo periodico no TIMER A
 	
 	LDR R0, =TIMER0_TAILR_R 
-	LDR R1, =55999999                         
-	STR R1, [R0]                          ;Habilita contador para o valor 700ms
+	LDR R1, =7999999                        
+	STR R1, [R0]                          ;Habilita contador para o valor 100ms
 	
 	LDR R0, =TIMER0_TAPR_R
 	MOV R1, #0X00                          
@@ -188,7 +280,7 @@ Espera_PRTIMER
 	LDR R0, =TIMER0_IMR_R
 	LDR R1, [R0]
 	ORR R1, R1, #0X01                          
-	STR R1, [R0]                          ;Seta a interrupção do TimerA
+	STR R1, [R0]                          ;Seta a interrupï¿½ï¿½o do TimerA
 	
 	LDR R0, =NVIC_PRI4_R
 	LDR R1, [R0]
@@ -211,5 +303,5 @@ Espera_PRTIMER
 ; -------------------------------------------------------------------------------------------------------------------------
 ; Fim do Arquivo
 ; -------------------------------------------------------------------------------------------------------------------------	
-    ALIGN                        ;Garante que o fim da seção está alinhada 
+    ALIGN                        ;Garante que o fim da seï¿½ï¿½o estï¿½ alinhada 
     END                          ;Fim do arquivo
