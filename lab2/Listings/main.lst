@@ -9,117 +9,138 @@ ARM Macro Assembler    Page 1
     3 00000000         ; Prof. Guilherme Peron
     4 00000000         ; Ver 1 19/03/2018
     5 00000000         ; Ver 2 26/08/2018
-    6 00000000         ; Este programa deve esperar o usuário pressionar uma ch
-                       ave.
-    7 00000000         ; Caso o usuário pressione uma chave, um LED deve piscar
-                        a cada 1 segundo.
+    6 00000000         ; Este programa deve esperar o usuï¿½rio pressionar uma 
+                       chave.
+    7 00000000         ; Caso o usuï¿½rio pressione uma chave, um LED deve pisc
+                       ar a cada 1 segundo.
     8 00000000         
     9 00000000         ; ------------------------------------------------------
                        -------------------------
-   10 00000000                 THUMB                        ; Instruções do tip
-                                                            o Thumb-2
+   10 00000000                 THUMB                        ; Instruï¿½ï¿½es do
+                                                             tipo Thumb-2
    11 00000000         ; ------------------------------------------------------
                        -------------------------
    12 00000000         
-   13 00000000         ; Declarações EQU - Defines
+   13 00000000         ; Declaraï¿½ï¿½es EQU - Defines
    14 00000000         ;<NOME>         EQU <VALOR>
    15 00000000         ; ========================
-   16 00000000         ; Definições de Valores
+   16 00000000         ; Definiï¿½ï¿½es de Valores
    17 00000000         
    18 00000000         
    19 00000000         ; ------------------------------------------------------
                        -------------------------
-   20 00000000         ; Área de Dados - Declarações de variáveis
+   20 00000000         ; ï¿½rea de Dados - Declaraï¿½ï¿½es de variï¿½veis
    21 00000000                 AREA             DATA, ALIGN=2
-   22 00000000         ; Se alguma variável for chamada em outro arquivo
+   22 00000000         ; Se alguma variï¿½vel for chamada em outro arquivo
    23 00000000         ;EXPORT  <var> [DATA,SIZE=<tam>]   ; Permite chamar a va
-                       riável <var> a 
+                       riï¿½vel <var> a 
    24 00000000         ; partir de outro arquivo
    25 00000000         ;<var> SPACE <tam>                        ; Declara uma 
-                       variável de nome <var>
+                       variï¿½vel de nome <var>
    26 00000000         ; de <tam> bytes a partir da primeira 
-   27 00000000         ; posição da RAM  
+   27 00000000         ; posiï¿½ï¿½o da RAM  
    28 00000000         
    29 00000000         ; ------------------------------------------------------
                        -------------------------
-   30 00000000         ; Área de Código - Tudo abaixo da diretiva a seguir será
-                        armazenado na memória de 
-   31 00000000         ;                  código
+   30 00000000         ; ï¿½rea de Cï¿½digo - Tudo abaixo da diretiva a seguir 
+                       serï¿½ armazenado na memï¿½ria de 
+   31 00000000         ;                  cï¿½digo
    32 00000000                 AREA             |.text|, CODE, READONLY, ALIGN=
 2
    33 00000000         
-   34 00000000         ; Se alguma função do arquivo for chamada em outro arqui
-                       vo 
+   34 00000000         ; Se alguma funï¿½ï¿½o do arquivo for chamada em outro a
+                       rquivo 
    35 00000000                 EXPORT           Start       ; Permite chamar a 
-                                                            função Start a part
-                                                            ir de 
+                                                            funï¿½ï¿½o Start a 
+                                                            partir de 
    36 00000000         ; outro arquivo. No caso startup.s
    37 00000000         
-   38 00000000         ; Se chamar alguma função externa 
+   38 00000000         ; Se chamar alguma funï¿½ï¿½o externa 
    39 00000000         ;IMPORT <func>              ; Permite chamar dentro dest
                        e arquivo uma 
-   40 00000000         ; função <func>
-   41 00000000                 IMPORT           PLL_Init
-   42 00000000                 IMPORT           SysTick_Init
-   43 00000000                 IMPORT           SysTick_Wait1ms
-   44 00000000                 IMPORT           GPIO_Init
+   40 00000000         ; funï¿½ï¿½o <func>
+   41 00000000         
+   42 00000000                 IMPORT           PLL_Init
+   43 00000000                 IMPORT           SysTick_Init
+   44 00000000                 IMPORT           SysTick_Wait1ms
 
 
 
 ARM Macro Assembler    Page 2 
 
 
-   45 00000000                 IMPORT           PortN_Output
-   46 00000000                 IMPORT           PortJ_Input
-   47 00000000         
-   48 00000000         
-   49 00000000         ; ------------------------------------------------------
+   45 00000000                 IMPORT           LCD_Init    ; Permite chamar GP
+                                                            IO_Init de outro ar
+                                                            quivo
+   46 00000000                 IMPORT           setup_LCD   ; ConfiguraÃ§Ã£o do
+                                                             LCD
+   47 00000000                 IMPORT           send_comand_lcd
+   48 00000000                 IMPORT           send_complex_comand_lcd
+   49 00000000                 IMPORT           send_data_lcd
+   50 00000000         
+   51 00000000         
+   52 00000000         ; ------------------------------------------------------
                        -------------------------
-   50 00000000         ; Função main()
-   51 00000000         Start
-   52 00000000 F7FF FFFE       BL               PLL_Init    ;Chama a subrotina 
+   53 00000000         ; Funï¿½ï¿½o main()
+   54 00000000         Start
+   55 00000000 F7FF FFFE       BL               PLL_Init    ;Chama a subrotina 
                                                             para alterar o cloc
                                                             k do microcontrolad
                                                             or para 80MHz
-   53 00000004 F7FF FFFE       BL               SysTick_Init ;Chama a subrotina
+   56 00000004 F7FF FFFE       BL               SysTick_Init ;Chama a subrotina
                                                              para inicializar o
                                                              SysTick
-   54 00000008 F7FF FFFE       BL               GPIO_Init   ;Chama a subrotina 
-                                                            que inicializa os G
-                                                            PIO
-   55 0000000C         
-   56 0000000C         MainLoop
-   57 0000000C         ; ****************************************
-   58 0000000C         ; Escrever código que lê o estado da chave, se ela estiv
-                       er desativada apaga o LED
-   59 0000000C         ; Se estivar ativada chama a subrotina Pisca_LED
-   60 0000000C         ; ****************************************
-   61 0000000C E7FE            B                MainLoop
-   62 0000000E         
-   63 0000000E         ;-------------------------------------------------------
+   57 00000008 F7FF FFFE       BL               LCD_Init
+   58 0000000C F7FF FFFE       BL               setup_LCD
+   59 00000010         
+   60 00000010 F04F 0061       MOV              R0, #97
+   61 00000014 F7FF FFFE       BL               send_data_lcd
+   62 00000018         
+   63 00000018         
+   64 00000018         MainLoop
+   65 00000018         ; ****************************************
+   66 00000018 F04F 0061       MOV              R0, #97
+   67 0000001C         volta
+   68 0000001C F7FF FFFE       BL               send_data_lcd
+   69 00000020 4602            MOV              R2, R0
+   70 00000022 F44F 707A       MOV              R0, #1000
+   71 00000026 F7FF FFFE       BL               SysTick_Wait1ms
+   72 0000002A 4610            MOV              R0, R2
+   73 0000002C F100 0001       ADD              R0, R0, #1
+   74 00000030 F7FF FFF4       BL               volta
+   75 00000034         ; ****************************************
+   76 00000034 E7F0            B                MainLoop
+   77 00000036         
+   78 00000036         ;-------------------------------------------------------
                        -------------------------
-   64 0000000E         ; Função Pisca_LED
-   65 0000000E         ; Parâmetro de entrada: Não tem
-   66 0000000E         ; Parâmetro de saída: Não tem
-   67 0000000E         Pisca_LED
-   68 0000000E         ; ****************************************
-   69 0000000E         ; Escrever função que acende o LED, espera 1 segundo, ap
-                       aga o LED e espera 1 s
-   70 0000000E         ; Esta função deve chamar a rotina SysTick_Wait1ms com o
-                        parâmetro de entrada em R0
-   71 0000000E         ; ****************************************
-   72 0000000E         
-   73 0000000E         ; ------------------------------------------------------
+   79 00000036         ; Funï¿½ï¿½o Pisca_LED
+   80 00000036         ; Parï¿½metro de entrada: Nï¿½o tem
+   81 00000036         ; Parï¿½metro de saï¿½da: Nï¿½o tem
+   82 00000036         Pisca_LED
+   83 00000036         ; ****************************************
+   84 00000036         ; Escrever funï¿½ï¿½o que acende o LED, espera 1 segundo
+                       , apaga o LED e espera 1 s
+   85 00000036         ; Esta funï¿½ï¿½o deve chamar a rotina SysTick_Wait1ms c
+                       om o parï¿½metro de entrada em R0
+   86 00000036         ; ****************************************
+   87 00000036         
+   88 00000036         ; ------------------------------------------------------
                        --------------------------------------------------------
                        -----------
-   74 0000000E         ; Fim do Arquivo
-   75 0000000E         ; ------------------------------------------------------
+   89 00000036         ; Fim do Arquivo
+
+
+
+ARM Macro Assembler    Page 3 
+
+
+   90 00000036         ; ------------------------------------------------------
                        --------------------------------------------------------
                        ----------- 
-   76 0000000E 00 00           ALIGN                        ;Garante que o fim 
-                                                            da seção está alinh
-                                                            ada 
-   77 00000010                 END                          ;Fim do arquivo
+   91 00000036 00 00           ALIGN                        ;Garante que o fim 
+                                                            da seï¿½ï¿½o estï¿½
+                                                             alinhada 
+   92 00000038                 END                          ;Fim do arquivo
 Command Line: --debug --xref --diag_suppress=9931,A1950W --cpu=Cortex-M4.fp.sp 
 --depend=.\objects\main.d -o.\objects\main.o -IC:\Users\IanIshikawa\AppData\Loc
 al\Arm\Packs\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C129 --predefine="__EVAL SET
@@ -154,19 +175,19 @@ Symbol: .text
    Uses
       None
 Comment: .text unused
-MainLoop 0000000C
+MainLoop 00000018
 
 Symbol: MainLoop
    Definitions
-      At line 56 in file main.s
+      At line 64 in file main.s
    Uses
-      At line 61 in file main.s
+      At line 76 in file main.s
 Comment: MainLoop used once
-Pisca_LED 0000000E
+Pisca_LED 00000036
 
 Symbol: Pisca_LED
    Definitions
-      At line 67 in file main.s
+      At line 82 in file main.s
    Uses
       None
 Comment: Pisca_LED unused
@@ -174,64 +195,95 @@ Start 00000000
 
 Symbol: Start
    Definitions
-      At line 51 in file main.s
+      At line 54 in file main.s
    Uses
       At line 35 in file main.s
 Comment: Start used once
-4 symbols
+volta 0000001C
+
+Symbol: volta
+   Definitions
+      At line 67 in file main.s
+   Uses
+      At line 74 in file main.s
+Comment: volta used once
+5 symbols
 
 
 
 ARM Macro Assembler    Page 1 Alphabetic symbol ordering
 External symbols
 
-GPIO_Init 00000000
+LCD_Init 00000000
 
-Symbol: GPIO_Init
+Symbol: LCD_Init
    Definitions
-      At line 44 in file main.s
+      At line 45 in file main.s
    Uses
-      At line 54 in file main.s
-Comment: GPIO_Init used once
+      At line 57 in file main.s
+Comment: LCD_Init used once
 PLL_Init 00000000
 
 Symbol: PLL_Init
    Definitions
-      At line 41 in file main.s
+      At line 42 in file main.s
    Uses
-      At line 52 in file main.s
+      At line 55 in file main.s
 Comment: PLL_Init used once
-PortJ_Input 00000000
-
-Symbol: PortJ_Input
-   Definitions
-      At line 46 in file main.s
-   Uses
-      None
-Comment: PortJ_Input unused
-PortN_Output 00000000
-
-Symbol: PortN_Output
-   Definitions
-      At line 45 in file main.s
-   Uses
-      None
-Comment: PortN_Output unused
 SysTick_Init 00000000
 
 Symbol: SysTick_Init
    Definitions
-      At line 42 in file main.s
+      At line 43 in file main.s
    Uses
-      At line 53 in file main.s
+      At line 56 in file main.s
 Comment: SysTick_Init used once
 SysTick_Wait1ms 00000000
 
 Symbol: SysTick_Wait1ms
    Definitions
-      At line 43 in file main.s
+      At line 44 in file main.s
+   Uses
+      At line 71 in file main.s
+Comment: SysTick_Wait1ms used once
+send_comand_lcd 00000000
+
+Symbol: send_comand_lcd
+   Definitions
+      At line 47 in file main.s
    Uses
       None
-Comment: SysTick_Wait1ms unused
-6 symbols
-345 symbols in table
+Comment: send_comand_lcd unused
+send_complex_comand_lcd 00000000
+
+Symbol: send_complex_comand_lcd
+   Definitions
+      At line 48 in file main.s
+   Uses
+      None
+Comment: send_complex_comand_lcd unused
+send_data_lcd 00000000
+
+Symbol: send_data_lcd
+   Definitions
+      At line 49 in file main.s
+   Uses
+      At line 61 in file main.s
+      At line 68 in file main.s
+
+setup_LCD 00000000
+
+
+
+
+ARM Macro Assembler    Page 2 Alphabetic symbol ordering
+External symbols
+
+Symbol: setup_LCD
+   Definitions
+      At line 46 in file main.s
+   Uses
+      At line 58 in file main.s
+Comment: setup_LCD used once
+8 symbols
+348 symbols in table

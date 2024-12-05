@@ -5,16 +5,32 @@
 ; Ver 2 26/08/2018
 
 ; -------------------------------------------------------------------------------
-        THUMB                        ; Instruções do tipo Thumb-2
+        THUMB                        ; Instruï¿½ï¿½es do tipo Thumb-2
 ; -------------------------------------------------------------------------------
-; Declarações EQU - Defines
+; Declaraï¿½ï¿½es EQU - Defines
 ; ========================
 ; ========================
-; Definições dos Registradores Gerais
+; Definiï¿½ï¿½es dos Registradores Gerais
 SYSCTL_RCGCGPIO_R	 EQU	0x400FE608
 SYSCTL_PRGPIO_R		 EQU    0x400FEA08
 ; ========================
-; Definições dos Ports
+; Definiï¿½ï¿½es dos Ports
+;DEFINIï¿½ï¿½O DOS TODOS OS PORTS
+GPIO_PORTA_BASE_R     EQU    0x40058000
+GPIO_PORTB_BASE_R     EQU    0x40059000
+GPIO_PORTC_BASE_R     EQU    0x4005A000
+GPIO_PORTD_BASE_R     EQU    0x4005B000
+GPIO_PORTE_BASE_R     EQU    0x4005C000
+GPIO_PORTF_BASE_R     EQU    0x4005D000
+GPIO_PORTG_BASE_R     EQU    0x4005E000
+GPIO_PORTH_BASE_R     EQU    0x4005F000
+GPIO_PORTJ_BASE_R     EQU    0x40060000
+GPIO_PORTK_BASE_R     EQU    0x40061000
+GPIO_PORTL_BASE_R     EQU    0x40062000
+GPIO_PORTM_BASE_R     EQU    0x40063000
+GPIO_PORTN_BASE_R     EQU    0x40064000
+GPIO_PORTP_BASE_R     EQU    0x40065000
+GPIO_PORTQ_BASE_R     EQU    0x40066000
 ; PORT J
 GPIO_PORTJ_AHB_LOCK_R    	EQU    0x40060520
 GPIO_PORTJ_AHB_CR_R      	EQU    0x40060524
@@ -37,54 +53,92 @@ GPIO_PORTN_AHB_DEN_R     	EQU    0x4006451C
 GPIO_PORTN_AHB_PUR_R     	EQU    0x40064510	
 GPIO_PORTN_AHB_DATA_R    	EQU    0x400643FC
 GPIO_PORTN               	EQU    2_001000000000000	
+; PORT M
+GPIO_PORTM_DATA_BITS_R EQU  0x40063000
+GPIO_PORTM_DATA_R      EQU  0x400633FC
+GPIO_PORTM_DIR_R       EQU  0x40063400
+GPIO_PORTM_IS_R        EQU  0x40063404
+GPIO_PORTM_IBE_R       EQU  0x40063408
+GPIO_PORTM_IEV_R       EQU  0x4006340C
+GPIO_PORTM_IM_R        EQU  0x40063410
+GPIO_PORTM_RIS_R       EQU  0x40063414
+GPIO_PORTM_MIS_R       EQU  0x40063418
+GPIO_PORTM_ICR_R       EQU  0x4006341C
+GPIO_PORTM_AFSEL_R     EQU  0x40063420
+GPIO_PORTM_DR2R_R      EQU  0x40063500
+GPIO_PORTM_DR4R_R      EQU  0x40063504
+GPIO_PORTM_DR8R_R      EQU  0x40063508
+GPIO_PORTM_ODR_R       EQU  0x4006350C
+GPIO_PORTM_PUR_R       EQU  0x40063510
+GPIO_PORTM_PDR_R       EQU  0x40063514
+GPIO_PORTM_SLR_R       EQU  0x40063518
+GPIO_PORTM_DEN_R       EQU  0x4006351C
+GPIO_PORTM_LOCK_R      EQU  0x40063520
+GPIO_PORTM_CR_R        EQU  0x40063524
+GPIO_PORTM_AMSEL_R     EQU  0x40063528
+GPIO_PORTM_PCTL_R      EQU  0x4006352C
+GPIO_PORTM_ADCCTL_R    EQU  0x40063530
+GPIO_PORTM_DMACTL_R    EQU  0x40063534
+GPIO_PORTM_SI_R        EQU  0x40063538
+GPIO_PORTM_DR12R_R     EQU  0x4006353C
+GPIO_PORTM_WAKEPEN_R   EQU  0x40063540
+GPIO_PORTM_WAKELVL_R   EQU  0x40063544
+GPIO_PORTM_WAKESTAT_R  EQU  0x40063548
+GPIO_PORTM_PP_R        EQU  0x40063FC0
+GPIO_PORTM_PC_R        EQU  0x40063FC4
+GPIO_PORTM             EQU  2_000100000000000	
+; PORT K
+GPIO_PORTK_DATA_BITS_R  EQU 0x40061000
+GPIO_PORTK_DATA_R       EQU 0x400613FC
+GPIO_PORTK_DIR_R        EQU 0x40061400
+GPIO_PORTK_IS_R         EQU 0x40061404
+GPIO_PORTK_IBE_R        EQU 0x40061408
+GPIO_PORTK_IEV_R        EQU 0x4006140C
+GPIO_PORTK_IM_R         EQU 0x40061410
+GPIO_PORTK_RIS_R        EQU 0x40061414
+GPIO_PORTK_MIS_R        EQU 0x40061418
+GPIO_PORTK_ICR_R        EQU 0x4006141C
+GPIO_PORTK_AFSEL_R      EQU 0x40061420
+GPIO_PORTK_DR2R_R       EQU 0x40061500
+GPIO_PORTK_DR4R_R       EQU 0x40061504
+GPIO_PORTK_DR8R_R       EQU 0x40061508
+GPIO_PORTK_ODR_R        EQU 0x4006150C
+GPIO_PORTK_PUR_R        EQU 0x40061510
+GPIO_PORTK_PDR_R        EQU 0x40061514
+GPIO_PORTK_SLR_R        EQU 0x40061518
+GPIO_PORTK_DEN_R        EQU 0x4006151C
+GPIO_PORTK_LOCK_R       EQU 0x40061520
+GPIO_PORTK_CR_R         EQU 0x40061524
+GPIO_PORTK_AMSEL_R      EQU 0x40061528
+GPIO_PORTK_PCTL_R       EQU 0x4006152C
+GPIO_PORTK_ADCCTL_R     EQU 0x40061530
+GPIO_PORTK_DMACTL_R     EQU 0x40061534
+GPIO_PORTK_SI_R         EQU 0x40061538
+GPIO_PORTK_DR12R_R      EQU 0x4006153C
+GPIO_PORTK_WAKEPEN_R    EQU 0x40061540
+GPIO_PORTK_WAKELVL_R    EQU 0x40061544
+GPIO_PORTK_WAKESTAT_R   EQU 0x40061548
+GPIO_PORTK_PP_R         EQU 0x40061FC0
+GPIO_PORTK_PC_R         EQU 0x40061FC4
+GPIO_PORTK              EQU 2_000001000000000	
+
+
+
+
 
 
 ; -------------------------------------------------------------------------------
-; Área de Código - Tudo abaixo da diretiva a seguir será armazenado na memória de 
-;                  código
+; ï¿½rea de Cï¿½digo - Tudo abaixo da diretiva a seguir serï¿½ armazenado na memï¿½ria de 
+;                  cï¿½digo
         AREA    |.text|, CODE, READONLY, ALIGN=2
 
-		; Se alguma função do arquivo for chamada em outro arquivo	
-        EXPORT GPIO_Init            ; Permite chamar GPIO_Init de outro arquivo
-		EXPORT PortN_Output			; Permite chamar PortN_Output de outro arquivo
-		EXPORT PortJ_Input          ; Permite chamar PortJ_Input de outro arquivo
+
 									
 
-;--------------------------------------------------------------------------------
-; Função GPIO_Init
-; Parâmetro de entrada: Não tem
-; Parâmetro de saída: Não tem
-GPIO_Init
-;=====================
-; ****************************************
-; Escrever função de inicialização dos GPIO
-; Inicializar as portas J e N
-; ****************************************
-	BX LR
-
-; -------------------------------------------------------------------------------
-; Função PortN_Output
-; Parâmetro de entrada: 
-; Parâmetro de saída: Não tem
-PortN_Output
-; ****************************************
-; Escrever função que acende ou apaga o LED
-; ****************************************
-	
-	BX LR
-; -------------------------------------------------------------------------------
-; Função PortJ_Input
-; Parâmetro de entrada: Não tem
-; Parâmetro de saída: R0 --> o valor da leitura
-PortJ_Input
-; ****************************************
-; Escrever função que lê a chave e retorna 
-; um registrador se está ativada ou não
-; ****************************************
-	
-	BX LR
 
 
 
-    ALIGN                           ; garante que o fim da seção está alinhada 
+
+
+    ALIGN                           ; garante que o fim da seï¿½ï¿½o estï¿½ alinhada 
     END                             ; fim do arquivo
