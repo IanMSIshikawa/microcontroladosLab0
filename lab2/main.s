@@ -10,10 +10,16 @@
         THUMB                        ; Instruï¿½ï¿½es do tipo Thumb-2
 ; -------------------------------------------------------------------------------
 		
-; Declaraï¿½ï¿½es EQU - Defines
+; Declara½ï¿½es EQU - Defines
 ;<NOME>         EQU <VALOR>
 ; ========================
 ; Definiï¿½ï¿½es de Valores
+;=======
+; Definições de Valores
+ACENDE_LED EQU 0x20000A08
+TOGGLE_LED EQU 0x20000A04
+RESET_SW   EQU 0x20000A00
+
 
 
 ; -------------------------------------------------------------------------------
@@ -25,6 +31,8 @@
 ;<var>	SPACE <tam>                        ; Declara uma variï¿½vel de nome <var>
                                            ; de <tam> bytes a partir da primeira 
                                            ; posiï¿½ï¿½o da RAM		
+;=======
+                                           ; posição da RAM	
 
 ; -------------------------------------------------------------------------------
 ; ï¿½rea de Cï¿½digo - Tudo abaixo da diretiva a seguir serï¿½ armazenado na memï¿½ria de 
@@ -57,6 +65,8 @@
 		IMPORT PortP_Output
 		IMPORT PortM_Output 
 		IMPORT PortL_Input
+		
+		
 ; -------------------------------------------------------------------------------
 ; Funï¿½ï¿½o main()
 Start  		
@@ -67,6 +77,23 @@ Start
 	
 	MOV R0, #97
 	BL send_data_lcd
+
+
+LimpaREGS_Tela_LEDS
+
+	MOV R0,#0
+	MOV R4,#0 ; usado em Varredura
+	MOV R6,#0 ;R6 = base multiplicacão
+	MOV R7,#0 ;R7 = estado multiplicador
+	MOV R8,#0 ;R8 = nova tecla detectada
+	MOV R9,#0 ;R9 = tecla contagem debounce
+	MOV R10,#0 ;R10= n estados debounce
+
+	LDR R0,=RESET_SW
+	MOV R1,#0
+	STR R1,[R0]
+	MOV R0,#0
+	MOV R1,#0
 
 
 MainLoop
@@ -83,16 +110,16 @@ volta
 ; ****************************************
 
 
-	BL imprimeLed
+	BL faz_Varredura
+	
+	LDR R0,=RESET_SW
+	LDR R0,[R0]
+	CMP R0,#1
+	IT EQ
+		BEQ LimpaREGS_Tela_LEDS
+	
 	BL AscendeLed
 
-;	MOV R0,#2_000000100
-;	BL SysTick_Wait1ms
-;	MOV R0,#2_1111
-;	BL PortQ_Output
-;	MOV R0,#2_1100000
-;	BL PortP_Output
-;	MOV R0,#2_00100000
 	B MainLoop
 
 ;--------------------------------------------------------------------------------
@@ -110,10 +137,10 @@ AscendeLed
 ; ****************************************
 	PUSH{LR}
 	
-	MOV R0,R9;#2_00001111
+	MOV R0,R6;#2_00001111
 	;MOV R0,#3
 	BL PortQ_Output
-	MOV R0,R9;#2_11110000
+	MOV R0,R6;#2_11110000
 	BL PortA_Output
 	MOV R0,#2_11111111
 	BL PortP_Output
@@ -123,7 +150,7 @@ AscendeLed
 	
 Varredura
 	PUSH{LR}
-	MOVEQ R8,#0
+	MOV R8,#0
 	MOV R3,#2_00010000
 	MOV R5,#1
 	
@@ -186,35 +213,51 @@ Debounce_TRUE
 	IT HS
 		BHS Saida_deb; sair >=10
 
-	CMP R4, R9 ; R9 = tecla apertada ; R10= n estados
+	CMP R4, R9 ; R4 = nova tecla apertada ; R9 = tecla contagem debounce ;R10= n estados debounce
 	ITEE EQ
 		ADDEQ R10,R10,#1
-		MOVNE R10,#10
+		MOVNE R10,#0
 		MOVNE R9,R4
 	
 	CMP R10,#10
 	ITT EQ
 		MOVEQ R10,#0
 		MOVEQ R8,#1
+		;B   Saida_deb	
+	
+	
 		;BNE Varredura
 	B Saida_deb
 		
-imprimeLed
+faz_Varredura
 	PUSH{LR}
 	
 repete
 		BL Varredura
 		mov R0,#1
 		;BL Sys-Tick_Wait1ms
-		CMP R8,#1
-		IT NE
-			BNE repete
-		MOV R0,R8
+		LDR R0,=RESET_SW
+		LDR R0,[R0]
+		CMP R0,#1
+		IT EQ
+			BEQ saida
 
-		BL PortQ_Output
-		MOV R0,R8
-		BL PortP_Output
-		;MOV R0,#2_00100000
+		CMP R8,#1
+		;IT NE
+			;BNE repete
+		IT NE
+			BNE saida
+		CMP R9,R6
+		ITTT NE
+			MOVNE R6,R9
+			MOVNE R7,#0
+			BNE saida
+		ADD R7,#1
+		CMP R7,#10
+		IT HS
+			MOVHS R7,#0
+
+saida
 		
 	POP{LR}
 	BX LR

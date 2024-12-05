@@ -8,6 +8,10 @@
         THUMB                        ; Instruï¿½ï¿½es do tipo Thumb-2
 ; -------------------------------------------------------------------------------
 ; Declaraï¿½ï¿½es EQU - Defines
+;=======
+
+; Declarações EQU - Defines
+
 ; ========================
 ; ========================
 ; Definiï¿½ï¿½es dos Registradores Gerais
