@@ -7,6 +7,8 @@
 ; -------------------------------------------------------------------------------
         THUMB                        ; Instru��es do tipo Thumb-2
 ; -------------------------------------------------------------------------------
+	AREA  DATA, ALIGN=2
+
 ; Declara��es EQU - Defines
 ; ========================
 ; ========================
@@ -136,11 +138,12 @@ GPIO_PUR_R     	EQU    0x00000510
 
 
 
-
 ; -------------------------------------------------------------------------------
 ; �rea de C�digo - Tudo abaixo da diretiva a seguir ser� armazenado na mem�ria de 
 ;                  c�digo
         AREA    |.text|, CODE, READONLY, ALIGN=2
+			
+
 
 		; Se alguma fun��o do arquivo for chamada em outro arquivo	
         EXPORT LCD_Init            ; Permite chamar GPIO_Init de outro arquivo
@@ -148,9 +151,14 @@ GPIO_PUR_R     	EQU    0x00000510
         EXPORT send_comand_lcd
         EXPORT send_complex_comand_lcd
         EXPORT send_data_lcd
+        EXPORT send_string_lcd
 		IMPORT SysTick_Wait1us
+			
+string_test DCB "Hello World!"
+			
 
-									
+
+		
 
 ;--------------------------------------------------------------------------------
 ; Fun��o LCD_Init
@@ -349,6 +357,73 @@ send_data_lcd
     BX LR
 	
 ; *******************************************
+;Parametro: r0 -> operando 1
+;			r1 -> operando 2
+
+send_string_lcd
+    PUSH{LR}
+
+
+	LDR R0, =string_test  ; R0 agora contém o endereço da string
+	
+	
+	
+	MOV R0, #'T'
+	BL send_data_lcd
+	
+	MOV R0, #'a'
+	BL send_data_lcd
+	
+	MOV R0, #'b'
+	BL send_data_lcd
+	
+	MOV R0, #'u'
+	BL send_data_lcd
+	
+	MOV R0, #'a'
+	BL send_data_lcd
+	
+	MOV R0, #'d'
+	BL send_data_lcd
+	
+	MOV R0, #'a'
+	BL send_data_lcd
+	
+	MOV R0, #' '
+	BL send_data_lcd
+	
+	MOV R0, #'d'
+	BL send_data_lcd
+	
+	MOV R0, #'o'
+	BL send_data_lcd
+	
+	MOV R0, R6
+	BL send_data_lcd
+	
+;	pula para a segunda linha 
+	
+	MOV R0, #0xC0
+	BL send_comand_lcd
+	
+	MOV R0, R6
+	BL send_data_lcd
+	
+	MOV R0, ' '
+	BL send_data_lcd
+	
+	MOV R0, R7
+	BL send_data_lcd
+	
+	MOV R0, '='
+	BL send_data_lcd
+	
+	MUL R0, R6, R7
+	BL send_data_lcd
+	
+    POP{LR}
+    BX LR
+
 
 PortM_Output
 	LDR	R1, =GPIO_PORTM_DATA_R		    ;Carrega o valor do offset do data register
@@ -372,3 +447,4 @@ PortK_Output
 
     ALIGN                           ; garante que o fim da se��o est� alinhada 
     END                             ; fim do arquivo
+		

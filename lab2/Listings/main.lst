@@ -79,6 +79,7 @@ ARM Macro Assembler    Page 2
    49 00000000                 IMPORT           send_data_lcd
    50 00000000         
    51 00000000         
+<<<<<<< Updated upstream
    52 00000000         ; ------------------------------------------------------
                        -------------------------
    53 00000000         ; Fun��o main()
@@ -128,12 +129,64 @@ ARM Macro Assembler    Page 2
                        --------------------------------------------------------
                        -----------
    89 00000036         ; Fim do Arquivo
+=======
+   52 00000000                 IMPORT           GPIO_Init
+   53 00000000         ;IMPORT  PortN_Output
+   54 00000000                 IMPORT           PortJ_Input
+   55 00000000                 IMPORT           PortQ_Output
+   56 00000000                 IMPORT           PortA_Output
+   57 00000000                 IMPORT           PortP_Output
+   58 00000000                 IMPORT           PortM_Output
+   59 00000000                 IMPORT           PortL_Input
+   60 00000000                 IMPORT           send_string_lcd
+   61 00000000         ; ------------------------------------------------------
+                       -------------------------
+   62 00000000         ; Fun��o main()
+   63 00000000         Start
+   64 00000000 F7FF FFFE       BL               PLL_Init    ;Chama a subrotina 
+                                                            para alterar o cloc
+                                                            k do microcontrolad
+                                                            or para 80MHz
+   65 00000004 F7FF FFFE       BL               SysTick_Init ;Chama a subrotina
+                                                             para inicializar o
+                                                             SysTick
+   66 00000008 F7FF FFFE       BL               LCD_Init
+   67 0000000C F7FF FFFE       BL               setup_LCD
+   68 00000010 F04F 0002       MOV              R0, #2
+   69 00000014 F7FF FFFE       BL               send_string_lcd
+   70 00000018         
+   71 00000018         
+   72 00000018         
+   73 00000018         
+   74 00000018         MainLoop
+   75 00000018         ; ****************************************
+   76 00000018         
+   77 00000018 E7FE            B                MainLoop
+   78 0000001A         
+   79 0000001A         ;-------------------------------------------------------
+                       -------------------------
+   80 0000001A         ; Fun��o Pisca_LED
+   81 0000001A         ; Par�metro de entrada: N�o tem
+   82 0000001A         ; Par�metro de sa�da: N�o tem
+   83 0000001A         Pisca_LED
+   84 0000001A         ; Fun��o Pisca_LED
+   85 0000001A         ; Par�metro de entrada: N�o tem
+   86 0000001A         ; Par�metro de sa�da: N�o tem
+   87 0000001A         AscendeLed
+   88 0000001A         ; ****************************************
+   89 0000001A         ; Escrever fun��o que acende o LED, espera 1 segundo
+                       , apaga o LED e espera 1 s
+   90 0000001A         ; Esta fun��o deve chamar a rotina SysTick_Wait1ms c
+                       om o par�metro de entrada em R0
+   91 0000001A         ; ****************************************
+>>>>>>> Stashed changes
 
 
 
 ARM Macro Assembler    Page 3 
 
 
+<<<<<<< Updated upstream
    90 00000036         ; ------------------------------------------------------
                        --------------------------------------------------------
                        ----------- 
@@ -141,6 +194,148 @@ ARM Macro Assembler    Page 3
                                                             da se��o est�
                                                              alinhada 
    92 00000038                 END                          ;Fim do arquivo
+=======
+   92 0000001A B500            PUSH{LR}
+   93 0000001C         
+   94 0000001C 4648            MOV              R0,R9       ;#2_00001111
+   95 0000001E         ;MOV R0,#3
+   96 0000001E F7FF FFFE       BL               PortQ_Output
+   97 00000022 4648            MOV              R0,R9       ;#2_11110000
+   98 00000024 F7FF FFFE       BL               PortA_Output
+   99 00000028 F04F 00FF       MOV              R0,#2_11111111
+  100 0000002C F7FF FFFE       BL               PortP_Output
+  101 00000030 F85D EB04       POP{LR}
+  102 00000034         
+  103 00000034 4770            BX               LR
+  104 00000036         
+  105 00000036         Varredura
+  106 00000036 B500            PUSH{LR}
+  107 00000038 BF08 F04F 
+              0800             MOVEQ            R8,#0
+  108 0000003E F04F 0310       MOV              R3,#2_00010000
+  109 00000042 F04F 0501       MOV              R5,#1
+  110 00000046         
+  111 00000046         Varredura_loop
+  112 00000046 F083 00FF       EOR              R0,R3,#2_11111111 ; inverter bi
+                                                            ts ligados
+  113 0000004A         
+  114 0000004A F7FF FFFE       BL               PortM_Output
+  115 0000004E F7FF FFFE       BL               PortL_Input
+  116 00000052         
+  117 00000052 F04F 04FF       MOV              R4,#2_11111111
+  118 00000056         
+  119 00000056 F080 000F       EOR              R0,R0,#2_1111 ; inverter bits l
+                                                            igados
+  120 0000005A         
+  121 0000005A 2801            CMP              R0, #2_00000001
+  122 0000005C BF08            IT               EQ
+  123 0000005E 2400            MOVEQ            R4,#0
+  124 00000060         
+  125 00000060 2802            CMP              R0, #2_00000010
+  126 00000062 BF08            IT               EQ
+  127 00000064 2403            MOVEQ            R4,#3
+  128 00000066         
+  129 00000066 2804            CMP              R0, #2_00000100
+  130 00000068 BF08            IT               EQ
+  131 0000006A 2406            MOVEQ            R4,#6
+  132 0000006C         
+  133 0000006C 2808            CMP              R0, #2_00001000
+  134 0000006E BF08            IT               EQ
+  135 00000070 2409            MOVEQ            R4,#9
+  136 00000072         
+  137 00000072 2CFF            CMP              R4,#2_11111111
+  138 00000074 BF1C            ITT              NE
+  139 00000076 1964            ADDNE            R4,R4,R5
+  140 00000078 E008            BNE              Debounce_TRUE
+  141 0000007A         
+  142 0000007A F105 0501       ADD              R5,R5,#1
+  143 0000007E EA4F 0343       LSL              R3,R3,#1
+  144 00000082 2B80            CMP              R3, #2_10000000
+  145 00000084 D1DF            BNE              Varredura_loop
+  146 00000086         
+  147 00000086         
+
+
+
+ARM Macro Assembler    Page 4 
+
+
+  148 00000086         
+  149 00000086         SaidaVarredura
+  150 00000086         
+  151 00000086         ; CMP R4,#2_11111111
+  152 00000086         ; IT NE
+  153 00000086         ;  BNE Debounce_TRUE
+  154 00000086         
+  155 00000086         Saida_deb
+  156 00000086         
+  157 00000086 F85D EB04       POP{LR}
+  158 0000008A 4770            BX               LR
+  159 0000008C         
+  160 0000008C         Debounce_TRUE
+  161 0000008C         
+  162 0000008C 2C0B            CMP              R4, #11
+  163 0000008E BF08            IT               EQ
+  164 00000090 2400            MOVEQ            R4,#0       ; zerar R4 >=10
+  165 00000092         
+  166 00000092 2C0A            CMP              R4, #10
+  167 00000094 BF28            IT               HS
+  168 00000096 E7F6            BHS              Saida_deb   ; sair >=10
+  169 00000098         
+  170 00000098 454C            CMP              R4, R9      ; R9 = tecla aperta
+                                                            da ; R10= n estados
+                                                            
+  171 0000009A BF0E            ITEE             EQ
+  172 0000009C F10A 0A01       ADDEQ            R10,R10,#1
+  173 000000A0 F04F 0A0A       MOVNE            R10,#10
+  174 000000A4 46A1            MOVNE            R9,R4
+  175 000000A6         
+  176 000000A6 F1BA 0F0A       CMP              R10,#10
+  177 000000AA BF04            ITT              EQ
+  178 000000AC F04F 0A00       MOVEQ            R10,#0
+  179 000000B0 F04F 0801       MOVEQ            R8,#1
+  180 000000B4         ;BNE Varredura
+  181 000000B4 E7E7            B                Saida_deb
+  182 000000B6         
+  183 000000B6         imprimeLed
+  184 000000B6 B500            PUSH{LR}
+  185 000000B8         
+  186 000000B8         repete
+  187 000000B8 F7FF FFBD       BL               Varredura
+  188 000000BC F04F 0001       mov              R0,#1
+  189 000000C0         ;BL Sys-Tick_Wait1ms
+  190 000000C0 F1B8 0F01       CMP              R8,#1
+  191 000000C4 BF18            IT               NE
+  192 000000C6 E7F7            BNE              repete
+  193 000000C8 4640            MOV              R0,R8
+  194 000000CA         
+  195 000000CA F7FF FFFE       BL               PortQ_Output
+  196 000000CE 4640            MOV              R0,R8
+  197 000000D0 F7FF FFFE       BL               PortP_Output
+  198 000000D4         ;MOV R0,#2_00100000
+  199 000000D4         
+  200 000000D4 F85D EB04       POP{LR}
+  201 000000D8 4770            BX               LR
+  202 000000DA         
+  203 000000DA         
+  204 000000DA         ; ------------------------------------------------------
+
+
+
+ARM Macro Assembler    Page 5 
+
+
+                       --------------------------------------------------------
+                       -----------
+  205 000000DA         ; Fim do Arquivo
+  206 000000DA         ; ------------------------------------------------------
+                       --------------------------------------------------------
+                       ----------- 
+  207 000000DA 00 00           ALIGN                        ;Garante que o fim 
+                                                            da se��o est�
+                                                             alinhada 
+  208 000000DC                 END                          ;Fim do arquivo
+>>>>>>> Stashed changes
 Command Line: --debug --xref --diag_suppress=9931,A1950W --cpu=Cortex-M4.fp.sp 
 --depend=.\objects\main.d -o.\objects\main.o -IC:\Users\IanIshikawa\AppData\Loc
 al\Arm\Packs\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C129 --predefine="__EVAL SET
@@ -175,10 +370,30 @@ Symbol: .text
    Uses
       None
 Comment: .text unused
+<<<<<<< Updated upstream
+=======
+AscendeLed 0000001A
+
+Symbol: AscendeLed
+   Definitions
+      At line 87 in file main.s
+   Uses
+      None
+Comment: AscendeLed unused
+Debounce_TRUE 0000008C
+
+Symbol: Debounce_TRUE
+   Definitions
+      At line 160 in file main.s
+   Uses
+      At line 140 in file main.s
+Comment: Debounce_TRUE used once
+>>>>>>> Stashed changes
 MainLoop 00000018
 
 Symbol: MainLoop
    Definitions
+<<<<<<< Updated upstream
       At line 64 in file main.s
    Uses
       At line 76 in file main.s
@@ -191,10 +406,42 @@ Symbol: Pisca_LED
    Uses
       None
 Comment: Pisca_LED unused
+=======
+      At line 74 in file main.s
+   Uses
+      At line 77 in file main.s
+Comment: MainLoop used once
+Pisca_LED 0000001A
+
+Symbol: Pisca_LED
+   Definitions
+      At line 83 in file main.s
+   Uses
+      None
+Comment: Pisca_LED unused
+SaidaVarredura 00000086
+
+Symbol: SaidaVarredura
+   Definitions
+      At line 149 in file main.s
+   Uses
+      None
+Comment: SaidaVarredura unused
+Saida_deb 00000086
+
+Symbol: Saida_deb
+   Definitions
+      At line 155 in file main.s
+   Uses
+      At line 168 in file main.s
+      At line 181 in file main.s
+
+>>>>>>> Stashed changes
 Start 00000000
 
 Symbol: Start
    Definitions
+<<<<<<< Updated upstream
       At line 54 in file main.s
    Uses
       At line 35 in file main.s
@@ -208,6 +455,45 @@ Symbol: volta
       At line 74 in file main.s
 Comment: volta used once
 5 symbols
+=======
+      At line 63 in file main.s
+   Uses
+      At line 35 in file main.s
+Comment: Start used once
+Varredura 00000036
+
+Symbol: Varredura
+   Definitions
+      At line 105 in file main.s
+   Uses
+      At line 187 in file main.s
+Comment: Varredura used once
+Varredura_loop 00000046
+
+Symbol: Varredura_loop
+   Definitions
+      At line 111 in file main.s
+   Uses
+      At line 145 in file main.s
+Comment: Varredura_loop used once
+imprimeLed 000000B6
+
+Symbol: imprimeLed
+   Definitions
+      At line 183 in file main.s
+   Uses
+      None
+Comment: imprimeLed unused
+repete 000000B8
+
+Symbol: repete
+   Definitions
+      At line 186 in file main.s
+   Uses
+      At line 192 in file main.s
+Comment: repete used once
+12 symbols
+>>>>>>> Stashed changes
 
 
 
@@ -220,7 +506,11 @@ Symbol: LCD_Init
    Definitions
       At line 45 in file main.s
    Uses
+<<<<<<< Updated upstream
       At line 57 in file main.s
+=======
+      At line 66 in file main.s
+>>>>>>> Stashed changes
 Comment: LCD_Init used once
 PLL_Init 00000000
 
@@ -228,15 +518,80 @@ Symbol: PLL_Init
    Definitions
       At line 42 in file main.s
    Uses
+<<<<<<< Updated upstream
       At line 55 in file main.s
 Comment: PLL_Init used once
+=======
+      At line 64 in file main.s
+Comment: PLL_Init used once
+PortA_Output 00000000
+
+Symbol: PortA_Output
+   Definitions
+      At line 56 in file main.s
+   Uses
+      At line 98 in file main.s
+Comment: PortA_Output used once
+PortJ_Input 00000000
+
+Symbol: PortJ_Input
+   Definitions
+      At line 54 in file main.s
+   Uses
+      None
+Comment: PortJ_Input unused
+PortL_Input 00000000
+
+Symbol: PortL_Input
+   Definitions
+      At line 59 in file main.s
+   Uses
+      At line 115 in file main.s
+Comment: PortL_Input used once
+PortM_Output 00000000
+
+Symbol: PortM_Output
+   Definitions
+      At line 58 in file main.s
+   Uses
+      At line 114 in file main.s
+Comment: PortM_Output used once
+PortP_Output 00000000
+
+Symbol: PortP_Output
+
+
+
+ARM Macro Assembler    Page 2 Alphabetic symbol ordering
+External symbols
+
+   Definitions
+      At line 57 in file main.s
+   Uses
+      At line 100 in file main.s
+      At line 197 in file main.s
+
+PortQ_Output 00000000
+
+Symbol: PortQ_Output
+   Definitions
+      At line 55 in file main.s
+   Uses
+      At line 96 in file main.s
+      At line 195 in file main.s
+
+>>>>>>> Stashed changes
 SysTick_Init 00000000
 
 Symbol: SysTick_Init
    Definitions
       At line 43 in file main.s
    Uses
+<<<<<<< Updated upstream
       At line 56 in file main.s
+=======
+      At line 65 in file main.s
+>>>>>>> Stashed changes
 Comment: SysTick_Init used once
 SysTick_Wait1ms 00000000
 
@@ -244,8 +599,13 @@ Symbol: SysTick_Wait1ms
    Definitions
       At line 44 in file main.s
    Uses
+<<<<<<< Updated upstream
       At line 71 in file main.s
 Comment: SysTick_Wait1ms used once
+=======
+      None
+Comment: SysTick_Wait1ms unused
+>>>>>>> Stashed changes
 send_comand_lcd 00000000
 
 Symbol: send_comand_lcd
@@ -268,22 +628,47 @@ Symbol: send_data_lcd
    Definitions
       At line 49 in file main.s
    Uses
+<<<<<<< Updated upstream
       At line 61 in file main.s
       At line 68 in file main.s
 
 setup_LCD 00000000
 
+=======
+      None
+Comment: send_data_lcd unused
+send_string_lcd 00000000
+
+Symbol: send_string_lcd
+   Definitions
+>>>>>>> Stashed changes
 
 
 
 ARM Macro Assembler    Page 2 Alphabetic symbol ordering
 External symbols
 
+<<<<<<< Updated upstream
+=======
+      At line 60 in file main.s
+   Uses
+      At line 69 in file main.s
+Comment: send_string_lcd used once
+setup_LCD 00000000
+
+>>>>>>> Stashed changes
 Symbol: setup_LCD
    Definitions
       At line 46 in file main.s
    Uses
+<<<<<<< Updated upstream
       At line 58 in file main.s
 Comment: setup_LCD used once
 8 symbols
 348 symbols in table
+=======
+      At line 67 in file main.s
+Comment: setup_LCD used once
+16 symbols
+363 symbols in table
+>>>>>>> Stashed changes

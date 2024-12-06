@@ -23,7 +23,7 @@
 		;EXPORT  <var> [DATA,SIZE=<tam>]   ; Permite chamar a vari�vel <var> a 
 		                                   ; partir de outro arquivo
 ;<var>	SPACE <tam>                        ; Declara uma vari�vel de nome <var>
-                                           ; de <tam> bytes a partir da primeira 
+											; de <tam> bytes a partir da primeira 
                                            ; posi��o da RAM		
 
 ; -------------------------------------------------------------------------------
@@ -49,6 +49,15 @@
         IMPORT send_data_lcd
 
 
+		IMPORT  GPIO_Init
+        ;IMPORT  PortN_Output
+        IMPORT  PortJ_Input	
+		IMPORT PortQ_Output
+		IMPORT PortA_Output
+		IMPORT PortP_Output
+		IMPORT PortM_Output 
+		IMPORT PortL_Input
+		IMPORT send_string_lcd
 ; -------------------------------------------------------------------------------
 ; Fun��o main()
 Start  		
@@ -56,22 +65,13 @@ Start
 	BL SysTick_Init              ;Chama a subrotina para inicializar o SysTick
 	BL LCD_Init
 	BL setup_LCD 
+	MOV R0, #2
+	BL send_string_lcd
 	
-	MOV R0, #97
-	BL send_data_lcd
+	
 
 
 MainLoop
-; ****************************************
-	MOV R0, #97
-volta
-	BL send_data_lcd
-	MOV R2, R0
-	MOV R0, #1000
-	BL SysTick_Wait1ms
-	MOV R0, R2
-	ADD R0, R0, #1
-	BL volta
 ; ****************************************
 	B MainLoop
 
