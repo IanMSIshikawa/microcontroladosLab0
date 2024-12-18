@@ -10,12 +10,12 @@
         THUMB                        ; Instruï¿½ï¿½es do tipo Thumb-2
 ; -------------------------------------------------------------------------------
 		
-; Declara½ï¿½es EQU - Defines
+; Declaraï¿½ï¿½es EQU - Defines
 ;<NOME>         EQU <VALOR>
 ; ========================
 ; Definiï¿½ï¿½es de Valores
 ;=======
-; Definições de Valores
+; Definiï¿½ï¿½es de Valores
 ACENDE_LED EQU 0x20000A08
 TOGGLE_LED EQU 0x20000A04
 RESET_SW   EQU 0x20000A00
@@ -32,7 +32,7 @@ RESET_SW   EQU 0x20000A00
                                            ; de <tam> bytes a partir da primeira 
                                            ; posiï¿½ï¿½o da RAM		
 ;=======
-                                           ; posição da RAM	
+                                           ; posiï¿½ï¿½o da RAM	
 
 ; -------------------------------------------------------------------------------
 ; ï¿½rea de Cï¿½digo - Tudo abaixo da diretiva a seguir serï¿½ armazenado na memï¿½ria de 
@@ -55,6 +55,7 @@ RESET_SW   EQU 0x20000A00
 		IMPORT send_comand_lcd
         IMPORT send_complex_comand_lcd
         IMPORT send_data_lcd
+		IMPORT send_string_lcd
 
 
 		IMPORT  GPIO_Init
@@ -85,7 +86,7 @@ LimpaREGS_Tela_LEDS
 
 	MOV R0,#0
 	MOV R4,#0 ; usado em Varredura
-	MOV R6,#0 ;R6 = base multiplicacão
+	MOV R6,#0 ;R6 = base multiplicacï¿½o
 	MOV R7,#0 ;R7 = estado multiplicador
 	MOV R8,#0 ;R8 = nova tecla detectada
 	MOV R9,#0 ;R9 = tecla contagem debounce
@@ -109,6 +110,9 @@ MainLoop
 		BEQ LimpaREGS_Tela_LEDS
 	
 	BL AscendeLed
+	MOV R0, #0x01
+	BL send_complex_comand_lcd
+	BL send_string_lcd
 
 	B MainLoop
 
@@ -246,7 +250,7 @@ repete
 		CMP R7,#10
 		IT HS
 			MOVHS R7,#0
-
+		
 saida
 		
 	POP{LR}

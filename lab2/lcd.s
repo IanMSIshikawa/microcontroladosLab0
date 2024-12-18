@@ -148,6 +148,7 @@ GPIO_PUR_R     	EQU    0x00000510
         EXPORT send_comand_lcd
         EXPORT send_complex_comand_lcd
         EXPORT send_data_lcd
+		EXPORT send_string_lcd
 		IMPORT SysTick_Wait1us
 		IMPORT PortM_Output_LCD
 									
@@ -352,6 +353,68 @@ send_data_lcd
 ;Parametro: r0 -> string
 
 send_string_lcd
+  PUSH{LR}
+
+	MOV R0, #'T'
+	BL send_data_lcd
+	
+	MOV R0, #'a'
+	BL send_data_lcd
+	
+	MOV R0, #'b'
+	BL send_data_lcd
+	
+	MOV R0, #'u'
+	BL send_data_lcd
+	
+	MOV R0, #'a'
+	BL send_data_lcd
+	
+	MOV R0, #'d'
+	BL send_data_lcd
+	
+	MOV R0, #'a'
+	BL send_data_lcd
+	
+	MOV R0, #' '
+	BL send_data_lcd
+	
+	MOV R0, #'d'
+	BL send_data_lcd
+	
+	MOV R0, #'o'
+	BL send_data_lcd
+	
+	MOV R0, #' '
+	BL send_data_lcd
+	
+	ADD R0, R6, #'0'
+	BL send_data_lcd
+	
+;	pula para a segunda linha 
+	
+	MOV R0, #0xC0
+	BL send_comand_lcd
+	
+	ADD R0, R6, #'0'
+	BL send_data_lcd
+	
+	MOV R0, #'x'
+	BL send_data_lcd
+	
+	ADD R0, R7, #'0'
+	BL send_data_lcd
+	
+	MOV R0, #'='
+	BL send_data_lcd
+	
+	MUL R0, R6, R7
+	ADD R0, R0, #'0'
+	BL send_data_lcd
+	
+    POP{LR}
+    BX LR
+
     
 
 
