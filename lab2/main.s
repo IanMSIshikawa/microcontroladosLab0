@@ -99,18 +99,6 @@ LimpaREGS_Tela_LEDS
 
 
 MainLoop
-; ****************************************
-	MOV R0, #97
-	;volta
-	BL send_data_lcd
-	MOV R2, R0
-	;	MOV R0, #1000
-	;	BL SysTick_Wait1ms
-	MOV R0, R2
-	ADD R0, R0, #1
-	;	BL volta
-; ****************************************
-
 
 	BL faz_Varredura
 	
