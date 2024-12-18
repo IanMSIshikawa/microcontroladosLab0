@@ -18,3 +18,5 @@ lab1/Objects/utils.o
 lab2/gpio.uvguix.enzoh
 lab2/gpio.uvprojx
 lab1/gpio.uvguix.enzoh
+*.IanIshikawa
+*.uvoptx
