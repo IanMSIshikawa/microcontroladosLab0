@@ -63,7 +63,8 @@ RESET_SW   EQU 0x20000A00
 		IMPORT PortQ_Output
 		IMPORT PortA_Output
 		IMPORT PortP_Output
-		IMPORT PortM_Output 
+		IMPORT PortM_Output_Teclado 
+		IMPORT PortM_Output_LCD
 		IMPORT PortL_Input
 		
 		
@@ -72,6 +73,7 @@ RESET_SW   EQU 0x20000A00
 Start  		
 	BL PLL_Init                  ;Chama a subrotina para alterar o clock do microcontrolador para 80MHz
 	BL SysTick_Init              ;Chama a subrotina para inicializar o SysTick
+	BL GPIO_Init
 	BL LCD_Init
 	BL setup_LCD 
 	
@@ -99,14 +101,14 @@ LimpaREGS_Tela_LEDS
 MainLoop
 ; ****************************************
 	MOV R0, #97
-volta
+	;volta
 	BL send_data_lcd
 	MOV R2, R0
-	MOV R0, #1000
-	BL SysTick_Wait1ms
+	;	MOV R0, #1000
+	;	BL SysTick_Wait1ms
 	MOV R0, R2
 	ADD R0, R0, #1
-	BL volta
+	;	BL volta
 ; ****************************************
 
 
@@ -157,7 +159,7 @@ Varredura
 Varredura_loop
 	EOR R0,R3,#2_11111111; inverter bits ligados
 
-	BL PortM_Output 
+	BL PortM_Output_Teclado 
 	BL PortL_Input
 
 	MOV R4,#2_11111111

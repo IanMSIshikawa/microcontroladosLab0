@@ -1,4 +1,4 @@
-; utils.s
+	; utils.s
 ; Desenvolvido para a placa EK-TM4C1294XL
 ; Código que apresenta algumas funcionalidades:
 ; - Altera a frequência do barramento usando o PLL

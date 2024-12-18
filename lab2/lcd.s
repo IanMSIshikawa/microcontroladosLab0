@@ -149,7 +149,7 @@ GPIO_PUR_R     	EQU    0x00000510
         EXPORT send_complex_comand_lcd
         EXPORT send_data_lcd
 		IMPORT SysTick_Wait1us
-
+		IMPORT PortM_Output_LCD
 									
 
 ;--------------------------------------------------------------------------------
@@ -161,75 +161,75 @@ LCD_Init
 ; ****************************************
 ; Escrever fun��o de inicializa��o dos GPIO
 ; HABILITA O CLOCK NAS PORTAS
-	LDR     R0, =SYSCTL_RCGCGPIO_R  		
-	MOV		R1, #GPIO_PORTM                 
-	ORR     R1, #GPIO_PORTK					
-	STR     R1, [R0]	
+	;LDR     R0, =SYSCTL_RCGCGPIO_R  		
+	;MOV		R1, #GPIO_PORTM                 
+	;ORR     R1, #GPIO_PORTK					
+	;STR     R1, [R0]	
 
 
 ;AGUARDA SYSCTL_PRGPIO_R FICAR PRONTO
-aguarda
-	LDR R2, =SYSCTL_PRGPIO_R
-	LDR R0, [R2]
-	CMP R0, R1
-	BNE aguarda
+;aguarda
+	;LDR R2, =SYSCTL_PRGPIO_R
+	;LDR R0, [R2]
+	;CMP R0, R1
+	;BNE aguarda
 ;SETANDO GPIOAMSEL PORTAS 
-	LDR R0,=GPIO_PORTM_BASE_R
-	ADD R0, R0, #GPIO_AMSEL_R
-	LDR R1, =2_00000000
-	STR R1, [R0]
+;	LDR R0,=GPIO_PORTM_BASE_R
+;	ADD R0, R0, #GPIO_AMSEL_R
+	;LDR R1, =2_00000000
+	;STR R1, [R0]
 
-	LDR R0,=GPIO_PORTK_BASE_R
-	ADD R0, R0, #GPIO_AMSEL_R
-	LDR R1, =2_00000000
-	STR R1, [R0]
+;	LDR R0,=GPIO_PORTK_BASE_R
+;	ADD R0, R0, #GPIO_AMSEL_R
+;	LDR R1, =2_00000000
+;   STR R1, [R0]
 ;SETANDO GPIOPCTL DAS PORTAS 
 
-	LDR R0,=GPIO_PORTM_BASE_R
-	ADD R0, R0, #GPIO_PCTL_R
-	MOV R1, #0
-	STR R1, [R0]
-
-	LDR R0,=GPIO_PORTK_BASE_R
-	ADD R0, R0, #GPIO_PCTL_R
-	MOV R1, #0
-	STR R1, [R0]
+	;LDR R0,=GPIO_PORTM_BASE_R
+	;ADD R0, R0, #GPIO_PCTL_R
+	;MOV R1, #0
+	;STR R1, [R0]
+	;
+	;LDR R0,=GPIO_PORTK_BASE_R
+	;ADD R0, R0, #GPIO_PCTL_R
+	;MOV R1, #0
+	;STR R1, [R0]
 ;SETANDO GPIODIR PARA AS PORTAS 
 
-	LDR R0,=GPIO_PORTM_BASE_R
-	ADD R0, R0, #GPIO_DIR_R
-	MOV R1, #2_111
-	STR R1, [R0]
+	;LDR R0,=GPIO_PORTM_BASE_R
+	;ADD R0, R0, #GPIO_DIR_R
+	;MOV R1, #2_111
+	;STR R1, [R0]
 
-	LDR R0,=GPIO_PORTK_BASE_R
-	ADD R0, R0, #GPIO_DIR_R
-	MOV R1, #2_11111111
-	STR R1, [R0]
+	;LDR R0,=GPIO_PORTK_BASE_R
+	;ADD R0, R0, #GPIO_DIR_R
+	;MOV R1, #2_11111111
+	;STR R1, [R0]
 
 ;SETANDO GPIOAFSEL PARA AS PORTAS 
 
-	LDR R0,=GPIO_PORTM_BASE_R
-	ADD R0, R0, #GPIO_AFSEL_R
-	MOV R1, #2_00000000
-	STR R1, [R0]
-
-	LDR R0,=GPIO_PORTK_BASE_R
-	ADD R0, R0, #GPIO_AFSEL_R
-	MOV R1, #2_00000000
-	STR R1, [R0]
+	;LDR R0,=GPIO_PORTM_BASE_R
+	;ADD R0, R0, #GPIO_AFSEL_R
+	;MOV R1, #2_00000000
+	;STR R1, [R0]
+	;
+	;LDR R0,=GPIO_PORTK_BASE_R
+	;ADD R0, R0, #GPIO_AFSEL_R
+	;MOV R1, #2_00000000
+	;STR R1, [R0]
 
 ;SETANDO GPIO_DEN_R PARA AS PORTAS A, B, P, Q, J
 
-	LDR R0,=GPIO_PORTM_BASE_R
-	ADD R0, R0, #GPIO_DEN_R
-	MOV R1, #2_111
-	STR R1, [R0]
-
-	LDR R0,=GPIO_PORTK_BASE_R
-	ADD R0, R0, #GPIO_DEN_R
-	MOV R1, #2_11111111
-	STR R1, [R0]
-
+	;LDR R0,=GPIO_PORTM_BASE_R
+	;ADD R0, R0, #GPIO_DEN_R
+	;MOV R1, #2_111
+	;STR R1, [R0]
+	;
+	;LDR R0,=GPIO_PORTK_BASE_R
+	;ADD R0, R0, #GPIO_DEN_R
+	;MOV R1, #2_11111111
+	;STR R1, [R0]
+	;
 	BX LR
 ; ****************************************
 
@@ -276,7 +276,7 @@ send_comand_lcd
 
     ;seta pinos pm0, pm1, pm2 para intrução, write, enable
     MOV R0, #2_100
-    BL PortM_Output
+    BL PortM_Output_LCD
 
     ;espera por 10us
     MOV R0, #10
@@ -284,7 +284,7 @@ send_comand_lcd
 
     ;desabilita e espera 40us
     MOV R0, #2_000
-    BL PortM_Output
+    BL PortM_Output_LCD
     MOV R0, #40
     BL SysTick_Wait1us
 
@@ -304,7 +304,7 @@ send_complex_comand_lcd
 
     ;seta pinos pm0, pm1, pm2 para intrução, write, enable
     MOV R0, #2_100
-    BL PortM_Output
+    BL PortM_Output_LCD
 
     ;espera por 10us
     MOV R0, #10
@@ -312,7 +312,7 @@ send_complex_comand_lcd
 
     ;desabilita e espera 1,64ms
     MOV R0, #2_000
-    BL PortM_Output
+    BL PortM_Output_LCD
     MOV R0, #1640
     BL SysTick_Wait1us
 
@@ -332,7 +332,7 @@ send_data_lcd
 
     ;seta pinos pm0, pm1, pm2 para dado, write, enable
     MOV R0, #2_101
-    BL PortM_Output
+    BL PortM_Output_LCD
 
     ;espera por 10us
     MOV R0, #10
@@ -340,7 +340,7 @@ send_data_lcd
 
     ;desabilita e espera 40us
     MOV R0, #2_000
-    BL PortM_Output
+    BL PortM_Output_LCD
     MOV R0, #40
     BL SysTick_Wait1us
 
@@ -357,13 +357,13 @@ send_string_lcd
 
 
 PortM_Output
-	LDR	R1, =GPIO_PORTM_DATA_R		    ;Carrega o valor do offset do data register
-	;Read-Modify-Write para escrita
-	LDR R2, [R1]
-	BIC R2, #2_00000111                     ;Primeiro limpamos os dois bits do lido da porta 
-	ORR R0, R0, R2                          ;Fazer o OR do lido pela porta com o parâmetro de entrada
-	STR R0, [R1]                            ;Escreve na porta F o barramento de dados dos pinos
-
+	;LDR	R1, =GPIO_PORTM_DATA_R		    ;Carrega o valor do offset do data register
+	;;Read-Modify-Write para escrita
+	;LDR R2, [R1]
+	;BIC R2, #2_00000111                     ;Primeiro limpamos os dois bits do lido da porta 
+	;ORR R0, R0, R2                          ;Fazer o OR do lido pela porta com o parâmetro de entrada
+	;STR R0, [R1]                            ;Escreve na porta F o barramento de dados dos pinos
+	;
 	BX LR
 
 PortK_Output

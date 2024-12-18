@@ -10,6 +10,106 @@
 ; Declaraï¿½ï¿½es EQU - Defines
 ;=======
 
+;//*****************************************************************************
+;//
+;// NVIC registers (NVIC)
+;//
+;//*****************************************************************************
+NVIC_ACTLR_R            EQU 0xE000E008
+NVIC_ST_CTRL_R          EQU 0xE000E010
+NVIC_ST_RELOAD_R        EQU 0xE000E014
+NVIC_ST_CURRENT_R       EQU 0xE000E018
+NVIC_EN0_R              EQU 0xE000E100
+NVIC_EN1_R              EQU 0xE000E104
+NVIC_EN2_R              EQU 0xE000E108
+NVIC_EN3_R              EQU 0xE000E10C
+NVIC_DIS0_R             EQU 0xE000E180
+NVIC_DIS1_R             EQU 0xE000E184
+NVIC_DIS2_R             EQU 0xE000E188
+NVIC_DIS3_R             EQU 0xE000E18C
+NVIC_PEND0_R            EQU 0xE000E200
+NVIC_PEND1_R            EQU 0xE000E204
+NVIC_PEND2_R            EQU 0xE000E208
+NVIC_PEND3_R            EQU 0xE000E20C
+NVIC_UNPEND0_R          EQU 0xE000E280
+NVIC_UNPEND1_R          EQU 0xE000E284
+NVIC_UNPEND2_R          EQU 0xE000E288
+NVIC_UNPEND3_R          EQU 0xE000E28C
+NVIC_ACTIVE0_R          EQU 0xE000E300
+NVIC_ACTIVE1_R          EQU 0xE000E304
+NVIC_ACTIVE2_R          EQU 0xE000E308
+NVIC_ACTIVE3_R          EQU 0xE000E30C
+NVIC_PRI0_R             EQU 0xE000E400
+NVIC_PRI1_R             EQU 0xE000E404
+NVIC_PRI2_R             EQU 0xE000E408
+NVIC_PRI3_R             EQU 0xE000E40C
+NVIC_PRI4_R             EQU 0xE000E410
+NVIC_PRI5_R             EQU 0xE000E414
+NVIC_PRI6_R             EQU 0xE000E418
+NVIC_PRI7_R             EQU 0xE000E41C
+NVIC_PRI8_R             EQU 0xE000E420
+NVIC_PRI9_R             EQU 0xE000E424
+NVIC_PRI10_R            EQU 0xE000E428
+NVIC_PRI11_R            EQU 0xE000E42C
+NVIC_PRI12_R            EQU 0xE000E430
+NVIC_PRI13_R            EQU 0xE000E434
+NVIC_PRI14_R            EQU 0xE000E438
+NVIC_PRI15_R            EQU 0xE000E43C
+NVIC_PRI16_R            EQU 0xE000E440
+NVIC_PRI17_R            EQU 0xE000E444
+NVIC_PRI18_R            EQU 0xE000E448
+NVIC_PRI19_R            EQU 0xE000E44C
+NVIC_PRI20_R            EQU 0xE000E450
+NVIC_PRI21_R            EQU 0xE000E454
+NVIC_PRI22_R            EQU 0xE000E458
+NVIC_PRI23_R            EQU 0xE000E45C
+NVIC_PRI24_R            EQU 0xE000E460
+NVIC_PRI25_R            EQU 0xE000E464
+NVIC_PRI26_R            EQU 0xE000E468
+NVIC_PRI27_R            EQU 0xE000E46C
+NVIC_PRI28_R            EQU 0xE000E470
+NVIC_CPUID_R            EQU 0xE000ED00
+NVIC_INT_CTRL_R         EQU 0xE000ED04
+NVIC_VTABLE_R           EQU 0xE000ED08
+NVIC_APINT_R            EQU 0xE000ED0C
+NVIC_SYS_CTRL_R         EQU 0xE000ED10
+NVIC_CFG_CTRL_R         EQU 0xE000ED14
+NVIC_SYS_PRI1_R         EQU 0xE000ED18
+NVIC_SYS_PRI2_R         EQU 0xE000ED1C
+NVIC_SYS_PRI3_R         EQU 0xE000ED20
+NVIC_SYS_HND_CTRL_R     EQU 0xE000ED24
+NVIC_FAULT_STAT_R       EQU 0xE000ED28
+NVIC_HFAULT_STAT_R      EQU 0xE000ED2C
+NVIC_DEBUG_STAT_R       EQU 0xE000ED30
+NVIC_MM_ADDR_R          EQU 0xE000ED34
+NVIC_FAULT_ADDR_R       EQU 0xE000ED38
+NVIC_CPAC_R             EQU 0xE000ED88
+NVIC_MPU_TYPE_R         EQU 0xE000ED90
+NVIC_MPU_CTRL_R         EQU 0xE000ED94
+NVIC_MPU_NUMBER_R       EQU 0xE000ED98
+NVIC_MPU_BASE_R         EQU 0xE000ED9C
+NVIC_MPU_ATTR_R         EQU 0xE000EDA0
+NVIC_MPU_BASE1_R        EQU 0xE000EDA4
+NVIC_MPU_ATTR1_R        EQU 0xE000EDA8
+NVIC_MPU_BASE2_R        EQU 0xE000EDAC
+NVIC_MPU_ATTR2_R        EQU 0xE000EDB0
+NVIC_MPU_BASE3_R        EQU 0xE000EDB4
+NVIC_MPU_ATTR3_R        EQU 0xE000EDB8
+NVIC_DBG_CTRL_R         EQU 0xE000EDF0
+NVIC_DBG_XFER_R         EQU 0xE000EDF4
+NVIC_DBG_DATA_R         EQU 0xE000EDF8
+NVIC_DBG_INT_R          EQU 0xE000EDFC
+NVIC_SW_TRIG_R          EQU 0xE000EF00
+NVIC_FPCC_R             EQU 0xE000EF34
+NVIC_FPCA_R             EQU 0xE000EF38
+NVIC_FPDSC_R            EQU 0xE000EF3C
+
+
+
+
+
+
+
 ; Declarações EQU - Defines
 
 ; ========================
@@ -300,6 +400,20 @@ GPIO_PORTQ_AHB_WAKESTAT_R EQU 0x40066548
 GPIO_PORTQ_AHB_PP_R EQU 0x40066FC0
 GPIO_PORTQ_AHB_PC_R EQU 0x40066FC4
 GPIO_PORTQ EQU 16384
+
+; PORT N
+GPIO_PORTN_LOCK_R    	EQU    0x40064520
+GPIO_PORTN_CR_R      	EQU    0x40064524
+GPIO_PORTN_AMSEL_R   	EQU    0x40064528
+GPIO_PORTN_PCTL_R    	EQU    0x4006452C
+GPIO_PORTN_DIR_R     	EQU    0x40064400
+GPIO_PORTN_AFSEL_R   	EQU    0x40064420
+GPIO_PORTN_DEN_R     	EQU    0x4006451C
+GPIO_PORTN_PUR_R     	EQU    0x40064510	
+GPIO_PORTN_DATA_R    	EQU    0x400643FC
+GPIO_PORTN_DATA_BITS_R  EQU    0x40064000
+GPIO_PORTN               	EQU    2_001000000000000	
+
 	
 ;DENIFI??O DOS OFFSETS DE CONFIG
 GPIO_LOCK_R    	EQU    0x00000520
@@ -310,10 +424,12 @@ GPIO_DIR_R     	EQU    0x00000400
 GPIO_AFSEL_R   	EQU    0x00000420
 GPIO_DEN_R     	EQU    0x0000051C
 GPIO_PUR_R     	EQU    0x00000510
-	
-NVIC_EN1_R      EQU	   0xE000E104
-	
-	
+		
+
+; VAR
+
+RESET_SW   EQU 0x20000A00
+
 	
 
 
@@ -331,7 +447,9 @@ NVIC_EN1_R      EQU	   0xE000E104
 		EXPORT PortP_Output			; Permite chamar PortP_Output de outro arquivo	
 		EXPORT PortM_Output 
 		EXPORT PortL_Input
-			
+		EXPORT PortM_Output_LCD
+		EXPORT PortM_Output_Teclado	
+		EXPORT GPIOPortJ_Handler	
 
 ;--------------------------------------------------------------------------------
 ; Funï¿½ï¿½o GPIO_Init
@@ -350,6 +468,8 @@ GPIO_Init
 	ORR     R1, #GPIO_PORTP
 	ORR     R1, #GPIO_PORTA                 						
 	ORR     R1, #GPIO_PORTJ
+	ORR     R1, #GPIO_PORTK			
+	ORR		R1, #GPIO_PORTN
 	STR     R1, [R0]	
 
 
@@ -370,6 +490,13 @@ aguarda
 	ADD R0, R0, #GPIO_AMSEL_R
 	LDR R1, =2_00000000
 	STR R1, [R0]
+;LCD
+
+	LDR R0,=GPIO_PORTK_BASE_R
+	ADD R0, R0, #GPIO_AMSEL_R
+	LDR R1, =2_00000000
+	STR R1, [R0]
+
 ;LEDS
 	LDR R0,=GPIO_PORTA_BASE_R
 	ADD R0, R0, #GPIO_AMSEL_R
@@ -386,10 +513,16 @@ aguarda
 	LDR R1, =2_00000000
 	STR R1, [R0]
 
+;BOTAO
 	LDR R0,=GPIO_PORTJ_BASE_R
 	ADD R0, R0, #GPIO_AMSEL_R
 	LDR R1, =2_00000000
 	STR R1, [R0]
+
+;TIMER
+	LDR R1, =2_00000000
+	LDR     R0, =GPIO_PORTN_AMSEL_R			;Carrega o R0 com o endereço do AMSEL para a porta N
+    STR     R1, [R0]					    ;Guarda no registrador AMSEL da porta N da memória
 
 	
 ;SETANDO GPIOPCTL DAS PORTAS A, B, P, Q, J
@@ -403,6 +536,13 @@ aguarda
 	ADD R0, R0, #GPIO_PCTL_R
 	MOV R1, #0
 	STR R1, [R0]
+;Teclado
+
+	LDR R0,=GPIO_PORTK_BASE_R
+	ADD R0, R0, #GPIO_PCTL_R
+	MOV R1, #0
+	STR R1, [R0]
+	
 ;LEDS
 
 	LDR R0,=GPIO_PORTQ_BASE_R
@@ -420,11 +560,16 @@ aguarda
 	ADD R0, R0, #GPIO_PCTL_R
 	MOV R1, #0
 	STR R1, [R0]
-	
+;BOTAO	
 	LDR R0,=GPIO_PORTJ_BASE_R
 	ADD R0, R0, #GPIO_PCTL_R
 	MOV R1, #0
 	STR R1, [R0]
+;TIMER
+	LDR R1, =2_00000000
+	LDR     R0, =GPIO_PORTN_PCTL_R			;Carrega o R0 com o endereço do AMSEL para a porta N
+    STR     R1, [R0]					    ;Guarda no registrador AMSEL da porta N da memória
+
 
 ;SETANDO GPIODIR PARA AS PORTAS A, B, P, Q, J
 	LDR R0,=GPIO_PORTL_BASE_R
@@ -434,7 +579,14 @@ aguarda
 	
 	LDR R0,=GPIO_PORTM_BASE_R
 	ADD R0, R0, #GPIO_DIR_R
-	MOV R1, #2_11110000
+	;MOV R1, #2_11110000
+	MOV R1, #2_11110111
+	STR R1, [R0]
+;LCD
+
+	LDR R0,=GPIO_PORTK_BASE_R
+	ADD R0, R0, #GPIO_DIR_R
+	MOV R1, #2_11111111
 	STR R1, [R0]
 
 ;LEDS
@@ -454,10 +606,17 @@ aguarda
 	MOV R1, #2_11110000
 	STR R1, [R0]
 
-	LDR R0,=GPIO_PORTJ_BASE_R
+;BOTAO
+	LDR R0,=GPIO_PORTN_DIR_R
 	ADD R0, R0, #GPIO_DIR_R
-	MOV R1, #2_00000000
+	MOV R1, #2_0010
 	STR R1, [R0]
+
+;TIMER
+	LDR R1, =2_00000000
+	LDR     R0, =GPIO_PORTN_PCTL_R			;Carrega o R0 com o endereço do AMSEL para a porta N
+    STR     R1, [R0]					    ;Guarda no registrador AMSEL da porta N da memória
+
 
 ;SETANDO GPIOAFSEL PARA AS PORTAS A, B, P, Q, J
 
@@ -467,6 +626,13 @@ aguarda
 	STR R1, [R0]
 	
 	LDR R0,=GPIO_PORTL_BASE_R
+	ADD R0, R0, #GPIO_AFSEL_R
+	MOV R1, #2_00000000
+	STR R1, [R0]
+	
+;LCD
+
+	LDR R0,=GPIO_PORTK_BASE_R
 	ADD R0, R0, #GPIO_AFSEL_R
 	MOV R1, #2_00000000
 	STR R1, [R0]
@@ -488,23 +654,38 @@ aguarda
 	MOV R1, #2_00000000
 	STR R1, [R0]
 
+;BOTAO
 	LDR R0,=GPIO_PORTJ_BASE_R
 	ADD R0, R0, #GPIO_AFSEL_R
 	MOV R1, #2_00000000
 	STR R1, [R0]
+;TIMER
+	MOV R1, #2_00000000
+    LDR     R0, =GPIO_PORTJ_AHB_AFSEL_R     ;Carrega o endereço do AFSEL da porta J
+    STR     R1, [R0]                        ;Escreve na porta
 
 	
 ;SETANDO GPIO_DEN_R PARA AS PORTAS M e L
 
 	LDR R0,=GPIO_PORTM_BASE_R
 	ADD R0, R0, #GPIO_DEN_R
-	MOV R1, #2_11110000
+	MOV R1, #2_11110111
 	STR R1, [R0]
 	
 	LDR R0,=GPIO_PORTL_BASE_R
 	ADD R0, R0, #GPIO_DEN_R
 	MOV R1, #2_00001111
 	STR R1, [R0]
+
+;LCD
+
+	LDR R0,=GPIO_PORTK_BASE_R
+	ADD R0, R0, #GPIO_DEN_R
+	MOV R1, #2_11111111
+	STR R1, [R0]
+	
+;LEDS
+
 	
 	LDR R0,=GPIO_PORTA_BASE_R
 	ADD R0, R0, #GPIO_DEN_R
@@ -583,13 +764,41 @@ aguarda
 	ORR R1,R1,R2
 	STR R1, [R0] 
 
+;SETANDO NVIC PRI DA PORTA J 
+
+	LDR R0,=NVIC_PRI12_R
+	LDR R1,[R0]
+	MOV R2, #5
+	LSL R2, #29
+	ORR R1,R1,R2
+	STR R1, [R0] 
 
 	BX LR
+; -------------------------------------------------------------------------------
+; Funï¿½ï¿½o GPIOPortJ_Handler
+; Parï¿½metro de entrada: R0 --> o valor da saida
+; Parï¿½metro de saï¿½da: Nï¿½o tem
+
+; -------------------------------------------------------------------------------
+
+GPIOPortJ_Handler
+
+	;Setar o RESET_SW
+	LDR R0,=RESET_SW
+	MOV R1,#1
+	STR R1,[R0]
+	MOV R0,#0
+	MOV R1,#0
+
+	;SETANDO GPIOICR DA PORTA J --ACK do interrupt
+
+	LDR R0,=GPIO_PORTJ_AHB_ICR_R	
+	MOV R1, #2_00000001
+	STR R1, [R0] 
 
 
-
-
-
+	BX LR
+; -------------------------------------------------------------------------------
 
 
 ; -------------------------------------------------------------------------------
@@ -607,8 +816,37 @@ PortM_Output
 	ORR R0, R0, R2                          ;Fazer o OR do lido pela porta com o parï¿½metro de entrada
 	STR R0, [R1]                            ;Escreve na porta M o barramento de dados do pino M7-M4
 	BX LR									;Retorno
-
 	
+; -------------------------------------------------------------------------------
+; Funï¿½ï¿½o PortM_Output
+; Parï¿½metro de entrada: R0 --> o valor da saida
+; Parï¿½metro de saï¿½da: Nï¿½o tem
+PortM_Output_LCD
+; ****************************************
+; 
+; ****************************************
+	LDR	R1, =GPIO_PORTM_DATA_R		    ;Carrega o valor do offset do data register
+	;Read-Modify-Write para escrita
+	LDR R2, [R1]
+	BIC R2, #2_00000111                  ;Primeiro limpamos os dois bits do lido da porta R2 = R2 & 0000 1111
+	ORR R0, R0, R2                          ;Fazer o OR do lido pela porta com o parï¿½metro de entrada
+	STR R0, [R1]                            ;Escreve na porta M o barramento de dados do pino M7-M4
+	BX LR									;Retorno
+; -------------------------------------------------------------------------------
+; Funï¿½ï¿½o PortM_Output
+; Parï¿½metro de entrada: R0 --> o valor da saida
+; Parï¿½metro de saï¿½da: Nï¿½o tem
+PortM_Output_Teclado
+; ****************************************
+; 
+; ****************************************
+	LDR	R1, =GPIO_PORTM_DATA_R		    ;Carrega o valor do offset do data register
+	;Read-Modify-Write para escrita
+	LDR R2, [R1]
+	BIC R2, #2_11110000                     ;Primeiro limpamos os dois bits do lido da porta 
+	ORR R0, R0, R2                          ;Fazer o OR do lido pela porta com o parâmetro de entrada
+	STR R0, [R1]                            ;Escreve na porta F o barramento de dados dos pinos
+
 	BX LR
 ; -------------------------------------------------------------------------------
 ; Funï¿½ï¿½o PortJ_Input
@@ -676,7 +914,19 @@ PortP_Output
 	ORR R0, R0, R2                          ;Fazer o OR do lido pela porta com o parï¿½metro de entrada
 	STR R0, [R1]                            ;Escreve na porta F o barramento de dados dos pinos F4 e F0
 	BX LR
+	
+PortK_Output
+	LDR	R1, =GPIO_PORTK_DATA_R		    ;Carrega o valor do offset do data register
+	;Read-Modify-Write para escrita
+	LDR R2, [R1]
+	BIC R2, #2_11111111                     ;Primeiro limpamos os dois bits do lido da porta 
+	ORR R0, R0, R2                          ;Fazer o OR do lido pela porta com o parâmetro de entrada
+	STR R0, [R1]                            ;Escreve na porta F o barramento de dados dos pinos
 
+	BX LR
+
+    ALIGN                           ; garante que o fim da se??o est? alinhada 
+    END                             ; fim do arquivo
 
 
 
