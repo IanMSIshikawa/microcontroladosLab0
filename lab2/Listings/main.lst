@@ -320,7 +320,7 @@ ARM Macro Assembler    Page 5
   141 00000008 F7FF FFFE       BL               GPIO_Init
   142 0000000C F7FF FFFE       BL               LCD_Init
   143 00000010 F7FF FFFE       BL               setup_LCD
-  144 00000014 F000 F8B2       BL               Load_Contagem_Memoria ;Chama a 
+  144 00000014 F000 F8AE       BL               Load_Contagem_Memoria ;Chama a 
                                                             subrotina que grava
                                                              na memoria os valo
 
@@ -330,7 +330,7 @@ ARM Macro Assembler    Page 6
 
 
                                                             res da contagem
-  145 00000018 F000 F8E1       BL               Timer0A_init ;Chama subrotina q
+  145 00000018 F000 F8DD       BL               Timer0A_init ;Chama subrotina q
                                                             ue inicializa e hab
                                                             ilita interrupcao d
                                                             o timer 0_A
@@ -355,7 +355,7 @@ ARM Macro Assembler    Page 6
   157 00000038 F04F 0A00       MOV              R10,#0      ;R10= n estados deb
                                                             ounce
   158 0000003C         
-  159 0000003C 4885            LDR              R0,=RESET_SW
+  159 0000003C 4883            LDR              R0,=RESET_SW
   160 0000003E F04F 0100       MOV              R1,#0
   161 00000042 6001            STR              R1,[R0]
   162 00000044 F04F 0000       MOV              R0,#0
@@ -364,430 +364,432 @@ ARM Macro Assembler    Page 6
   165 0000004C         
   166 0000004C         MainLoop
   167 0000004C         
-  168 0000004C F000 F86C       BL               faz_Varredura
+  168 0000004C F000 F868       BL               faz_Varredura
   169 00000050         
-  170 00000050 4880            LDR              R0,=RESET_SW
+  170 00000050 487E            LDR              R0,=RESET_SW
   171 00000052 6800            LDR              R0,[R0]
   172 00000054 2801            CMP              R0,#1
   173 00000056 BF08            IT               EQ
   174 00000058 E7E2            BEQ              LimpaREGS_Tela_LEDS
   175 0000005A         
-  176 0000005A F000 F818       BL               AscendeLed
-  177 0000005E 4630            MOV              R0, R6
-  178 00000060 F000 F87D       BL               Set_Contagem_timer
-  179 00000064 F04F 0001       MOV              R0, #0x01
-  180 00000068 F7FF FFFE       BL               send_complex_comand_lcd
-  181 0000006C F7FF FFFE       BL               send_string_lcd
-  182 00000070         
-  183 00000070         
-  184 00000070 E7EC            B                MainLoop
-  185 00000072         
-  186 00000072         ;-------------------------------------------------------
+  176 0000005A         
+  177 0000005A 4630            MOV              R0, R6
+  178 0000005C F000 F87B       BL               Set_Contagem_timer
+  179 00000060 F04F 0001       MOV              R0, #0x01
+  180 00000064 F7FF FFFE       BL               send_complex_comand_lcd
+  181 00000068 F7FF FFFE       BL               send_string_lcd
+  182 0000006C         
+  183 0000006C         
+  184 0000006C E7EE            B                MainLoop
+  185 0000006E         
+  186 0000006E         ;-------------------------------------------------------
                        -------------------------
-  187 00000072         ; Fun��o Pisca_LED
-  188 00000072         ; Par�metro de entrada: N�o tem
-  189 00000072         ; Par�metro de sa�da: N�o tem
-  190 00000072         Pisca_LED
+  187 0000006E         ; Fun��o Pisca_LED
+  188 0000006E         ; Par�metro de entrada: N�o tem
+  189 0000006E         ; Par�metro de sa�da: N�o tem
+  190 0000006E         Pisca_LED
 
 
 
 ARM Macro Assembler    Page 7 
 
 
-  191 00000072 B500            PUSH{LR}
-  192 00000074         
-  193 00000074 F1BB 0FFF       CMP              R11, #2_11111111
-  194 00000078 BF08            IT               EQ
-  195 0000007A 2000            MOVEQ            R0,#2_00000000
-  196 0000007C         
-  197 0000007C F1BB 0F00       CMP              R11, #2_00000000
-  198 00000080 BF08            IT               EQ
-  199 00000082 20FF            MOVEQ            R0,#2_11111111
-  200 00000084         
-  201 00000084 F7FF FFFE       BL               PortP_Output
-  202 00000088         
-  203 00000088         
-  204 00000088 F85D EB04       POP{LR}
-  205 0000008C 4770            BX               LR
-  206 0000008E         
-  207 0000008E         
-  208 0000008E         ; ****************************************
-  209 0000008E         ; Escrever fun��o que acende o LED, espera 1 segundo
+  191 0000006E B500            PUSH{LR}
+  192 00000070         
+  193 00000070 F000 F80D       BL               AscendeLed
+  194 00000074         
+  195 00000074 F1BB 0FFF       CMP              R11, #2_11111111
+  196 00000078 BF08            IT               EQ
+  197 0000007A 2000            MOVEQ            R0,#2_00000000
+  198 0000007C         
+  199 0000007C F1BB 0F00       CMP              R11, #2_00000000
+  200 00000080 BF08            IT               EQ
+  201 00000082 20FF            MOVEQ            R0,#2_11111111
+  202 00000084         
+  203 00000084 F7FF FFFE       BL               PortP_Output
+  204 00000088         
+  205 00000088         
+  206 00000088 F85D EB04       POP{LR}
+  207 0000008C 4770            BX               LR
+  208 0000008E         
+  209 0000008E         
+  210 0000008E         ; ****************************************
+  211 0000008E         ; Escrever fun��o que acende o LED, espera 1 segundo
                        , apaga o LED e espera 1 s
-  210 0000008E         ; Esta fun��o deve chamar a rotina SysTick_Wait1ms c
+  212 0000008E         ; Esta fun��o deve chamar a rotina SysTick_Wait1ms c
                        om o par�metro de entrada em R0
-  211 0000008E         ; ****************************************
-  212 0000008E         AscendeLed
-  213 0000008E B500            PUSH{LR}
-  214 00000090         
-  215 00000090 4630            MOV              R0,R6       ;#2_00001111
-  216 00000092 F7FF FFFE       BL               PortQ_Output
-  217 00000096 4630            MOV              R0,R6       ;#2_11110000
-  218 00000098 F7FF FFFE       BL               PortA_Output
-  219 0000009C F04F 00FF       MOV              R0,#2_11111111
-  220 000000A0 F7FF FFFE       BL               PortP_Output
-  221 000000A4 F85D EB04       POP{LR}
-  222 000000A8         
-  223 000000A8 4770            BX               LR
-  224 000000AA         ;********************************
-  225 000000AA         Varredura
-  226 000000AA B500            PUSH{LR}
-  227 000000AC F04F 0800       MOV              R8,#0
-  228 000000B0 F04F 0310       MOV              R3,#2_00010000
-  229 000000B4 F04F 0501       MOV              R5,#1
-  230 000000B8         
-  231 000000B8         Varredura_loop
-  232 000000B8 F083 00FF       EOR              R0,R3,#2_11111111 ; inverter bi
+  213 0000008E         ; ****************************************
+  214 0000008E         AscendeLed
+  215 0000008E B500            PUSH{LR}
+  216 00000090         
+  217 00000090 4630            MOV              R0,R6       ;#2_00001111
+  218 00000092 F7FF FFFE       BL               PortQ_Output
+  219 00000096 4630            MOV              R0,R6       ;#2_11110000
+  220 00000098 F7FF FFFE       BL               PortA_Output
+  221 0000009C         ; MOV R0,#2_11111111
+  222 0000009C         ; BL PortP_Output
+  223 0000009C F85D EB04       POP{LR}
+  224 000000A0         
+  225 000000A0 4770            BX               LR
+  226 000000A2         ;********************************
+  227 000000A2         Varredura
+  228 000000A2 B500            PUSH{LR}
+  229 000000A4 F04F 0800       MOV              R8,#0
+  230 000000A8 F04F 0310       MOV              R3,#2_00010000
+  231 000000AC F04F 0501       MOV              R5,#1
+  232 000000B0         
+  233 000000B0         Varredura_loop
+  234 000000B0 F083 00FF       EOR              R0,R3,#2_11111111 ; inverter bi
                                                             ts ligados
-  233 000000BC         
-  234 000000BC F7FF FFFE       BL               PortM_Output_Teclado
-  235 000000C0 F7FF FFFE       BL               PortL_Input
-  236 000000C4         
-  237 000000C4 F04F 04FF       MOV              R4,#2_11111111
-  238 000000C8         
-  239 000000C8 F080 000F       EOR              R0,R0,#2_1111 ; inverter bits l
+  235 000000B4         
+  236 000000B4 F7FF FFFE       BL               PortM_Output_Teclado
+  237 000000B8 F7FF FFFE       BL               PortL_Input
+  238 000000BC         
+  239 000000BC F04F 04FF       MOV              R4,#2_11111111
+  240 000000C0         
+  241 000000C0 F080 000F       EOR              R0,R0,#2_1111 ; inverter bits l
                                                             igados
-  240 000000CC         
-  241 000000CC 2801            CMP              R0, #2_00000001
-  242 000000CE BF08            IT               EQ
-  243 000000D0 2400            MOVEQ            R4,#0
-  244 000000D2         
-  245 000000D2 2802            CMP              R0, #2_00000010
+  242 000000C4         
+  243 000000C4 2801            CMP              R0, #2_00000001
+  244 000000C6 BF08            IT               EQ
+  245 000000C8 2400            MOVEQ            R4,#0
 
 
 
 ARM Macro Assembler    Page 8 
 
 
-  246 000000D4 BF08            IT               EQ
-  247 000000D6 2403            MOVEQ            R4,#3
-  248 000000D8         
-  249 000000D8 2804            CMP              R0, #2_00000100
-  250 000000DA BF08            IT               EQ
-  251 000000DC 2406            MOVEQ            R4,#6
-  252 000000DE         
-  253 000000DE 2808            CMP              R0, #2_00001000
-  254 000000E0 BF08            IT               EQ
-  255 000000E2 2409            MOVEQ            R4,#9
-  256 000000E4         
-  257 000000E4 2CFF            CMP              R4,#2_11111111
-  258 000000E6 BF1C            ITT              NE
-  259 000000E8 1964            ADDNE            R4,R4,R5
-  260 000000EA E008            BNE              Debounce_TRUE
-  261 000000EC         
-  262 000000EC F105 0501       ADD              R5,R5,#1
-  263 000000F0 EA4F 0343       LSL              R3,R3,#1
-  264 000000F4 2B80            CMP              R3, #2_10000000
-  265 000000F6 D1DF            BNE              Varredura_loop
-  266 000000F8         
-  267 000000F8         
-  268 000000F8         
-  269 000000F8         SaidaVarredura
-  270 000000F8         
-  271 000000F8         ; CMP R4,#2_11111111
-  272 000000F8         ; IT NE
-  273 000000F8         ;  BNE Debounce_TRUE
-  274 000000F8         
-  275 000000F8         Saida_deb
-  276 000000F8         
-  277 000000F8 F85D EB04       POP{LR}
-  278 000000FC 4770            BX               LR
-  279 000000FE         ;******************************8
-  280 000000FE         Debounce_TRUE
-  281 000000FE         
-  282 000000FE 2C0B            CMP              R4, #11
-  283 00000100 BF08            IT               EQ
-  284 00000102 2400            MOVEQ            R4,#0       ; zerar R4 >=10
-  285 00000104         
-  286 00000104 2C0A            CMP              R4, #10
-  287 00000106 BF28            IT               HS
-  288 00000108 E7F6            BHS              Saida_deb   ; sair >=10
-  289 0000010A         
-  290 0000010A 454C            CMP              R4, R9      ; R4 = nova tecla a
+  246 000000CA         
+  247 000000CA 2802            CMP              R0, #2_00000010
+  248 000000CC BF08            IT               EQ
+  249 000000CE 2403            MOVEQ            R4,#3
+  250 000000D0         
+  251 000000D0 2804            CMP              R0, #2_00000100
+  252 000000D2 BF08            IT               EQ
+  253 000000D4 2406            MOVEQ            R4,#6
+  254 000000D6         
+  255 000000D6 2808            CMP              R0, #2_00001000
+  256 000000D8 BF08            IT               EQ
+  257 000000DA 2409            MOVEQ            R4,#9
+  258 000000DC         
+  259 000000DC 2CFF            CMP              R4,#2_11111111
+  260 000000DE BF1C            ITT              NE
+  261 000000E0 1964            ADDNE            R4,R4,R5
+  262 000000E2 E008            BNE              Debounce_TRUE
+  263 000000E4         
+  264 000000E4 F105 0501       ADD              R5,R5,#1
+  265 000000E8 EA4F 0343       LSL              R3,R3,#1
+  266 000000EC 2B80            CMP              R3, #2_10000000
+  267 000000EE D1DF            BNE              Varredura_loop
+  268 000000F0         
+  269 000000F0         
+  270 000000F0         
+  271 000000F0         SaidaVarredura
+  272 000000F0         
+  273 000000F0         ; CMP R4,#2_11111111
+  274 000000F0         ; IT NE
+  275 000000F0         ;  BNE Debounce_TRUE
+  276 000000F0         
+  277 000000F0         Saida_deb
+  278 000000F0         
+  279 000000F0 F85D EB04       POP{LR}
+  280 000000F4 4770            BX               LR
+  281 000000F6         ;******************************8
+  282 000000F6         Debounce_TRUE
+  283 000000F6         
+  284 000000F6 2C0B            CMP              R4, #11
+  285 000000F8 BF08            IT               EQ
+  286 000000FA 2400            MOVEQ            R4,#0       ; zerar R4 >=10
+  287 000000FC         
+  288 000000FC 2C0A            CMP              R4, #10
+  289 000000FE BF28            IT               HS
+  290 00000100 E7F6            BHS              Saida_deb   ; sair >=10
+  291 00000102         
+  292 00000102 454C            CMP              R4, R9      ; R4 = nova tecla a
                                                             pertada ; R9 = tecl
                                                             a contagem debounce
                                                              ;R10= n estados de
                                                             bounce
-  291 0000010C BF0E            ITEE             EQ
-  292 0000010E F10A 0A01       ADDEQ            R10,R10,#1
-  293 00000112 F04F 0A00       MOVNE            R10,#0
-  294 00000116 46A1            MOVNE            R9,R4
-  295 00000118         
-  296 00000118 F1BA 0F4B       CMP              R10,#75
-  297 0000011C BF04            ITT              EQ
-  298 0000011E F04F 0A00       MOVEQ            R10,#0
-  299 00000122 F04F 0801       MOVEQ            R8,#1
-  300 00000126         ;B   Saida_deb 
+  293 00000104 BF0E            ITEE             EQ
+  294 00000106 F10A 0A01       ADDEQ            R10,R10,#1
+  295 0000010A F04F 0A00       MOVNE            R10,#0
+  296 0000010E 46A1            MOVNE            R9,R4
+  297 00000110         
+  298 00000110 F1BA 0F4B       CMP              R10,#75
+  299 00000114 BF04            ITT              EQ
+  300 00000116 F04F 0A00       MOVEQ            R10,#0
 
 
 
 ARM Macro Assembler    Page 9 
 
 
-  301 00000126         
-  302 00000126         
-  303 00000126         ;BNE Varredura
-  304 00000126 E7E7            B                Saida_deb
-  305 00000128         ;****************************
-  306 00000128         faz_Varredura
-  307 00000128 B500            PUSH{LR}
-  308 0000012A         
-  309 0000012A         repete
-  310 0000012A F7FF FFBE       BL               Varredura
-  311 0000012E F04F 0001       mov              R0,#1
-  312 00000132         ;BL Sys-Tick_Wait1ms
-  313 00000132 4848            LDR              R0,=RESET_SW
-  314 00000134 6800            LDR              R0,[R0]
-  315 00000136 2801            CMP              R0,#1
-  316 00000138 BF08            IT               EQ
-  317 0000013A E00D            BEQ              saida
-  318 0000013C         
-  319 0000013C F1B8 0F01       CMP              R8,#1
-  320 00000140         ;IT NE
-  321 00000140         ;BNE repete
-  322 00000140 BF18            IT               NE
-  323 00000142 E009            BNE              saida
-  324 00000144 45B1            CMP              R9,R6
-  325 00000146 BF1E            ITTT             NE
-  326 00000148 464E            MOVNE            R6,R9
-  327 0000014A 2700            MOVNE            R7,#0
-  328 0000014C E004            BNE              saida
-  329 0000014E F107 0701       ADD              R7,#1
-  330 00000152 2F0A            CMP              R7,#10
-  331 00000154 BF28            IT               HS
-  332 00000156 2700            MOVHS            R7,#0
-  333 00000158         
-  334 00000158         saida
-  335 00000158         
-  336 00000158 F85D EB04       POP{LR}
-  337 0000015C 4770            BX               LR
-  338 0000015E         
-  339 0000015E         
-  340 0000015E         ;-------------------------------------------------------
+  301 0000011A F04F 0801       MOVEQ            R8,#1
+  302 0000011E         ;B   Saida_deb 
+  303 0000011E         
+  304 0000011E         
+  305 0000011E         ;BNE Varredura
+  306 0000011E E7E7            B                Saida_deb
+  307 00000120         ;****************************
+  308 00000120         faz_Varredura
+  309 00000120 B500            PUSH{LR}
+  310 00000122         
+  311 00000122         repete
+  312 00000122 F7FF FFBE       BL               Varredura
+  313 00000126 F04F 0001       mov              R0,#1
+  314 0000012A         ;BL Sys-Tick_Wait1ms
+  315 0000012A 4848            LDR              R0,=RESET_SW
+  316 0000012C 6800            LDR              R0,[R0]
+  317 0000012E 2801            CMP              R0,#1
+  318 00000130 BF08            IT               EQ
+  319 00000132 E00D            BEQ              saida
+  320 00000134         
+  321 00000134 F1B8 0F01       CMP              R8,#1
+  322 00000138         ;IT NE
+  323 00000138         ;BNE repete
+  324 00000138 BF18            IT               NE
+  325 0000013A E009            BNE              saida
+  326 0000013C 45B1            CMP              R9,R6
+  327 0000013E BF1E            ITTT             NE
+  328 00000140 464E            MOVNE            R6,R9
+  329 00000142 2700            MOVNE            R7,#0
+  330 00000144 E004            BNE              saida
+  331 00000146 F107 0701       ADD              R7,#1
+  332 0000014A 2F0A            CMP              R7,#10
+  333 0000014C BF28            IT               HS
+  334 0000014E 2700            MOVHS            R7,#0
+  335 00000150         
+  336 00000150         saida
+  337 00000150         
+  338 00000150 F85D EB04       POP{LR}
+  339 00000154 4770            BX               LR
+  340 00000156         
+  341 00000156         
+  342 00000156         ;-------------------------------------------------------
                        -------------------------
-  341 0000015E         ; Fun��o Set_Contagem_timer
-  342 0000015E         ; Par�metro de entrada: R0 ( 1- 100 ms, 2 -200ms, ...,
+  343 00000156         ; Fun��o Set_Contagem_timer
+  344 00000156         ; Par�metro de entrada: R0 ( 1- 100 ms, 2 -200ms, ...,
                         9 - 900ms)
-  343 0000015E         ; Par�metro de sa�da: N�o tem
-  344 0000015E         Set_Contagem_timer
-  345 0000015E B407            PUSH             {R0, R1, R2}
-  346 00000160         
-  347 00000160 4602            MOV              R2, R0      ;Salva o parametro 
+  345 00000156         ; Par�metro de sa�da: N�o tem
+  346 00000156         Set_Contagem_timer
+  347 00000156 B407            PUSH             {R0, R1, R2}
+  348 00000158         
+  349 00000158 4602            MOV              R2, R0      ;Salva o parametro 
                                                             de entrada em R2
-  348 00000162 F1A2 0201       SUB              R2, R2, #1
-  349 00000166         
-  350 00000166 483C            LDR              R0, =ADDRESS_MEMORY_CONTAGEM
-  351 00000168 F04F 0104       LDR              R1, =ADDRESS_MEMORY_OFFSET
-  352 0000016C FB02 F201       MUL              R2, R2, R1
-  353 00000170 4402            ADD              R2, R2, R0
-  354 00000172 6811            LDR              R1, [R2]
-  355 00000174         
-  356 00000174 4839            LDR              R0, =TIMER0_TAILR_R
+  350 0000015A F1A2 0201       SUB              R2, R2, #1
+  351 0000015E         
+  352 0000015E 483C            LDR              R0, =ADDRESS_MEMORY_CONTAGEM
+  353 00000160 F04F 0104       LDR              R1, =ADDRESS_MEMORY_OFFSET
+  354 00000164 FB02 F201       MUL              R2, R2, R1
+  355 00000168 4402            ADD              R2, R2, R0
+  356 0000016A 6811            LDR              R1, [R2]
 
 
 
 ARM Macro Assembler    Page 10 
 
 
-  357 00000176 6001            STR              R1, [R0]    ;Seta o contador pa
+  357 0000016C         
+  358 0000016C 4839            LDR              R0, =TIMER0_TAILR_R
+  359 0000016E 6001            STR              R1, [R0]    ;Seta o contador pa
                                                             ra o valor requerid
                                                             o
-  358 00000178         
-  359 00000178 BC07            POP              {R0, R1, R2}
-  360 0000017A 4770            BX               LR
-  361 0000017C         
-  362 0000017C         ;-------------------------------------------------------
+  360 00000170         
+  361 00000170 BC07            POP              {R0, R1, R2}
+  362 00000172 4770            BX               LR
+  363 00000174         
+  364 00000174         ;-------------------------------------------------------
                        -------------------------
-  363 0000017C         ; Fun��o Set_Contagem_timer
-  364 0000017C         ; Par�metro de entrada: R0 ( 1- 100 ms, 2 -200ms, ...,
+  365 00000174         ; Fun��o Set_Contagem_timer
+  366 00000174         ; Par�metro de entrada: R0 ( 1- 100 ms, 2 -200ms, ...,
                         9 - 900ms)
-  365 0000017C         ; Par�metro de sa�da: N�o tem
-  366 0000017C         Load_Contagem_Memoria
-  367 0000017C B503            PUSH             {R0, R1, LR}
-  368 0000017E 4836            LDR              R0, =ADDRESS_MEMORY_CONTAGEM
-  369 00000180 4937            LDR              R1, =CONTAGEM_100_MS
-  370 00000182 6001            STR              R1, [R0]    ;Carrega o valor de
+  367 00000174         ; Par�metro de sa�da: N�o tem
+  368 00000174         Load_Contagem_Memoria
+  369 00000174 B503            PUSH             {R0, R1, LR}
+  370 00000176 4836            LDR              R0, =ADDRESS_MEMORY_CONTAGEM
+  371 00000178 4937            LDR              R1, =CONTAGEM_100_MS
+  372 0000017A 6001            STR              R1, [R0]    ;Carrega o valor de
                                                              contagem de 100 ms
                                                              no endereco R0
-  371 00000184         
-  372 00000184 F100 0004       ADD              R0, R0, #ADDRESS_MEMORY_OFFSET
-  373 00000188 4936            LDR              R1, =CONTAGEM_200_MS
-  374 0000018A 6001            STR              R1, [R0]    ;Carrega o valor de
+  373 0000017C         
+  374 0000017C F100 0004       ADD              R0, R0, #ADDRESS_MEMORY_OFFSET
+  375 00000180 4936            LDR              R1, =CONTAGEM_200_MS
+  376 00000182 6001            STR              R1, [R0]    ;Carrega o valor de
                                                              contagem de 200 ms
                                                              no endereco R0
-  375 0000018C         
-  376 0000018C F100 0004       ADD              R0, R0, #ADDRESS_MEMORY_OFFSET
-  377 00000190 4935            LDR              R1, =CONTAGEM_300_MS
-  378 00000192 6001            STR              R1, [R0]    ;Carrega o valor de
+  377 00000184         
+  378 00000184 F100 0004       ADD              R0, R0, #ADDRESS_MEMORY_OFFSET
+  379 00000188 4935            LDR              R1, =CONTAGEM_300_MS
+  380 0000018A 6001            STR              R1, [R0]    ;Carrega o valor de
                                                              contagem de 300 ms
                                                              no endereco R0
-  379 00000194         
-  380 00000194 F100 0004       ADD              R0, R0, #ADDRESS_MEMORY_OFFSET
-  381 00000198 4934            LDR              R1, =CONTAGEM_400_MS
-  382 0000019A 6001            STR              R1, [R0]    ;Carrega o valor de
+  381 0000018C         
+  382 0000018C F100 0004       ADD              R0, R0, #ADDRESS_MEMORY_OFFSET
+  383 00000190 4934            LDR              R1, =CONTAGEM_400_MS
+  384 00000192 6001            STR              R1, [R0]    ;Carrega o valor de
                                                              contagem de 400 ms
                                                              no endereco R0
-  383 0000019C         
-  384 0000019C F100 0004       ADD              R0, R0, #ADDRESS_MEMORY_OFFSET
-  385 000001A0 4933            LDR              R1, =CONTAGEM_500_MS
-  386 000001A2 6001            STR              R1, [R0]    ;Carrega o valor de
+  385 00000194         
+  386 00000194 F100 0004       ADD              R0, R0, #ADDRESS_MEMORY_OFFSET
+  387 00000198 4933            LDR              R1, =CONTAGEM_500_MS
+  388 0000019A 6001            STR              R1, [R0]    ;Carrega o valor de
                                                              contagem de 500 ms
                                                              no endereco R0
-  387 000001A4         
-  388 000001A4 F100 0004       ADD              R0, R0, #ADDRESS_MEMORY_OFFSET
-  389 000001A8 4932            LDR              R1, =CONTAGEM_600_MS
-  390 000001AA 6001            STR              R1, [R0]    ;Carrega o valor de
+  389 0000019C         
+  390 0000019C F100 0004       ADD              R0, R0, #ADDRESS_MEMORY_OFFSET
+  391 000001A0 4932            LDR              R1, =CONTAGEM_600_MS
+  392 000001A2 6001            STR              R1, [R0]    ;Carrega o valor de
                                                              contagem de 600 ms
                                                              no endereco R0
-  391 000001AC         
-  392 000001AC F100 0004       ADD              R0, R0, #ADDRESS_MEMORY_OFFSET
-  393 000001B0 4931            LDR              R1, =CONTAGEM_700_MS
-  394 000001B2 6001            STR              R1, [R0]    ;Carrega o valor de
+  393 000001A4         
+  394 000001A4 F100 0004       ADD              R0, R0, #ADDRESS_MEMORY_OFFSET
+  395 000001A8 4931            LDR              R1, =CONTAGEM_700_MS
+  396 000001AA 6001            STR              R1, [R0]    ;Carrega o valor de
                                                              contagem de 700 ms
                                                              no endereco R0
-  395 000001B4         
-  396 000001B4 F100 0004       ADD              R0, R0, #ADDRESS_MEMORY_OFFSET
-  397 000001B8 4930            LDR              R1, =CONTAGEM_800_MS
+  397 000001AC         
 
 
 
 ARM Macro Assembler    Page 11 
 
 
-  398 000001BA 6001            STR              R1, [R0]    ;Carrega o valor de
+  398 000001AC F100 0004       ADD              R0, R0, #ADDRESS_MEMORY_OFFSET
+  399 000001B0 4930            LDR              R1, =CONTAGEM_800_MS
+  400 000001B2 6001            STR              R1, [R0]    ;Carrega o valor de
                                                              contagem de 800 ms
                                                              no endereco R0
-  399 000001BC         
-  400 000001BC F100 0004       ADD              R0, R0, #ADDRESS_MEMORY_OFFSET
-  401 000001C0 492F            LDR              R1, =CONTAGEM_900_MS
-  402 000001C2 6001            STR              R1, [R0]    ;Carrega o valor de
+  401 000001B4         
+  402 000001B4 F100 0004       ADD              R0, R0, #ADDRESS_MEMORY_OFFSET
+  403 000001B8 492F            LDR              R1, =CONTAGEM_900_MS
+  404 000001BA 6001            STR              R1, [R0]    ;Carrega o valor de
                                                              contagem de 900 ms
                                                              no endereco R0 
-  403 000001C4         
-  404 000001C4 E8BD 4003       POP              {R0, R1, LR}
-  405 000001C8 4770            BX               LR
-  406 000001CA         ;-------------------------------------------------------
+  405 000001BC         
+  406 000001BC E8BD 4003       POP              {R0, R1, LR}
+  407 000001C0 4770            BX               LR
+  408 000001C2         ;-------------------------------------------------------
                        -------------------------
-  407 000001CA         ; Fun��o Timer0A_Handler
-  408 000001CA         ; Par�metro de entrada: N�o tem
-  409 000001CA         ; Par�metro de sa�da: N�o tem
-  410 000001CA         Timer0A_Handler
-  411 000001CA 492E            LDR              R1, =TIMER0_ICR_R
-  412 000001CC F04F 0001       MOV              R0, #1
-  413 000001D0 6008            STR              R0, [R1]
-  414 000001D2 B500            PUSH             {LR}
-  415 000001D4 F7FF FF4D       BL               Pisca_LED
-  416 000001D8 F85D EB04       POP              {LR}
-  417 000001DC 4770            BX               LR
-  418 000001DE         
-  419 000001DE         
-  420 000001DE         ; ------------------------------------------------------
+  409 000001C2         ; Fun��o Timer0A_Handler
+  410 000001C2         ; Par�metro de entrada: N�o tem
+  411 000001C2         ; Par�metro de sa�da: N�o tem
+  412 000001C2         Timer0A_Handler
+  413 000001C2 492E            LDR              R1, =TIMER0_ICR_R
+  414 000001C4 F04F 0001       MOV              R0, #1
+  415 000001C8 6008            STR              R0, [R1]
+  416 000001CA B500            PUSH             {LR}
+  417 000001CC F7FF FF4F       BL               Pisca_LED
+  418 000001D0 F85D EB04       POP              {LR}
+  419 000001D4 4770            BX               LR
+  420 000001D6         
+  421 000001D6         
+  422 000001D6         ; ------------------------------------------------------
                        --------------------------------------------------------
                        -----------
-  421 000001DE         ; Funcao Timer0A_init (inicializacao do timer A0)
-  422 000001DE         ; ------------------------------------------------------
+  423 000001D6         ; Funcao Timer0A_init (inicializacao do timer A0)
+  424 000001D6         ; ------------------------------------------------------
                        --------------------------------------------------------
                        -----------
-  423 000001DE         Timer0A_init
-  424 000001DE 482A            LDR              R0, =SYSCTL_RCGCTIMER_R
-  425 000001E0 F04F 0101       MOV              R1, #2_0000001
-  426 000001E4 6001            STR              R1, [R0]    ;Habilitar o TIMER 
+  425 000001D6         Timer0A_init
+  426 000001D6 482A            LDR              R0, =SYSCTL_RCGCTIMER_R
+  427 000001D8 F04F 0101       MOV              R1, #2_0000001
+  428 000001DC 6001            STR              R1, [R0]    ;Habilitar o TIMER 
                                                             0 no registrador RC
                                                             GCTIMER
-  427 000001E6         
-  428 000001E6 4829            LDR              R0, =SYSCTL_PRTIMER_R
-  429 000001E8         Espera_PRTIMER
-  430 000001E8 6801            LDR              R1, [R0]
-  431 000001EA F04F 0201       MOV              R2, #2_0000001
-  432 000001EE 4211            TST              R1, R2      ;Testa o R1 com R2 
+  429 000001DE         
+  430 000001DE 4829            LDR              R0, =SYSCTL_PRTIMER_R
+  431 000001E0         Espera_PRTIMER
+  432 000001E0 6801            LDR              R1, [R0]
+  433 000001E2 F04F 0201       MOV              R2, #2_0000001
+  434 000001E6 4211            TST              R1, R2      ;Testa o R1 com R2 
                                                             fazendo R1 & R2
-  433 000001F0 D0FA            BEQ              Espera_PRTIMER ;Se o flag Z=1, 
+  435 000001E8 D0FA            BEQ              Espera_PRTIMER ;Se o flag Z=1, 
                                                             volta para o la�o
                                                             . Sen�o continua 
                                                             executando
-  434 000001F2         
-  435 000001F2 4827            LDR              R0, =TIMER0_CTL_R
-  436 000001F4 F04F 0100       MOV              R1, #0X00
-  437 000001F8 6001            STR              R1, [R0]    ;Desabilita TIMERS
-  438 000001FA         
-  439 000001FA 4826            LDR              R0, =TIMER0_CFG_R
-  440 000001FC F04F 0100       MOV              R1, #0X00
-  441 00000200 6001            STR              R1, [R0]    ;Configura TIMER pa
+  436 000001EA         
+  437 000001EA 4827            LDR              R0, =TIMER0_CTL_R
+  438 000001EC F04F 0100       MOV              R1, #0X00
+  439 000001F0 6001            STR              R1, [R0]    ;Desabilita TIMERS
+  440 000001F2         
+  441 000001F2 4826            LDR              R0, =TIMER0_CFG_R
 
 
 
 ARM Macro Assembler    Page 12 
 
 
+  442 000001F4 F04F 0100       MOV              R1, #0X00
+  443 000001F8 6001            STR              R1, [R0]    ;Configura TIMER pa
                                                             ra 32 bits
-  442 00000202         
-  443 00000202 4825            LDR              R0, =TIMER0_TAMR_R
-  444 00000204 F04F 0102       MOV              R1, #0X2
-  445 00000208 6001            STR              R1, [R0]    ;Habilita modo peri
+  444 000001FA         
+  445 000001FA 4825            LDR              R0, =TIMER0_TAMR_R
+  446 000001FC F04F 0102       MOV              R1, #0X2
+  447 00000200 6001            STR              R1, [R0]    ;Habilita modo peri
                                                             odico no TIMER A
-  446 0000020A         
-  447 0000020A 4814            LDR              R0, =TIMER0_TAILR_R
-  448 0000020C 4914            LDR              R1, =7999999
-  449 0000020E 6001            STR              R1, [R0]    ;Habilita contador 
+  448 00000202         
+  449 00000202 4814            LDR              R0, =TIMER0_TAILR_R
+  450 00000204 4914            LDR              R1, =7999999
+  451 00000206 6001            STR              R1, [R0]    ;Habilita contador 
                                                             para o valor 100ms
-  450 00000210         
-  451 00000210 4822            LDR              R0, =TIMER0_TAPR_R
-  452 00000212 F04F 0100       MOV              R1, #0X00
-  453 00000216 6001            STR              R1, [R0]    ;Limpa o preescale 
+  452 00000208         
+  453 00000208 4822            LDR              R0, =TIMER0_TAPR_R
+  454 0000020A F04F 0100       MOV              R1, #0X00
+  455 0000020E 6001            STR              R1, [R0]    ;Limpa o preescale 
                                                             (zerado)
-  454 00000218         
-  455 00000218 481A            LDR              R0, =TIMER0_ICR_R
-  456 0000021A 6801            LDR              R1, [R0]
-  457 0000021C F041 0101       ORR              R1, R1, #0X01
-  458 00000220 6001            STR              R1, [R0]    ;Limpa a interrupca
+  456 00000210         
+  457 00000210 481A            LDR              R0, =TIMER0_ICR_R
+  458 00000212 6801            LDR              R1, [R0]
+  459 00000214 F041 0101       ORR              R1, R1, #0X01
+  460 00000218 6001            STR              R1, [R0]    ;Limpa a interrupca
                                                             o do TIMER A
-  459 00000222         
-  460 00000222         
-  461 00000222 481F            LDR              R0, =TIMER0_IMR_R
-  462 00000224 6801            LDR              R1, [R0]
-  463 00000226 F041 0101       ORR              R1, R1, #0X01
-  464 0000022A 6001            STR              R1, [R0]    ;Seta a interrup�
+  461 0000021A         
+  462 0000021A         
+  463 0000021A 481F            LDR              R0, =TIMER0_IMR_R
+  464 0000021C 6801            LDR              R1, [R0]
+  465 0000021E F041 0101       ORR              R1, R1, #0X01
+  466 00000222 6001            STR              R1, [R0]    ;Seta a interrup�
                                                             �o do TimerA
-  465 0000022C         
-  466 0000022C 481D            LDR              R0, =NVIC_PRI4_R
-  467 0000022E 6801            LDR              R1, [R0]
-  468 00000230 F04F 0204       MOV              R2, #4
-  469 00000234 EA4F 7242       LSL              R2, R2, #29
-  470 00000238 EA41 0102       ORR              R1, R1, R2
-  471 0000023C 6001            STR              R1, [R0]    ;Seta a prioridade 
+  467 00000224         
+  468 00000224 481D            LDR              R0, =NVIC_PRI4_R
+  469 00000226 6801            LDR              R1, [R0]
+  470 00000228 F04F 0204       MOV              R2, #4
+  471 0000022C EA4F 7242       LSL              R2, R2, #29
+  472 00000230 EA41 0102       ORR              R1, R1, R2
+  473 00000234 6001            STR              R1, [R0]    ;Seta a prioridade 
                                                             do TIMER A0
-  472 0000023E         
-  473 0000023E 481A            LDR              R0, =NVIC_EN0_R
-  474 00000240 F04F 0101       MOV              R1, #1
-  475 00000244 EA4F 41C1       LSL              R1, R1, #19
-  476 00000248 6001            STR              R1, [R0]    ;Habilita a interru
+  474 00000236         
+  475 00000236 481A            LDR              R0, =NVIC_EN0_R
+  476 00000238 F04F 0101       MOV              R1, #1
+  477 0000023C EA4F 41C1       LSL              R1, R1, #19
+  478 00000240 6001            STR              R1, [R0]    ;Habilita a interru
                                                             pcao do TIMER A0
-  477 0000024A         
-  478 0000024A 4811            LDR              R0, =TIMER0_CTL_R
-  479 0000024C F04F 0101       MOV              R1, #0X01
-  480 00000250 6001            STR              R1, [R0]    ;Habilita TIMER A
-  481 00000252         
-  482 00000252 4770            BX               LR
-  483 00000254         
-  484 00000254         
-  485 00000254         
-  486 00000254         ; ------------------------------------------------------
+  479 00000242         
+  480 00000242 4811            LDR              R0, =TIMER0_CTL_R
+  481 00000244 F04F 0101       MOV              R1, #0X01
+  482 00000248 6001            STR              R1, [R0]    ;Habilita TIMER A
+  483 0000024A         
+  484 0000024A 4770            BX               LR
+  485 0000024C         
+  486 0000024C         
+  487 0000024C         
+  488 0000024C         ; ------------------------------------------------------
                        --------------------------------------------------------
                        -----------
-  487 00000254         ; Fim do Arquivo
-  488 00000254         ; ------------------------------------------------------
-                       --------------------------------------------------------
-                       ----------- 
+  489 0000024C         ; Fim do Arquivo
+  490 0000024C         ; ------------------------------------------------------
 
 
 
 ARM Macro Assembler    Page 13 
 
 
-  489 00000254                 ALIGN                        ;Garante que o fim 
+                       --------------------------------------------------------
+                       ----------- 
+  491 0000024C                 ALIGN                        ;Garante que o fim 
                                                             da se��o est�
                                                              alinhada 
-  490 00000254                 END                          ;Fim do arquivo
+  492 0000024C                 END                          ;Fim do arquivo
               20000A00 
               20001000 
               40030028 
@@ -848,25 +850,25 @@ AscendeLed 0000008E
 
 Symbol: AscendeLed
    Definitions
-      At line 212 in file main.s
+      At line 214 in file main.s
    Uses
-      At line 176 in file main.s
+      At line 193 in file main.s
 Comment: AscendeLed used once
-Debounce_TRUE 000000FE
+Debounce_TRUE 000000F6
 
 Symbol: Debounce_TRUE
    Definitions
-      At line 280 in file main.s
+      At line 282 in file main.s
    Uses
-      At line 260 in file main.s
+      At line 262 in file main.s
 Comment: Debounce_TRUE used once
-Espera_PRTIMER 000001E8
+Espera_PRTIMER 000001E0
 
 Symbol: Espera_PRTIMER
    Definitions
-      At line 429 in file main.s
+      At line 431 in file main.s
    Uses
-      At line 433 in file main.s
+      At line 435 in file main.s
 Comment: Espera_PRTIMER used once
 LimpaREGS_Tela_LEDS 00000020
 
@@ -876,11 +878,11 @@ Symbol: LimpaREGS_Tela_LEDS
    Uses
       At line 174 in file main.s
 Comment: LimpaREGS_Tela_LEDS used once
-Load_Contagem_Memoria 0000017C
+Load_Contagem_Memoria 00000174
 
 Symbol: Load_Contagem_Memoria
    Definitions
-      At line 366 in file main.s
+      At line 368 in file main.s
    Uses
       At line 144 in file main.s
 Comment: Load_Contagem_Memoria used once
@@ -892,7 +894,7 @@ Symbol: MainLoop
    Uses
       At line 184 in file main.s
 Comment: MainLoop used once
-Pisca_LED 00000072
+Pisca_LED 0000006E
 
 Symbol: Pisca_LED
 
@@ -904,30 +906,30 @@ Relocatable symbols
    Definitions
       At line 190 in file main.s
    Uses
-      At line 415 in file main.s
+      At line 417 in file main.s
 Comment: Pisca_LED used once
-SaidaVarredura 000000F8
+SaidaVarredura 000000F0
 
 Symbol: SaidaVarredura
    Definitions
-      At line 269 in file main.s
+      At line 271 in file main.s
    Uses
       None
 Comment: SaidaVarredura unused
-Saida_deb 000000F8
+Saida_deb 000000F0
 
 Symbol: Saida_deb
    Definitions
-      At line 275 in file main.s
+      At line 277 in file main.s
    Uses
-      At line 288 in file main.s
-      At line 304 in file main.s
+      At line 290 in file main.s
+      At line 306 in file main.s
 
-Set_Contagem_timer 0000015E
+Set_Contagem_timer 00000156
 
 Symbol: Set_Contagem_timer
    Definitions
-      At line 344 in file main.s
+      At line 346 in file main.s
    Uses
       At line 178 in file main.s
 Comment: Set_Contagem_timer used once
@@ -939,27 +941,27 @@ Symbol: Start
    Uses
       At line 107 in file main.s
 Comment: Start used once
-Timer0A_Handler 000001CA
+Timer0A_Handler 000001C2
 
 Symbol: Timer0A_Handler
    Definitions
-      At line 410 in file main.s
+      At line 412 in file main.s
    Uses
       At line 133 in file main.s
 Comment: Timer0A_Handler used once
-Timer0A_init 000001DE
+Timer0A_init 000001D6
 
 Symbol: Timer0A_init
    Definitions
-      At line 423 in file main.s
+      At line 425 in file main.s
    Uses
       At line 145 in file main.s
 Comment: Timer0A_init used once
-Varredura 000000AA
+Varredura 000000A2
 
 Symbol: Varredura
    Definitions
-      At line 225 in file main.s
+      At line 227 in file main.s
 
 
 
@@ -967,41 +969,41 @@ ARM Macro Assembler    Page 3 Alphabetic symbol ordering
 Relocatable symbols
 
    Uses
-      At line 310 in file main.s
+      At line 312 in file main.s
 Comment: Varredura used once
-Varredura_loop 000000B8
+Varredura_loop 000000B0
 
 Symbol: Varredura_loop
    Definitions
-      At line 231 in file main.s
+      At line 233 in file main.s
    Uses
-      At line 265 in file main.s
+      At line 267 in file main.s
 Comment: Varredura_loop used once
-faz_Varredura 00000128
+faz_Varredura 00000120
 
 Symbol: faz_Varredura
    Definitions
-      At line 306 in file main.s
+      At line 308 in file main.s
    Uses
       At line 168 in file main.s
 Comment: faz_Varredura used once
-repete 0000012A
+repete 00000122
 
 Symbol: repete
    Definitions
-      At line 309 in file main.s
+      At line 311 in file main.s
    Uses
       None
 Comment: repete unused
-saida 00000158
+saida 00000150
 
 Symbol: saida
    Definitions
-      At line 334 in file main.s
+      At line 336 in file main.s
    Uses
-      At line 317 in file main.s
-      At line 323 in file main.s
-      At line 328 in file main.s
+      At line 319 in file main.s
+      At line 325 in file main.s
+      At line 330 in file main.s
 
 19 symbols
 
@@ -1024,8 +1026,8 @@ Symbol: ADDRESS_MEMORY_CONTAGEM
    Definitions
       At line 68 in file main.s
    Uses
-      At line 350 in file main.s
-      At line 368 in file main.s
+      At line 352 in file main.s
+      At line 370 in file main.s
 
 ADDRESS_MEMORY_OFFSET 00000004
 
@@ -1033,15 +1035,15 @@ Symbol: ADDRESS_MEMORY_OFFSET
    Definitions
       At line 69 in file main.s
    Uses
-      At line 351 in file main.s
-      At line 372 in file main.s
-      At line 376 in file main.s
-      At line 380 in file main.s
-      At line 384 in file main.s
-      At line 388 in file main.s
-      At line 392 in file main.s
-      At line 396 in file main.s
-      At line 400 in file main.s
+      At line 353 in file main.s
+      At line 374 in file main.s
+      At line 378 in file main.s
+      At line 382 in file main.s
+      At line 386 in file main.s
+      At line 390 in file main.s
+      At line 394 in file main.s
+      At line 398 in file main.s
+      At line 402 in file main.s
 
 ADDRESS_MEMORY_TMP 20001A00
 
@@ -1057,7 +1059,7 @@ Symbol: CONTAGEM_100_MS
    Definitions
       At line 58 in file main.s
    Uses
-      At line 369 in file main.s
+      At line 371 in file main.s
 Comment: CONTAGEM_100_MS used once
 CONTAGEM_200_MS 00F423FF
 
@@ -1065,7 +1067,7 @@ Symbol: CONTAGEM_200_MS
    Definitions
       At line 59 in file main.s
    Uses
-      At line 373 in file main.s
+      At line 375 in file main.s
 Comment: CONTAGEM_200_MS used once
 CONTAGEM_300_MS 016E35FF
 
@@ -1079,7 +1081,7 @@ Symbol: CONTAGEM_300_MS
    Definitions
       At line 60 in file main.s
    Uses
-      At line 377 in file main.s
+      At line 379 in file main.s
 Comment: CONTAGEM_300_MS used once
 CONTAGEM_400_MS 01E847FF
 
@@ -1087,7 +1089,7 @@ Symbol: CONTAGEM_400_MS
    Definitions
       At line 61 in file main.s
    Uses
-      At line 381 in file main.s
+      At line 383 in file main.s
 Comment: CONTAGEM_400_MS used once
 CONTAGEM_500_MS 026259FF
 
@@ -1095,7 +1097,7 @@ Symbol: CONTAGEM_500_MS
    Definitions
       At line 62 in file main.s
    Uses
-      At line 385 in file main.s
+      At line 387 in file main.s
 Comment: CONTAGEM_500_MS used once
 CONTAGEM_600_MS 02DC6BFF
 
@@ -1103,7 +1105,7 @@ Symbol: CONTAGEM_600_MS
    Definitions
       At line 63 in file main.s
    Uses
-      At line 389 in file main.s
+      At line 391 in file main.s
 Comment: CONTAGEM_600_MS used once
 CONTAGEM_700_MS 03567DFF
 
@@ -1111,7 +1113,7 @@ Symbol: CONTAGEM_700_MS
    Definitions
       At line 64 in file main.s
    Uses
-      At line 393 in file main.s
+      At line 395 in file main.s
 Comment: CONTAGEM_700_MS used once
 CONTAGEM_800_MS 03D08FFF
 
@@ -1119,7 +1121,7 @@ Symbol: CONTAGEM_800_MS
    Definitions
       At line 65 in file main.s
    Uses
-      At line 397 in file main.s
+      At line 399 in file main.s
 Comment: CONTAGEM_800_MS used once
 CONTAGEM_900_MS 044AA1FF
 
@@ -1127,7 +1129,7 @@ Symbol: CONTAGEM_900_MS
    Definitions
       At line 66 in file main.s
    Uses
-      At line 401 in file main.s
+      At line 403 in file main.s
 Comment: CONTAGEM_900_MS used once
 INT_TIMER0A 00000023
 
@@ -1211,7 +1213,7 @@ Symbol: NVIC_EN0_R
    Definitions
       At line 44 in file main.s
    Uses
-      At line 473 in file main.s
+      At line 475 in file main.s
 Comment: NVIC_EN0_R used once
 NVIC_EN1_R E000E104
 
@@ -1243,7 +1245,7 @@ Symbol: NVIC_PRI4_R
    Definitions
       At line 43 in file main.s
    Uses
-      At line 466 in file main.s
+      At line 468 in file main.s
 Comment: NVIC_PRI4_R used once
 RESET_SW 20000A00
 
@@ -1253,7 +1255,7 @@ Symbol: RESET_SW
    Uses
       At line 159 in file main.s
       At line 170 in file main.s
-      At line 313 in file main.s
+      At line 315 in file main.s
 
 SYSCTL_PRTIMER_R 400FEA04
 
@@ -1261,7 +1263,7 @@ Symbol: SYSCTL_PRTIMER_R
    Definitions
       At line 13 in file main.s
    Uses
-      At line 428 in file main.s
+      At line 430 in file main.s
 Comment: SYSCTL_PRTIMER_R used once
 SYSCTL_RCGCTIMER_R 400FE604
 
@@ -1275,7 +1277,7 @@ Symbol: SYSCTL_RCGCTIMER_R
    Definitions
       At line 12 in file main.s
    Uses
-      At line 424 in file main.s
+      At line 426 in file main.s
 Comment: SYSCTL_RCGCTIMER_R used once
 TIMER0_ADCEV_R 40030070
 
@@ -1299,7 +1301,7 @@ Symbol: TIMER0_CFG_R
    Definitions
       At line 14 in file main.s
    Uses
-      At line 439 in file main.s
+      At line 441 in file main.s
 Comment: TIMER0_CFG_R used once
 TIMER0_CTL_R 4003000C
 
@@ -1307,8 +1309,8 @@ Symbol: TIMER0_CTL_R
    Definitions
       At line 17 in file main.s
    Uses
-      At line 435 in file main.s
-      At line 478 in file main.s
+      At line 437 in file main.s
+      At line 480 in file main.s
 
 TIMER0_DMAEV_R 4003006C
 
@@ -1324,8 +1326,8 @@ Symbol: TIMER0_ICR_R
    Definitions
       At line 22 in file main.s
    Uses
-      At line 411 in file main.s
-      At line 455 in file main.s
+      At line 413 in file main.s
+      At line 457 in file main.s
 
 TIMER0_IMR_R 40030018
 
@@ -1339,7 +1341,7 @@ Symbol: TIMER0_IMR_R
    Definitions
       At line 19 in file main.s
    Uses
-      At line 461 in file main.s
+      At line 463 in file main.s
 Comment: TIMER0_IMR_R used once
 TIMER0_MIS_R 40030020
 
@@ -1387,8 +1389,8 @@ Symbol: TIMER0_TAILR_R
    Definitions
       At line 23 in file main.s
    Uses
-      At line 356 in file main.s
-      At line 447 in file main.s
+      At line 358 in file main.s
+      At line 449 in file main.s
 
 TIMER0_TAMATCHR_R 40030030
 
@@ -1410,7 +1412,7 @@ Symbol: TIMER0_TAMR_R
    Definitions
       At line 15 in file main.s
    Uses
-      At line 443 in file main.s
+      At line 445 in file main.s
 Comment: TIMER0_TAMR_R used once
 TIMER0_TAPMR_R 40030040
 
@@ -1426,7 +1428,7 @@ Symbol: TIMER0_TAPR_R
    Definitions
       At line 27 in file main.s
    Uses
-      At line 451 in file main.s
+      At line 453 in file main.s
 Comment: TIMER0_TAPR_R used once
 TIMER0_TAPS_R 4003005C
 
@@ -1573,7 +1575,7 @@ Symbol: PortA_Output
    Definitions
       At line 128 in file main.s
    Uses
-      At line 218 in file main.s
+      At line 220 in file main.s
 Comment: PortA_Output used once
 PortJ_Input 00000000
 
@@ -1589,7 +1591,7 @@ Symbol: PortL_Input
    Definitions
       At line 132 in file main.s
    Uses
-      At line 235 in file main.s
+      At line 237 in file main.s
 Comment: PortL_Input used once
 PortM_Output_LCD 00000000
 
@@ -1611,7 +1613,7 @@ External symbols
    Definitions
       At line 130 in file main.s
    Uses
-      At line 234 in file main.s
+      At line 236 in file main.s
 Comment: PortM_Output_Teclado used once
 PortP_Output 00000000
 
@@ -1619,16 +1621,15 @@ Symbol: PortP_Output
    Definitions
       At line 129 in file main.s
    Uses
-      At line 201 in file main.s
-      At line 220 in file main.s
-
+      At line 203 in file main.s
+Comment: PortP_Output used once
 PortQ_Output 00000000
 
 Symbol: PortQ_Output
    Definitions
       At line 127 in file main.s
    Uses
-      At line 216 in file main.s
+      At line 218 in file main.s
 Comment: PortQ_Output used once
 SysTick_Init 00000000
 
@@ -1667,13 +1668,13 @@ send_data_lcd 00000000
 Symbol: send_data_lcd
    Definitions
       At line 121 in file main.s
+   Uses
 
 
 
 ARM Macro Assembler    Page 3 Alphabetic symbol ordering
 External symbols
 
-   Uses
       None
 Comment: send_data_lcd unused
 send_string_lcd 00000000

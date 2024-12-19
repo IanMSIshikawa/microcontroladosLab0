@@ -173,7 +173,7 @@ MainLoop
 	IT EQ
 		BEQ LimpaREGS_Tela_LEDS
 	
-	BL AscendeLed
+	
 	MOV R0, R6
 	BL Set_Contagem_timer
 	MOV R0, #0x01
@@ -189,6 +189,8 @@ MainLoop
 ; Par�metro de sa�da: N�o tem
 Pisca_LED
 	PUSH{LR}
+
+	BL AscendeLed
 
 	CMP R11, #2_11111111
 	IT EQ
@@ -216,8 +218,8 @@ AscendeLed
 	BL PortQ_Output
 	MOV R0,R6;#2_11110000
 	BL PortA_Output
-	MOV R0,#2_11111111
-	BL PortP_Output
+;	MOV R0,#2_11111111
+;	BL PortP_Output
 	POP{LR}
 
 	BX LR
@@ -360,9 +362,7 @@ Set_Contagem_timer
 	BX LR
 	
 ;--------------------------------------------------------------------------------
-; Fun��o Set_Contagem_timer
-; Par�metro de entrada: R0 ( 1- 100 ms, 2 -200ms, ..., 9 - 900ms)
-; Par�metro de sa�da: N�o tem
+
 Load_Contagem_Memoria
 	PUSH {R0, R1, LR}
 	LDR R0, =ADDRESS_MEMORY_CONTAGEM 
