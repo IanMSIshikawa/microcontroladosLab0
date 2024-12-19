@@ -176,6 +176,7 @@ MainLoop
 	MOV R0, #0x01
 	BL send_complex_comand_lcd
 	BL send_string_lcd
+	
 
 	B MainLoop
 
