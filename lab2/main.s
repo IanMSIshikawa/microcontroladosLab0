@@ -143,18 +143,20 @@ Start
 	BL setup_LCD 
 	BL Load_Contagem_Memoria     ;Chama a subrotina que grava na memoria os valores da contagem
 	BL Timer0A_init      ;Chama subrotina que inicializa e habilita interrupcao do timer 0_A
-	MOV R11, #2_11111111  ;Controla pisca led
-	
+	  ;Controla pisca led
+	MOV R0,#2
+	BL Set_Contagem_timer
 
 LimpaREGS_Tela_LEDS
 
 	MOV R0,#0
 	MOV R4,#0 ; usado em Varredura
-	MOV R6,#0 ;R6 = base multiplicac�o
+	MOV R6,#1 ;R6 = base multiplicac�o
 	MOV R7,#0 ;R7 = estado multiplicador
 	MOV R8,#0 ;R8 = nova tecla detectada
 	MOV R9,#0 ;R9 = tecla contagem debounce
 	MOV R10,#0 ;R10= n estados debounce
+	MOV R11, #0
 
 	LDR R0,=RESET_SW
 	MOV R1,#0
@@ -172,14 +174,15 @@ MainLoop
 	CMP R0,#1
 	IT EQ
 		BEQ LimpaREGS_Tela_LEDS
-	
-	
-	MOV R0, R6
-	BL Set_Contagem_timer
+		
+	;LDR R0,=ACENDE_LED
+	;LDR R0,[R0]
+
 	MOV R0, #0x01
 	BL send_complex_comand_lcd
 	BL send_string_lcd
-	
+	MOV R0, R6
+	BL Pisca_LED
 
 	B MainLoop
 
@@ -189,18 +192,14 @@ MainLoop
 ; Par�metro de sa�da: N�o tem
 Pisca_LED
 	PUSH{LR}
-
+	
+	CMP R11,#1
+	ITE EQ
+		MOVEQ R1,#0
+		MOVNE R1,R6
 	BL AscendeLed
 
-	CMP R11, #2_11111111
-	IT EQ
-		MOVEQ R0,#2_00000000
-
-	CMP R11, #2_00000000
-	IT EQ
-		MOVEQ R0,#2_11111111
-
-	BL PortP_Output
+	;BL PortP_Output
 
 
 	POP{LR}
@@ -214,12 +213,12 @@ Pisca_LED
 AscendeLed
 	PUSH{LR}
 	
-	MOV R0,R6;#2_00001111
+	MOV R0,R1;#2_00001111
 	BL PortQ_Output
-	MOV R0,R6;#2_11110000
+	MOV R0,R1;#2_11110000
 	BL PortA_Output
-;	MOV R0,#2_11111111
-;	BL PortP_Output
+	MOV R0,#2_11111111
+	BL PortP_Output
 	POP{LR}
 
 	BX LR
@@ -323,6 +322,10 @@ repete
 			;BNE repete
 		IT NE
 			BNE saida
+		MOV R0, R6
+		BL Set_Contagem_timer
+
+		
 		CMP R9,R6
 		ITTT NE
 			MOVNE R6,R9
@@ -412,7 +415,14 @@ Timer0A_Handler
 	MOV R0, #1
 	STR R0, [R1]
 	PUSH {LR}
-	BL Pisca_LED
+;	BL Pisca_LED
+	EOR R11,#1
+
+	;LDR R0,=ACENDE_LED
+	;LDR R0,[R0]
+	;EOR R1,R0,#1
+	;LDR R0,=ACENDE_LED
+	;STR R1,[R0]
 	POP {LR}
 	BX LR
 
