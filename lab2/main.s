@@ -143,6 +143,7 @@ Start
 	BL setup_LCD 
 	BL Load_Contagem_Memoria     ;Chama a subrotina que grava na memoria os valores da contagem
 	BL Timer0A_init      ;Chama subrotina que inicializa e habilita interrupcao do timer 0_A
+	MOV R11, #2_11111111  ;Controla pisca led
 	
 
 LimpaREGS_Tela_LEDS
@@ -187,8 +188,21 @@ MainLoop
 ; Par�metro de entrada: N�o tem
 ; Par�metro de sa�da: N�o tem
 Pisca_LED
-	
+	PUSH{LR}
 
+	CMP R11, #2_11111111
+	IT EQ
+		MOVEQ R0,#2_00000000
+
+	CMP R11, #2_00000000
+	IT EQ
+		MOVEQ R0,#2_11111111
+
+	BL PortP_Output
+
+
+	POP{LR}
+	BX LR
 
 
 ; ****************************************
@@ -199,7 +213,6 @@ AscendeLed
 	PUSH{LR}
 	
 	MOV R0,R6;#2_00001111
-	;MOV R0,#3
 	BL PortQ_Output
 	MOV R0,R6;#2_11110000
 	BL PortA_Output
