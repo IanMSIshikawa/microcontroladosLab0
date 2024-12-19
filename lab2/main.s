@@ -151,7 +151,7 @@ LimpaREGS_Tela_LEDS
 
 	MOV R0,#0
 	MOV R4,#0 ; usado em Varredura
-	MOV R6,#1 ;R6 = base multiplicac�o
+	MOV R6,#0 ;R6 = base multiplicac�o
 	MOV R7,#0 ;R7 = estado multiplicador
 	MOV R8,#0 ;R8 = nova tecla detectada
 	MOV R9,#0 ;R9 = tecla contagem debounce
@@ -213,9 +213,15 @@ Pisca_LED
 AscendeLed
 	PUSH{LR}
 	
+	
+	
+	
+	
+	
+	
 	MOV R0,R1;#2_00001111
 	BL PortQ_Output
-	MOV R0,R1;#2_11110000
+	MOV R0,#2_00000000
 	BL PortA_Output
 	MOV R0,#2_11111111
 	BL PortP_Output
@@ -322,7 +328,7 @@ repete
 			;BNE repete
 		IT NE
 			BNE saida
-		MOV R0, R6
+		MOV R0, R9
 		BL Set_Contagem_timer
 
 		
