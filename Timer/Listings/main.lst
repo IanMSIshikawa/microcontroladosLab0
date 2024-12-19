@@ -300,7 +300,7 @@ ARM Macro Assembler    Page 5
                                                              contador (1 -9)
   119 00000020         MainLoop
   120 00000020         
-  121 00000020 F1BB 0F02       CMP              R11, #2     ;SE PISCOU MAIS DE 
+  121 00000020 F1BB 0F0A       CMP              R11, #10    ;SE PISCOU MAIS DE 
                                                             10 VEZES
   122 00000024 BF98            IT               LS
   123 00000026 E7FB            BLS              MainLoop
@@ -597,10 +597,10 @@ ARM Macro Assembler    Page 10
               E000E410 
               E000E100 
 Command Line: --debug --xref --diag_suppress=9931,A1950W --cpu=Cortex-M4.fp.sp 
---depend=.\objects\main.d -o.\objects\main.o -I"C:\Users\Robson Junior\AppData\
-Local\Arm\Packs\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C129" --predefine="__EVAL
- SETA 1" --predefine="__UVISION_VERSION SETA 541" --predefine="TM4C1294NCPDT SE
-TA 1" --list=.\listings\main.lst main.s
+--depend=.\objects\main.d -o.\objects\main.o -IC:\Users\IanIshikawa\AppData\Loc
+al\Arm\Packs\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C129 --predefine="__EVAL SET
+A 1" --predefine="__UVISION_VERSION SETA 541" --predefine="TM4C1294NCPDT SETA 1
+" --list=.\listings\main.lst main.s
 
 
 

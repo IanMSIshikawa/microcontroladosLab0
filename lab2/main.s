@@ -173,6 +173,8 @@ MainLoop
 		BEQ LimpaREGS_Tela_LEDS
 	
 	BL AscendeLed
+	MOV R0, R6
+	BL Set_Contagem_timer
 	MOV R0, #0x01
 	BL send_complex_comand_lcd
 	BL send_string_lcd
@@ -185,14 +187,15 @@ MainLoop
 ; Par�metro de entrada: N�o tem
 ; Par�metro de sa�da: N�o tem
 Pisca_LED
-; Fun��o Pisca_LED
-; Par�metro de entrada: N�o tem
-; Par�metro de sa�da: N�o tem
-AscendeLed
+	
+
+
+
 ; ****************************************
 ; Escrever fun��o que acende o LED, espera 1 segundo, apaga o LED e espera 1 s
 ; Esta fun��o deve chamar a rotina SysTick_Wait1ms com o par�metro de entrada em R0
 ; ****************************************
+AscendeLed
 	PUSH{LR}
 	
 	MOV R0,R6;#2_00001111
@@ -205,7 +208,7 @@ AscendeLed
 	POP{LR}
 
 	BX LR
-	
+;********************************
 Varredura
 	PUSH{LR}
 	MOV R8,#0
@@ -260,7 +263,7 @@ Saida_deb
 	
 	POP{LR}
 	BX LR
-	
+;******************************8
 Debounce_TRUE
 
 	CMP R4, #11
@@ -286,7 +289,7 @@ Debounce_TRUE
 	
 		;BNE Varredura
 	B Saida_deb
-		
+;****************************
 faz_Varredura
 	PUSH{LR}
 	

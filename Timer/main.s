@@ -118,7 +118,7 @@ Start
 	MOV R4,  #1                   ; Registrador que armazena o estado do contador (1 -9)
 MainLoop
  
-	CMP R11, #2 ;SE PISCOU MAIS DE 10 VEZES
+	CMP R11, #10 ;SE PISCOU MAIS DE 10 VEZES
 	IT LS
 		BLS MainLoop
 		
