@@ -408,9 +408,19 @@ send_string_lcd
 	MOV R0, #'='
 	BL send_data_lcd
 	
-	MUL R0, R6, R7
-	ADD R0, R0, #'0'
-	BL send_data_lcd
+	MOV R2, #10
+	MUL R0, R6, R7  ;Resultado da multiplicacao
+	UDIV R1, R0, R2  ;recebe dezena do resultado
+
+	ADD R0, R1, #'0'
+	BL send_data_lcd  ;imprime dezena
+
+	MUL R0, R6, R7  ;Resultado da multiplicacao
+	MLS R1, R1, R2, R0 		  ;R1 = R0 - (R1*R2) 
+	ADD R0, R1, #'0'
+	BL send_data_lcd  ;imprime dezena
+
+
 	
     POP{LR}
     BX LR

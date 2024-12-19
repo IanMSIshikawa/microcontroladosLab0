@@ -563,7 +563,7 @@ ARM Macro Assembler    Page 9
   273 00000034         ;pm2 -> enable
   274 00000034         
   275 00000034         ;carrega comando 
-  276 00000034 F000 F88E       BL               PortK_Output
+  276 00000034 F000 F89A       BL               PortK_Output
   277 00000038         
   278 00000038         ;seta pinos pm0, pm1, pm2 para intrução, write, enable
                        
@@ -598,7 +598,7 @@ ARM Macro Assembler    Page 10
   301 00000060         ;pm2 -> enable
   302 00000060         
   303 00000060         ;carrega comando 
-  304 00000060 F000 F878       BL               PortK_Output
+  304 00000060 F000 F884       BL               PortK_Output
   305 00000064         
   306 00000064         ;seta pinos pm0, pm1, pm2 para intrução, write, enable
                        
@@ -627,7 +627,7 @@ ARM Macro Assembler    Page 10
   329 0000008C         ;pm2 -> enable
   330 0000008C         
   331 0000008C         ;carrega dado 
-  332 0000008C F000 F862       BL               PortK_Output
+  332 0000008C F000 F86E       BL               PortK_Output
   333 00000090         
   334 00000090         ;seta pinos pm0, pm1, pm2 para dado, write, enable
   335 00000090 F04F 0005       MOV              R0, #2_101
@@ -712,60 +712,81 @@ ARM Macro Assembler    Page 11
   408 00000138 F04F 003D       MOV              R0, #'='
   409 0000013C F7FF FFFE       BL               send_data_lcd
   410 00000140         
-  411 00000140 FB06 F007       MUL              R0, R6, R7
+  411 00000140 F04F 020A       MOV              R2, #10
 
 
 
 ARM Macro Assembler    Page 12 
 
 
-  412 00000144 F100 0030       ADD              R0, R0, #'0'
-  413 00000148 F7FF FFFE       BL               send_data_lcd
+  412 00000144 FB06 F007       MUL              R0, R6, R7  ;Resultado da multi
+                                                            plicacao
+  413 00000148 FBB0 F1F2       UDIV             R1, R0, R2  ;recebe dezena do r
+                                                            esultado
   414 0000014C         
-  415 0000014C F85D EB04       POP{LR}
-  416 00000150 4770            BX               LR
-  417 00000152         
-  418 00000152         
-  419 00000152         
-  420 00000152         
-  421 00000152         
-  422 00000152         PortM_Output
-  423 00000152         ;LDR R1, =GPIO_PORTM_DATA_R      ;Carrega o valor do off
+  415 0000014C F101 0030       ADD              R0, R1, #'0'
+  416 00000150 F7FF FFFE       BL               send_data_lcd ;imprime dezena
+  417 00000154         
+  418 00000154 FB06 F007       MUL              R0, R6, R7  ;Resultado da multi
+                                                            plicacao
+  419 00000158 FB01 0112       MLS              R1, R1, R2, R0 
+                                                            ;R1 = R0 - (R1*R2) 
+                                                            
+  420 0000015C F101 0030       ADD              R0, R1, #'0'
+  421 00000160 F7FF FFFE       BL               send_data_lcd ;imprime dezena
+  422 00000164         
+  423 00000164         
+  424 00000164         
+  425 00000164 F85D EB04       POP{LR}
+  426 00000168 4770            BX               LR
+  427 0000016A         
+  428 0000016A         
+  429 0000016A         
+  430 0000016A         
+  431 0000016A         
+  432 0000016A         PortM_Output
+  433 0000016A         ;LDR R1, =GPIO_PORTM_DATA_R      ;Carrega o valor do off
                        set do data register
-  424 00000152         ;;Read-Modify-Write para escrita
-  425 00000152         ;LDR R2, [R1]
-  426 00000152         ;BIC R2, #2_00000111                     ;Primeiro limpa
+  434 0000016A         ;;Read-Modify-Write para escrita
+  435 0000016A         ;LDR R2, [R1]
+  436 0000016A         ;BIC R2, #2_00000111                     ;Primeiro limpa
                        mos os dois bits do lido da porta 
-  427 00000152         ;ORR R0, R0, R2                          ;Fazer o OR do 
+  437 0000016A         ;ORR R0, R0, R2                          ;Fazer o OR do 
                        lido pela porta com o parâmetro de entrada
-  428 00000152         ;STR R0, [R1]                            ;Escreve na por
+  438 0000016A         ;STR R0, [R1]                            ;Escreve na por
                        ta F o barramento de dados dos pinos
-  429 00000152         ;
-  430 00000152 4770            BX               LR
-  431 00000154         
-  432 00000154         PortK_Output
-  433 00000154 4903            LDR              R1, =GPIO_PORTK_DATA_R ;Carrega
+  439 0000016A         ;
+  440 0000016A 4770            BX               LR
+  441 0000016C         
+  442 0000016C         PortK_Output
+  443 0000016C 4903            LDR              R1, =GPIO_PORTK_DATA_R ;Carrega
                                                              o valor do offset 
                                                             do data register
-  434 00000156         ;Read-Modify-Write para escrita
-  435 00000156 680A            LDR              R2, [R1]
-  436 00000158 F022 02FF       BIC              R2, #2_11111111 ;Primeiro limpa
+  444 0000016E         ;Read-Modify-Write para escrita
+  445 0000016E 680A            LDR              R2, [R1]
+  446 00000170 F022 02FF       BIC              R2, #2_11111111 ;Primeiro limpa
                                                             mos os dois bits do
                                                              lido da porta 
-  437 0000015C EA40 0002       ORR              R0, R0, R2  ;Fazer o OR do lido
+  447 00000174 EA40 0002       ORR              R0, R0, R2  ;Fazer o OR do lido
                                                              pela porta com o p
                                                             arâmetro de entrad
                                                             a
-  438 00000160 6008            STR              R0, [R1]    ;Escreve na porta F
+  448 00000178 6008            STR              R0, [R1]    ;Escreve na porta F
                                                              o barramento de da
                                                             dos dos pinos
-  439 00000162         
-  440 00000162 4770            BX               LR
-  441 00000164         
-  442 00000164                 ALIGN                        ; garante que o fim
+  449 0000017A         
+  450 0000017A 4770            BX               LR
+  451 0000017C         
+  452 0000017C                 ALIGN                        ; garante que o fim
+
+
+
+ARM Macro Assembler    Page 13 
+
+
                                                              da se��o est�
                                                             � alinhada 
-  443 00000164                 END                          ; fim do arquivo
+  453 0000017C                 END                          ; fim do arquivo
               400613FC 
 Command Line: --debug --xref --diag_suppress=9931,A1950W --cpu=Cortex-M4.fp.sp 
 --depend=.\objects\lcd.d -o.\objects\lcd.o -IC:\Users\IanIshikawa\AppData\Local
@@ -794,21 +815,21 @@ Symbol: LCD_Init
    Uses
       At line 146 in file lcd.s
 Comment: LCD_Init used once
-PortK_Output 00000154
+PortK_Output 0000016C
 
 Symbol: PortK_Output
    Definitions
-      At line 432 in file lcd.s
+      At line 442 in file lcd.s
    Uses
       At line 276 in file lcd.s
       At line 304 in file lcd.s
       At line 332 in file lcd.s
 
-PortM_Output 00000152
+PortM_Output 0000016A
 
 Symbol: PortM_Output
    Definitions
-      At line 422 in file lcd.s
+      At line 432 in file lcd.s
    Uses
       None
 Comment: PortM_Output unused
@@ -863,7 +884,8 @@ Relocatable symbols
       At line 403 in file lcd.s
       At line 406 in file lcd.s
       At line 409 in file lcd.s
-      At line 413 in file lcd.s
+      At line 416 in file lcd.s
+      At line 421 in file lcd.s
 
 send_string_lcd 000000B6
 
@@ -1182,7 +1204,7 @@ Symbol: GPIO_PORTK_DATA_R
    Definitions
       At line 92 in file lcd.s
    Uses
-      At line 433 in file lcd.s
+      At line 443 in file lcd.s
 Comment: GPIO_PORTK_DATA_R used once
 GPIO_PORTK_DEN_R 4006151C
 
