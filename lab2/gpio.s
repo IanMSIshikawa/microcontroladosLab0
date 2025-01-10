@@ -110,7 +110,7 @@ NVIC_FPDSC_R            EQU 0xE000EF3C
 
 
 
-; Declarações EQU - Defines
+; Declaraï¿½ï¿½es EQU - Defines
 
 ; ========================
 ; ========================
@@ -520,8 +520,8 @@ aguarda
 
 ;TIMER
 	LDR R1, =2_00000000
-	LDR     R0, =GPIO_PORTN_AMSEL_R			;Carrega o R0 com o endereço do AMSEL para a porta N
-    STR     R1, [R0]					    ;Guarda no registrador AMSEL da porta N da memória
+	LDR     R0, =GPIO_PORTN_AMSEL_R			;Carrega o R0 com o endereï¿½o do AMSEL para a porta N
+    STR     R1, [R0]					    ;Guarda no registrador AMSEL da porta N da memï¿½ria
 
 	
 ;SETANDO GPIOPCTL DAS PORTAS A, B, P, Q, J
@@ -566,8 +566,8 @@ aguarda
 	STR R1, [R0]
 ;TIMER
 	LDR R1, =2_00000000
-	LDR     R0, =GPIO_PORTN_PCTL_R			;Carrega o R0 com o endereço do AMSEL para a porta N
-    STR     R1, [R0]					    ;Guarda no registrador AMSEL da porta N da memória
+	LDR     R0, =GPIO_PORTN_PCTL_R			;Carrega o R0 com o endereï¿½o do AMSEL para a porta N
+    STR     R1, [R0]					    ;Guarda no registrador AMSEL da porta N da memï¿½ria
 
 
 ;SETANDO GPIODIR PARA AS PORTAS A, B, P, Q, J
@@ -611,10 +611,6 @@ aguarda
 	MOV R1, #2_0010
 	STR R1, [R0]
 
-;TIMER
-	LDR R1, =2_00000000
-	LDR     R0, =GPIO_PORTN_PCTL_R			;Carrega o R0 com o endereço do AMSEL para a porta N
-    STR     R1, [R0]					    ;Guarda no registrador AMSEL da porta N da memória
 
 
 ;SETANDO GPIOAFSEL PARA AS PORTAS A, B, P, Q, J
@@ -660,7 +656,7 @@ aguarda
 	STR R1, [R0]
 ;TIMER
 	MOV R1, #2_00000000
-    LDR     R0, =GPIO_PORTJ_AHB_AFSEL_R     ;Carrega o endereço do AFSEL da porta J
+    LDR     R0, =GPIO_PORTJ_AHB_AFSEL_R     ;Carrega o endereï¿½o do AFSEL da porta J
     STR     R1, [R0]                        ;Escreve na porta
 
 	
@@ -843,7 +839,7 @@ PortM_Output_Teclado
 	;Read-Modify-Write para escrita
 	LDR R2, [R1]
 	BIC R2, #2_11110000                     ;Primeiro limpamos os dois bits do lido da porta 
-	ORR R0, R0, R2                          ;Fazer o OR do lido pela porta com o parâmetro de entrada
+	ORR R0, R0, R2                          ;Fazer o OR do lido pela porta com o parï¿½metro de entrada
 	STR R0, [R1]                            ;Escreve na porta F o barramento de dados dos pinos
 
 	BX LR
@@ -919,7 +915,7 @@ PortK_Output
 	;Read-Modify-Write para escrita
 	LDR R2, [R1]
 	BIC R2, #2_11111111                     ;Primeiro limpamos os dois bits do lido da porta 
-	ORR R0, R0, R2                          ;Fazer o OR do lido pela porta com o parâmetro de entrada
+	ORR R0, R0, R2                          ;Fazer o OR do lido pela porta com o parï¿½metro de entrada
 	STR R0, [R1]                            ;Escreve na porta F o barramento de dados dos pinos
 
 	BX LR

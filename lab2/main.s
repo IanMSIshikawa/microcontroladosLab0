@@ -214,15 +214,10 @@ AscendeLed
 	PUSH{LR}
 	
 	
-	
-	
-	
-	
-	
 	MOV R0,R1;#2_00001111
 	BL PortQ_Output
 	MOV R0,#2_00000000
-	BL PortA_Output
+;	BL PortA_Output
 	MOV R0,#2_11111111
 	BL PortP_Output
 	POP{LR}
