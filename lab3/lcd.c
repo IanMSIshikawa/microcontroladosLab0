@@ -6,11 +6,32 @@
 
 #include "lcd.h"
 
+
+
+void PortK_Output(uint32_t var);
+void PortM_Output_LCD(uint32_t var);
+
+
 // -------------------------------------------------------------------------------
 // Fun��o PortJ_Input
 // L� os valores de entrada do port J
 // Par�metro de entrada: N�o tem
 // Par�metro de sa�da: o valor da leitura do port
+/*
+void PortK_Output(uint32_t var){
+    uint32_t read = GPIO_PORTK_DATA_R;
+    read = read & (~0xFF);
+    GPIO_PORTK_DATA_R = var | read ;
+}
+
+void PortM_Output_LCD(uint32_t var){
+
+    GPIO_PORTK_DATA_R = var | ( GPIO_PORTK_DATA_R & (~0x07) );
+
+}
+*/
+
+
 void setup_LCD(void)
 {
     //;Inicializar no modo 2 linhas / caracter matriz 5x7 (0x38)
