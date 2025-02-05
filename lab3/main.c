@@ -11,6 +11,7 @@ void SysTick_Wait1us(uint32_t delay);
 #include "lab3.h"
 #include "timer.h"
 #include "lcd.h"
+#include "motor.h"
 
 #define DEB_LIMIT 75
 

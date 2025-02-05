@@ -17,6 +17,7 @@
 #define GPIO_PORTN  (0x1000) //bit 12
 #define GPIO_PORTP  (0x2000) //bit 13
 #define GPIO_PORTQ  (0x4000) //bit 14
+#define GPIO_PORTH  (0x0080) //bit 7
 
 // -------------------------------------------------------------------------------
 // Fun��o GPIO_Init
@@ -32,7 +33,8 @@ void GPIO_Init(void)
 												GPIO_PORTM |
 												GPIO_PORTN |
 												GPIO_PORTP |
-												GPIO_PORTQ );
+												GPIO_PORTQ |
+												GPIO_PORTH );
 //1a. Ativar o clock para a porta setando o bit correspondente no registrador RCGCGPIO
 //SYSCTL_RCGCGPIO_R = (GPIO_PORTJ | GPIO_PORTN);
 	SYSCTL_RCGCGPIO_R = or_portas;
@@ -43,6 +45,7 @@ void GPIO_Init(void)
 	// 2. Limpar o AMSEL para desabilitar a anal�gica
 	GPIO_PORTJ_AHB_AMSEL_R = 0x00;
 	GPIO_PORTA_AHB_AMSEL_R = 0x00;
+	GPIO_PORTH_AHB_AMSEL_R = 0x00;
 	GPIO_PORTK_AMSEL_R = 0x00;
 	GPIO_PORTL_AMSEL_R = 0x00;
 	GPIO_PORTM_AMSEL_R = 0x00 ;
@@ -53,6 +56,7 @@ void GPIO_Init(void)
 	// 3. Limpar PCTL para selecionar o GPIO		
 	GPIO_PORTJ_AHB_PCTL_R = 0x00;
 	GPIO_PORTA_AHB_PCTL_R = 0x00;
+	GPIO_PORTH_AHB_PCTL_R = 0x00;
 	GPIO_PORTK_PCTL_R = 0x00;
 	GPIO_PORTL_PCTL_R = 0x00;
 	GPIO_PORTM_PCTL_R = 0x00;
@@ -66,6 +70,7 @@ void GPIO_Init(void)
 
 	GPIO_PORTJ_AHB_DIR_R = 0x00;
 	GPIO_PORTA_AHB_DIR_R = 0xF0;//2_11110000
+	GPIO_PORTH_AHB_DIR_R = 0x00;
 	GPIO_PORTK_DIR_R = 0xFF; // LCD
 	GPIO_PORTL_DIR_R = 0x00;
 	GPIO_PORTM_DIR_R = 0xF7;//2_11110111
@@ -78,6 +83,7 @@ void GPIO_Init(void)
 
 	GPIO_PORTJ_AHB_AFSEL_R = 0x00;
 	GPIO_PORTA_AHB_AFSEL_R = 0x00;//
+	GPIO_PORTH_AHB_AFSEL_R = 0x00;//
 	GPIO_PORTK_AFSEL_R = 0x00; // 
 	GPIO_PORTL_AFSEL_R = 0x00;
 	GPIO_PORTM_AFSEL_R = 0x00;//
@@ -86,11 +92,11 @@ void GPIO_Init(void)
 	GPIO_PORTQ_AFSEL_R = 0x00;//
 
 	// 6. Setar os bits de DEN para habilitar I/O digital	
-	GPIO_PORTJ_AHB_DEN_R = 0x03;   //Bit0 e bit1
-	GPIO_PORTN_DEN_R = 0x03; 		   //Bit0 e bit1
+
 
 	GPIO_PORTJ_AHB_DEN_R = 0x03;
 	GPIO_PORTA_AHB_DEN_R = 0xF0;//2_11110000
+	GPIO_PORTH_AHB_DEN_R = 0x0F;//2_11110000
 	GPIO_PORTK_DEN_R = 0xFF; // LCD
 	GPIO_PORTL_DEN_R = 0x0F;
 	GPIO_PORTM_DEN_R = 0xF7;//2_11110111
@@ -193,7 +199,7 @@ void PortM_Output_Teclado(uint32_t valor)
     temp = GPIO_PORTM_DATA_R & (~ 0xF0);
     //agora vamos fazer o OR com o valor recebido na fun��o
     temp = temp | valor;
-    GPIO_PORTN_DATA_R = temp; 
+    GPIO_PORTM_DATA_R = temp; 
 }
 
 // -------------------------------------------------------------------------------
@@ -209,7 +215,7 @@ void PortM_Output_LCD(uint32_t valor)
     temp = GPIO_PORTM_DATA_R & (~ 0x07);
     //agora vamos fazer o OR com o valor recebido na fun��o
     temp = temp | valor;
-    GPIO_PORTN_DATA_R = temp; 
+    GPIO_PORTM_DATA_R = temp; 
 }
 
 
@@ -226,7 +232,7 @@ void PortA_Output(uint32_t valor)
     temp = GPIO_PORTA_AHB_DATA_R & (~ 0xF0);
     //agora vamos fazer o OR com o valor recebido na fun��o
     temp = temp | valor;
-    GPIO_PORTN_DATA_R = temp; 
+    GPIO_PORTA_AHB_DATA_R = temp; 
 }
 
 // -------------------------------------------------------------------------------
@@ -242,7 +248,7 @@ void PortQ_Output(uint32_t valor)
     temp = GPIO_PORTQ_DATA_R & (~ 0x0F);
     //agora vamos fazer o OR com o valor recebido na fun��o
     temp = temp | valor;
-    GPIO_PORTN_DATA_R = temp; 
+    GPIO_PORTQ_DATA_R = temp; 
 }
 
 // -------------------------------------------------------------------------------
@@ -258,7 +264,7 @@ void PortP_Output(uint32_t valor)
     temp = GPIO_PORTP_DATA_R & (~ 0x20);
     //agora vamos fazer o OR com o valor recebido na fun��o
     temp = temp | valor;
-    GPIO_PORTN_DATA_R = temp; 
+    GPIO_PORTP_DATA_R = temp; 
 }
 
 // -------------------------------------------------------------------------------
@@ -274,5 +280,21 @@ void PortK_Output(uint32_t valor)
     temp = GPIO_PORTK_DATA_R & (~ 0xFF);
     //agora vamos fazer o OR com o valor recebido na fun��o
     temp = temp | valor;
-    GPIO_PORTN_DATA_R = temp; 
+    GPIO_PORTK_DATA_R = temp; 
+}
+
+// -------------------------------------------------------------------------------
+// Fun��o PortH_Output
+// Escreve os valores no port H
+// Par�metro de entrada: Valora ser escrito
+// Par�metro de sa�da: n�o tem
+void PortH_Output(uint32_t valor)
+{
+    uint32_t temp;
+    //vamos zerar somente os bits menos significativos
+    //para uma escrita amig�vel nos bits 0 e 1
+    temp = GPIO_PORTK_DATA_R & (~ 0x0F);
+    //agora vamos fazer o OR com o valor recebido na fun��o
+    temp = temp | valor;
+    GPIO_PORTH_AHB_DATA_R = temp; 
 }
