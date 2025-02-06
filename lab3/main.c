@@ -60,6 +60,8 @@ int main(void)
 
 	uint32_t leitura;
 	uint32_t degree = 0;
+	uint32_t sumDegree = 0;
+	uint32_t lap = 0;
 
 	while (1)
 	{
@@ -67,20 +69,18 @@ int main(void)
 		if(leitura != 0xFF){
 			debounce();
 			degree=processResult(leitura);
+			sumDegree+=degree;
+			if(sumDegree > 360){
+				sumDegree-=360;
+				lap++;
+			}
+
 			if (degree < 0){
 				degree*=-1;
 				step_motor(degree, 0);
 			} else{
 				step_motor(degree, 1);
 			}
-		}
-
-
-
-		int reset_new = get_reset();
-		if(reset_new==0x01)
-		{
-			reset_all();
 		}
 
 		send_complex_comand_lcd(0x01);
