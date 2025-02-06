@@ -5,6 +5,7 @@
 // Prof. Guilherme Peron
 
 #include "lcd.h"
+#include <stdio.h>
 
 
 
@@ -119,22 +120,14 @@ void send_data_lcd(uint32_t cmd_var)
 
 void send_string_lcd(uint32_t mult1, uint32_t mult2)
 {
-    const char stringA[] = "Tabuada do ";
-    int i = 0;
-    for(i=0;stringA[i]!='\0';i++)
-    {
-        send_data_lcd( (uint32_t)(stringA[i]) );
+    char buffer[32];  // Buffer para armazenar a string final
+
+    // Monta a string formatada com os valores
+    sprintf(buffer, "Posição: %d volta: %d", mult1, mult2);
+
+    // Envia cada caractere da string ao LCD
+    for (int i = 0; buffer[i] != '\0'; i++) {
+        send_data_lcd((uint32_t) buffer[i]);
     }
-    send_data_lcd( (uint32_t) (mult1+'0') );
-    //'\n'
-    send_comand_lcd( 0xC0 );
-    send_data_lcd( (uint32_t) (mult1+'0') );
-    send_data_lcd( (uint32_t) ('X') );
-    send_data_lcd( (uint32_t) (mult2+'0') );
-    uint32_t res= mult1*mult2;
-    if(res>=10)
-    {
-        send_data_lcd( (uint32_t) ((res/10)+'0') );
-    }
-    send_data_lcd( (uint32_t) ((res%10)+'0') );
+
 }

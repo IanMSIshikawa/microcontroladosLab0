@@ -85,7 +85,7 @@ int main(void)
 
 		send_complex_comand_lcd(0x01);
 
-		send_string_lcd(mult_base,mult);
+		send_string_lcd(sumDegree,lap);
 
 
 	}
