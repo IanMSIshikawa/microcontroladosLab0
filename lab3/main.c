@@ -29,11 +29,13 @@ uint32_t PortJ_Input(void);
 void Pisca_leds(void);
 
 
-void debounce( uint32_t resultado );
-void varredura(void);
+void debounce();
+uint32_t varredura(void);
 void Pisca_LED(uint32_t liga);
 void toggle_step_f(void);
-void 	reset_all(void);
+void reset_all(void);
+
+void step_motor(int degrees, int direction);
 
 uint32_t mult_base;// ;R6 = base multiplicac�o
 uint32_t mult;//;R7 = estado multiplicador
@@ -46,9 +48,7 @@ uint32_t deb_counter;//;R10= n estados debounce
 
 int main(void)
 {
-	//reset = 0x00;
-	//toggle_step = 0x00;
-	//toggle_led = 0x00;
+
 
 	PLL_Init();
 	SysTick_Init();
@@ -57,9 +57,25 @@ int main(void)
 	setup_LCD();
 	Timer0A_init();
 	Set_Contagem_timer(0);
+
+	uint32_t leitura;
+	uint32_t degree = 0;
+
 	while (1)
 	{
-		varredura();
+		leitura = varredura();
+		if(leitura != 0xFF){
+			debounce();
+			degree=processResult(leitura);
+			if (degree < 0){
+				degree*=-1;
+				step_motor(degree, 0);
+			} else{
+				step_motor(degree, 1);
+			}
+		}
+
+
 
 		int reset_new = get_reset();
 		if(reset_new==0x01)
@@ -67,37 +83,22 @@ int main(void)
 			reset_all();
 		}
 
-		int step_new = get_toggle_step();
-		if(step_new==0x01)
-		{
-			toggle_step_f();
-		}
-
 		send_complex_comand_lcd(0x01);
 
 		send_string_lcd(mult_base,mult);
-		
-		Pisca_LED(mult_base);
+
 
 	}
 }
 
-/*void Pisca_leds(void)
-{
-	PortN_Output(0x2);
-	SysTick_Wait1ms(250);
-	PortN_Output(0x1);
-	SysTick_Wait1ms(250);
-}*/
-
-void varredura(void)
+uint32_t varredura(void)
 {
 	uint32_t coluna = 0x10;
 	uint32_t offset = 0x1;
 	uint32_t leitura;
 	uint32_t resultado;
 
-	for (coluna = 0x10; coluna < 0x80; coluna=coluna << 1)
+	for (coluna = 0x10; coluna <= 0x80; coluna <<= 1)
 	{
 		PortM_Output_Teclado( coluna ^ 0xFF);//EOR R0,R3,#2_11111111; inverter bits ligados
 		leitura=PortJ_Input();
@@ -106,87 +107,58 @@ void varredura(void)
 		if(leitura==0x01)
 		{
 			resultado=0+offset;
+			return resultado;
 		}
 		if(leitura==0x02)
 		{
 			resultado=3+offset;
+			return resultado;
+
 		}
 		if(leitura==0x04)
 		{
 			resultado=6+offset;
+			return resultado;
+
 		}
 		if(leitura==0x08)
 		{
 			resultado=9+offset;
-		}
-		if (resultado!=0xFF)
-		{
-			break;
+			return resultado;
+
 		}
 		offset++;
 	}
-	if(resultado!=0xFF)
-	{
-		debounce(resultado);
-	}
-	if(new_key_det!=1)
-	{
-		return;
-	}
-	
-	Set_Contagem_timer(deb_key);
 
-	if(deb_key!=mult_base)
-	{
-		mult_base=deb_key;
-		mult=0;
-		return;
-	}
-	mult=(mult+1)%10;
-
-	return;
+	return resultado;
 
 }
 
-void debounce( uint32_t resultado )
+void debounce( )
 {
-	if (resultado==11){
-		resultado=0;
-	}
-
-	if (resultado>=10){
-		return;
-	}
-
-	if(deb_key!=resultado)
-	{
-		deb_counter=0;
-		deb_key=resultado;
-		return;
-	}
-
-	++deb_counter;
-	
-	if(deb_counter==DEB_LIMIT)
-	{
-		deb_counter=0;
-		new_key_det=1;
-	}
+	SysTick_Wait1ms(250);
 
 }
 
-
-
-void Pisca_LED(uint32_t liga)
-{
-	//uint32_t liga = mult_base;
-	if(get_toggle_led()==0x01)
-	{
-		liga = 0x00;
+uint32_t processResult(result){
+	if (result < 5){
+		return result * 15;
 	}
-	PortQ_Output(liga);
-	PortP_Output(0xFF);
-
+	else if(result == 5){
+		return 90;
+	}
+	else if(result == 6){
+		return 180;
+	}
+	else if (result < 0xB){
+		return result%6 * -15;
+	}
+	else if (result == 0xB){
+		return -90;
+	}
+	else if (result == 0xC){
+		return -180;
+	}
 }
 
 
@@ -202,11 +174,6 @@ void reset_all(void)
 	deb_counter=0;//;R10= n estados debounce
 	
 	set_reset(0x00);
-}
-
-void toggle_step_f(void)
-{
-	set_toggle_step(0x00);
 }
 
 
