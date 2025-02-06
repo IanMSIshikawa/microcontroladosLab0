@@ -93,72 +93,58 @@ int main(void)
 
 uint32_t varredura(void)
 {
-	uint32_t coluna = 0x10;
-	uint32_t offset = 0x1;
-	uint32_t leitura;
-	uint32_t resultado;
+	// Iterating over the first column
+    PortM_Output(0xE0); // MOV R0, #2_11100000
+    PortL_Input();
+    
+    if (PortL_Input() == 0xE) { // CMP R0, #2_1110
+        return 1;
+    } else if (PortL_Input() == 0xD) { // CMP R0, #2_1101
+        return 4;
+    } else if (PortL_Input() == 0xB) { // CMP R0, #2_1011
+        return 7;
+    } 
+    
+    // Iterating over the second column
+    PortM_Output(0xD0); // MOV R0, #2_11010000
+    PortL_Input();
+    
+    if (PortL_Input() == 0xE) { // CMP R0, #2_1110
+        return 2;
+    } else if (PortL_Input() == 0xD) { // CMP R0, #2_1101
+        return 5;
+    } else if (PortL_Input() == 0xB) { // CMP R0, #2_1011
+        return 8;
+    } else if (PortL_Input() == 0x7) { // CMP R0, #2_0111
+       	return 0;
+    }
+    
+    // Iterating over the third column
+    PortM_Output(0xB0); // MOV R0, #2_10110000
+    PortL_Input();
+    
+    if (PortL_Input() == 0xE) { // CMP R0, #2_1110
+        return 3;
+    } else if (PortL_Input() == 0xD) { // CMP R0, #2_1101
+        return 6;
+    } else if (PortL_Input() == 0xB) { // CMP R0, #2_1011
+        return 9;
+    } else if (PortL_Input() == 0x7) { // CMP R0, #2_0111
 
-	for (coluna = 0x10; coluna <= 0x80; coluna <<= 1)
-	{
-		PortM_Output_Teclado( coluna ^ 0xFF);//EOR R0,R3,#2_11111111; inverter bits ligados
-		leitura=PortJ_Input();
-		leitura=leitura^0x0F;
-		resultado=0xFF;
-		if(leitura==0x01)
-		{
-			resultado=0+offset;
-			return resultado;
+    }
+		
+		// Iterating over the fourth column
+    PortM_Output(0x70); // MOV R0, #2_01110000
+    PortL_Input();
+    
+    if (PortL_Input() == 0xE) { // CMP R0, #2_1110
+        return 10;;
+    } else if (PortL_Input() == 0xD) { // CMP R0, #2_1101
+        return 11;
+    } else if (PortL_Input() == 0xB) { // CMP R0, #2_1011
+        return 12;
 		}
-		if(leitura==0x02)
-		{
-			resultado=3+offset;
-			return resultado;
-
-		}
-		if(leitura==0x04)
-		{
-			resultado=6+offset;
-			return resultado;
-
-		}
-		if(leitura==0x08)
-		{
-			resultado=9+offset;
-			return resultado;
-
-		}
-		offset++;
-	}
-
-	return resultado;
-
-}
-
-void debounce( )
-{
-	SysTick_Wait1ms(250);
-
-}
-
-uint32_t processResult(result){
-	if (result < 5){
-		return result * 15;
-	}
-	else if(result == 5){
-		return 90;
-	}
-	else if(result == 6){
-		return 180;
-	}
-	else if (result < 0xB){
-		return result%6 * -15;
-	}
-	else if (result == 0xB){
-		return -90;
-	}
-	else if (result == 0xC){
-		return -180;
-	}
+	return 0xFF;
 }
 
 
