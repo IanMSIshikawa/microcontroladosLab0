@@ -37,111 +37,116 @@ char UART0_ReadChar(void);
 void debounce();
 uint32_t varredura(void);
 
-void step_motor(int degrees, int direction);
+void step_motor(int direction);
 void initPot();
 
 uint32_t mult_base;// ;R6 = base multiplicac�o
 uint32_t mult;//;R7 = estado multiplicador
 uint32_t new_key_det;// ;R8 = nova tecla detectada
 
+uint32_t programState = 0;
+char readChar = 0;
+uint32_t direction = 0;
+uint32_t vel = 0;
 
-int main(void)
-{
+int main(void) {
+    PLL_Init();
+    SysTick_Init();
+    GPIO_Init();
+    init_uart();
+    initPot();
+	step_motor(direction);
 
-	PLL_Init();
-	SysTick_Init();
-	GPIO_Init();
-	init_uart();
-	initPot();
+    char readChar = 0;
 
+    while (1) {
+        if (programState == 0) {
+            UART0_SendString("Motor parado, pressione * para iniciar.\r\n");
+            while (readChar != '*') {
+                readChar = UART0_ReadChar();
+            }
+            programState = 1;
+        }
 
-	uint32_t programState = 0;
-	char readChar = 0;
-	uint32_t direction = 0;
-	uint32_t vel = 0;
-	step_motor(0, 0);
+        if (programState == 1) {
+            UART0_SendString("Controle por terminal (t) ou potenciômetro (p)?\r\n");
+            while (readChar != 'p' && readChar != 't') {
+                readChar = UART0_ReadChar();
+            }
+            programState = (readChar == 'p') ? 2 : 3;
+        }
 
-	while (1)
-	{
-		if (programState == 0){
-			const char string[] = "Motor parado, pressione * para iniciar.";
-			UART0_SendString(string);
-			while (!readChar)
-			{
-				readChar = UART0_ReadChar();
-				programState = 1;
-			}
-			
-		}
-		if(programState == 1){
-			const char string[] = "terminal (t) ou potenciometro (p) ? ";
-			UART0_SendString(string);
-			while(readChar != 'p' && readChar != 't'){
-				readChar = UART0_ReadChar();
-				if(readChar == 'p'){programState = 2;}
-				if(readChar == 't'){programState = 3;}
-			}
-		}
-		if (programState == 2){//controle por terminal
+        if (programState == 2) { // Controle por potenciômetro
+            while (programState == 2) {
+                uint32_t adcValue = ADC_Read();
+                vel = (adcValue < 2048) ? ((2048 - adcValue) * 100 / 2048) : ((adcValue - 2048) * 100 / 2048);
+                uint32_t newDirection = (adcValue < 2048) ? 0 : 1;
+                if (newDirection != direction) {
+                    direction = newDirection;
+                    step_motor(direction);
+                }
+                PWM_SetDutyCycle(vel);
 
-			const char string[] = "sentido horário (h) ou anti-horário (a) ?";
-			UART0_SendString(string);
-			while(readChar != 'h' && readChar != 'a'){
-				readChar = UART0_ReadChar();
-				if(readChar == 'h'){direction = 1;}
-				if(readChar == 't'){direction = 0;}
-			}
-
-			const char string[] = "selecione a velocidade";
-			UART0_SendString(string);
-			while(readChar < '0' || readChar > '9'){
-				readChar = UART0_ReadChar();
-			}
-			vel = (readChar == '0') ? 100 : (readChar - '0') * 10;
-			step_motor(vel, direction);
-			
-			while (1) {
                 char buffer[50];
-                sprintf(buffer, "Velocidade: %d%%, Direção: %s\r\n",
-                        vel, direction == 0 ? "Horário" : "Anti-horário");
+                sprintf(buffer, "Velocidade: %d%%, Direção: %s\r\n", vel, direction == 0 ? "Horário" : "Anti-horário");
                 UART0_SendString(buffer);
-                
-                // Verifica se o usuário quer mudar algo
+
+                if (UART0_Available() && UART0_ReadChar() == 's') {
+                    programState = 0;
+                    vel = 0;
+                    PWM_SetDutyCycle(vel);
+                }
+                SysTick_Wait1ms(1000);
+            }
+        }
+
+        if (programState == 3) { // Controle por terminal
+            UART0_SendString("Sentido horário (h) ou anti-horário (a)?\r\n");
+            while (readChar != 'h' && readChar != 'a') {
+                readChar = UART0_ReadChar();
+            }
+            uint32_t newDirection = (readChar == 'h') ? 0 : 1;
+            if (newDirection != direction) {
+                direction = newDirection;
+                step_motor(direction);
+            }
+
+            UART0_SendString("Selecione a velocidade (0-9):\r\n");
+            while (readChar < '0' || readChar > '9') {
+                readChar = UART0_ReadChar();
+            }
+            vel = (readChar == '0') ? 100 : (readChar - '0') * 10;
+            PWM_SetDutyCycle(vel);
+
+            while (1) {
+                char buffer[50];
+                sprintf(buffer, "Velocidade: %d%%, Direção: %s\r\n", vel, direction == 0 ? "Horário" : "Anti-horário");
+                UART0_SendString(buffer);
+
                 if (UART0_Available()) {
                     readChar = UART0_ReadChar();
-                    if (readChar == 'h') {
-						direction = 0;
-						step_motor(vel, direction);
-					}
-                    if (readChar == 'a') {
-						direction = 1;
-						step_motor(vel, direction);
-					}
-                    if (readChar >= '5' && readChar <= '9') {
-						vel = (readChar - '0') * 10;
-						step_motor(vel, direction);
-					}
-					if (readChar == '0') {
-						vel = 100;
-						step_motor(vel, direction);
-					}
+                    if (readChar == 'h' || readChar == 'a') {
+                        newDirection = (readChar == 'h') ? 0 : 1;
+                        if (newDirection != direction) {
+                            direction = newDirection;
+                            step_motor(direction);
+                        }
+                    }
+                    if (readChar >= '0' && readChar <= '9') {
+                        vel = (readChar == '0') ? 100 : (readChar - '0') * 10;
+                        PWM_SetDutyCycle(vel);
+                    }
                     if (readChar == 's') {
                         programState = 0;
-						vel = 0;
-						step_motor(vel, direction);
+                        vel = 0;
+                        PWM_SetDutyCycle(vel);
                         break;
                     }
                 }
-
-                SysTick_Wait1ms(1000); 
+                SysTick_Wait1ms(1000);
             }
-			
-
-		}
-		if (programState == 3){//controle por potenciometro
-
-		}
-	}
+        }
+    }
 }
 
 uint32_t ADC_Read(void) {

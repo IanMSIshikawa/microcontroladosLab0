@@ -20,18 +20,11 @@ int calcular_tempo_ms(int velocidade) {
 }
 
 // Função para girar o motor indefinidamente na velocidade e direção especificada
-void step_motor(int velocidade, int direction) {
+void step_motor(int direction) {
     int i = 0;
-    int velocidade_atual = TEMPO_MAX_MS;  // Começa na velocidade mais lenta
-    int velocidade_alvo = calcular_tempo_ms(velocidade);  // Calcula tempo entre passos
 
     while (1) {  // Loop infinito para rodar continuamente
-        // Ajuste gradual da velocidade para evitar mudanças bruscas
-        if (velocidade_atual < velocidade_alvo) {
-            velocidade_atual++;  // Acelera gradualmente
-        } else if (velocidade_atual > velocidade_alvo) {
-            velocidade_atual--;  // Desacelera gradualmente
-        }
+
 
         // Define o próximo passo conforme a direção
         if (direction == 1) {  // Sentido horário
@@ -43,6 +36,6 @@ void step_motor(int velocidade, int direction) {
         i++;  // Avança um passo no motor
 
         // Aguarda conforme a velocidade definida
-        SysTick_Wait1ms(velocidade_atual < TEMPO_MIN_MS ? TEMPO_MIN_MS : velocidade_atual);
+        SysTick_Wait1ms(10);
     }
 }
