@@ -7,8 +7,8 @@
 
 
 
-void step_motor(int degrees, int direction);
-
+void step_motor(int velocidade_alvo, int direction);
+int calcular_tempo_ms(char tecla);
 
 
 #endif  //!__MOTOR__H__

@@ -10,6 +10,7 @@
 #include "lab3.h"
 
 #define GPIO_PORTA  (0x0001) //bit 1
+#define GPIO_PORTE  (0x0010) //bit 5
 #define GPIO_PORTJ  (0x0100) //bit 8
 #define GPIO_PORTK  (0x0200) //bit 9
 #define GPIO_PORTL  (0x0400) //bit 10
@@ -27,6 +28,7 @@
 void GPIO_Init(void)
 {
 	const uint32_t or_portas = (GPIO_PORTA |
+												GPIO_PORTE |
 												GPIO_PORTJ |
 												GPIO_PORTK |
 												GPIO_PORTL |
@@ -46,6 +48,7 @@ void GPIO_Init(void)
 	// 2. Limpar o AMSEL para desabilitar a anal�gica
 	GPIO_PORTJ_AHB_AMSEL_R = 0x00;
 	GPIO_PORTA_AHB_AMSEL_R = 0x00;
+	GPIO_PORTE_AHB_AMSEL_R = 0x10;
 	GPIO_PORTH_AHB_AMSEL_R = 0x00;
 	GPIO_PORTK_AMSEL_R = 0x00;
 	GPIO_PORTL_AMSEL_R = 0x00;
@@ -71,6 +74,7 @@ void GPIO_Init(void)
 
 	GPIO_PORTJ_AHB_DIR_R = 0x00;
 	GPIO_PORTA_AHB_DIR_R = 0xF0 | 0x03;
+	GPIO_PORTE_AHB_DIR_R = 0x10;
 	GPIO_PORTH_AHB_DIR_R = 0x00;
 	GPIO_PORTK_DIR_R = 0xFF; // LCD
 	GPIO_PORTL_DIR_R = 0x00;
@@ -84,6 +88,7 @@ void GPIO_Init(void)
 
 	GPIO_PORTJ_AHB_AFSEL_R = 0x00;
 	GPIO_PORTA_AHB_AFSEL_R = 0x00;//
+	GPIO_PORTE_AHB_AFSEL_R = 0x10;//
 	GPIO_PORTH_AHB_AFSEL_R = 0x00;//
 	GPIO_PORTK_AFSEL_R = 0x00; // 
 	GPIO_PORTL_AFSEL_R = 0x00;
@@ -97,6 +102,7 @@ void GPIO_Init(void)
 
 	GPIO_PORTJ_AHB_DEN_R = 0x03;
 	GPIO_PORTA_AHB_DEN_R = 0xF0;//2_11110000
+	GPIO_PORTE_AHB_DEN_R &= ~0x10;
 	GPIO_PORTH_AHB_DEN_R = 0x0F;//2_11110000
 	GPIO_PORTK_DEN_R = 0xFF; // LCD
 	GPIO_PORTL_DEN_R = 0x0F;
@@ -298,4 +304,31 @@ void PortH_Output(uint32_t valor)
     //agora vamos fazer o OR com o valor recebido na fun��o
     temp = temp | valor;
     GPIO_PORTH_AHB_DATA_R = temp; 
+}
+
+void initPot(){
+	// Passo 6: Habilitar o clock para o módulo ADC0
+	SYSCTL_RCGCADC_R |= SYSCTL_RCGCADC_R0;  // Habilita o relógio para o ADC0
+	while ((SYSCTL_PRADC_R & SYSCTL_PRADC_R0) == 0) {}  // Espera até o ADC0 estar pronto
+
+	// Passo 7: Escolher a taxa máxima de amostragem
+	ADC0_PC_R =  0x0;  // Escolhe a taxa de amostragem máxima para 125k amostras/seg
+
+	// Passo 8: Configurar a prioridade do sequenciador
+	ADC0_SSPRI_R = 0x0123; 
+
+	// Passo 9: Desabilitar o sequenciador SS0 para configuração
+	ADC0_ACTSS_R &= ~ADC_ACTSS_ASEN0;  // Desabilita o sequenciador SS0
+
+	// Passo 10: Configurar o tipo de gatilho para a conversão (gatilho por software)
+	ADC0_EMUX_R &= ~ADC_EMUX_EM0_M;  // Configura o gatilho para software no SS0
+
+	// Passo 11: Configurar a fonte de entrada para o canal AIN9
+	ADC0_SSMUX0_R = 9;  // AIN9 (PE4) como entrada para o sequenciador SS0
+
+	// Passo 12: Configurar os bits de controle para a sequência SS0
+	ADC0_SSCTL0_R = ADC_SSCTL0_IE0 | ADC_SSCTL0_END0;  // Habilita interrupção e fim de sequência
+
+	// Passo 14: Habilitar o sequenciador SS0
+	ADC0_ACTSS_R |= ADC_ACTSS_ASEN0;  // Habilita o sequenciador SS0
 }
