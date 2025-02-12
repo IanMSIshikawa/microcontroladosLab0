@@ -38,6 +38,7 @@ void debounce();
 uint32_t varredura(void);
 
 void step_motor(int degrees, int direction);
+void initPot();
 
 uint32_t mult_base;// ;R6 = base multiplicac�o
 uint32_t mult;//;R7 = estado multiplicador
@@ -51,6 +52,8 @@ int main(void)
 	SysTick_Init();
 	GPIO_Init();
 	init_uart();
+	initPot();
+
 
 	uint32_t programState = 0;
 	char readChar = 0;

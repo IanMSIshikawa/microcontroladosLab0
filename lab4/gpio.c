@@ -306,6 +306,7 @@ void PortH_Output(uint32_t valor)
     GPIO_PORTH_AHB_DATA_R = temp; 
 }
 
+//Função para inicializar o potenciometro
 void initPot(){
 	// Passo 6: Habilitar o clock para o módulo ADC0
 	SYSCTL_RCGCADC_R |= SYSCTL_RCGCADC_R0;  // Habilita o relógio para o ADC0
