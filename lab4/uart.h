@@ -8,6 +8,7 @@
 
 
 void init_uart();
+bool UART0_Available();
 
 
 
