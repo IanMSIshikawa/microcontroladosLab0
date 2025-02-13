@@ -5,6 +5,7 @@
 // Prof. Guilherme Peron
 
 #include <stdint.h>
+#include <stdio.h>
 void SysTick_Wait1ms(uint32_t delay);
 void SysTick_Wait1us(uint32_t delay);
 
@@ -38,6 +39,7 @@ void debounce();
 uint32_t varredura(void);
 
 void step_motor(int direction);
+bool UART0_Available();
 void initPot();
 
 uint32_t mult_base;// ;R6 = base multiplicac�o
@@ -53,6 +55,25 @@ uint32_t pwm_duty_cycle = 0;
 uint32_t pwm_duty_cycle_target = 0;
 bool pwm_high =  false;
 
+
+uint32_t ADC_Read(void) {
+    // Passo 2: Iniciar a conversão manual (gatilho SW)
+    ADC0_PSSI_R = ADC_PSSI_SS0;  // Aciona a conversão para SS0 (sequenciador 0)
+    
+    // Passo 3: Esperar a conversão ser concluída (polling de ADCRIS)
+    while ((ADC0_RIS_R & ADC_RIS_INR0) == 0) {
+        // Espera até que a conversão para o sequenciador SS0 esteja completa
+    }
+    
+    // Passo 4: Ler o resultado da conversão do FIFO
+    uint32_t adcResult = ADC0_SSFIFO0_R;  // Lê o valor convertido
+    
+    // Passo 5: Limpar a flag de conversão (ACK)
+    ADC0_ISC_R = ADC_ISC_IN0;  // Limpa o bit de interrupção para SS0
+    
+    // Passo 6: Retornar o valor lido
+    return adcResult;
+}
 
 int main(void) {
     PLL_Init();
@@ -154,24 +175,7 @@ int main(void) {
     }
 }
 
-uint32_t ADC_Read(void) {
-    // Passo 2: Iniciar a conversão manual (gatilho SW)
-    ADC0_PSSI_R = ADC_PSSI_SS0;  // Aciona a conversão para SS0 (sequenciador 0)
-    
-    // Passo 3: Esperar a conversão ser concluída (polling de ADCRIS)
-    while ((ADC0_RIS_R & ADC_RIS_INR0) == 0) {
-        // Espera até que a conversão para o sequenciador SS0 esteja completa
-    }
-    
-    // Passo 4: Ler o resultado da conversão do FIFO
-    uint32_t adcResult = ADC0_SSFIFO0_R;  // Lê o valor convertido
-    
-    // Passo 5: Limpar a flag de conversão (ACK)
-    ADC0_ISC_R = ADC_ISC_IN0;  // Limpa o bit de interrupção para SS0
-    
-    // Passo 6: Retornar o valor lido
-    return adcResult;
-}
+
 
 
 
