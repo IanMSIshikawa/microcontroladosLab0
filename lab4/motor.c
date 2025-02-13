@@ -39,3 +39,17 @@ void step_motor(int direction) {
         SysTick_Wait1ms(10);
     }
 }
+
+int PWM_SetDutyCycle(int vel){
+    if (vel < 0) vel = 0;
+    if (vel > 100) vel = 100;
+    
+    // Calcula o valor do PWM conforme a velocidade
+    uint32_t pwm = (vel * 1023) / 100;
+    
+    // Configura o PWM
+    PWM0_0_CMPA_R = pwm;
+    
+    return vel;
+}
+

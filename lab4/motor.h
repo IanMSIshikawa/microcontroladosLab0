@@ -9,6 +9,7 @@
 
 void step_motor(int direction);
 int calcular_tempo_ms(char tecla);
+int PWM_SetDutyCycle(int vel);
 
 
 #endif  //!__MOTOR__H__
