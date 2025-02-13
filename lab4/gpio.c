@@ -9,8 +9,11 @@
 #include "tm4c1294ncpdt.h"
 #include "lab3.h"
 
+//FALTA INICIALIZAR PE0,PE1 e PF2
+
 #define GPIO_PORTA  (0x0001) //bit 1
 #define GPIO_PORTE  (0x0010) //bit 5
+#define GPIO_PORTF  (0x0020) //bit 6
 #define GPIO_PORTJ  (0x0100) //bit 8
 #define GPIO_PORTK  (0x0200) //bit 9
 #define GPIO_PORTL  (0x0400) //bit 10
@@ -29,6 +32,7 @@ void GPIO_Init(void)
 {
 	const uint32_t or_portas = (GPIO_PORTA |
 												GPIO_PORTE |
+												GPIO_PORTF |
 												GPIO_PORTJ |
 												GPIO_PORTK |
 												GPIO_PORTL |
@@ -56,6 +60,7 @@ void GPIO_Init(void)
 	GPIO_PORTN_AMSEL_R = 0x00 ;
 	GPIO_PORTP_AMSEL_R = 0x00;
 	GPIO_PORTQ_AMSEL_R = 0x00;
+	GPIO_PORTF_AHB_AMSEL_R = 0x00;
 		
 	// 3. Limpar PCTL para selecionar o GPIO		
 	GPIO_PORTJ_AHB_PCTL_R = 0x00;
@@ -67,6 +72,8 @@ void GPIO_Init(void)
 	GPIO_PORTN_PCTL_R = 0x00;
 	GPIO_PORTP_PCTL_R = 0x00;
 	GPIO_PORTQ_PCTL_R = 0x00;
+	GPIO_PORTF_AHB_PCTL_R = 0x00;
+	GPIO_PORTE_AHB_PCTL_R = 0x00;
 	
 	// 4. DIR para 1 se for entrada, 0 se for sa�da
 //	GPIO_PORTJ_AHB_DIR_R = 0x00;
@@ -74,7 +81,7 @@ void GPIO_Init(void)
 
 	GPIO_PORTJ_AHB_DIR_R = 0x00;
 	GPIO_PORTA_AHB_DIR_R = 0xF0 | 0x03;
-	GPIO_PORTE_AHB_DIR_R = 0x10;
+	GPIO_PORTE_AHB_DIR_R = 0x00;
 	GPIO_PORTH_AHB_DIR_R = 0x00;
 	GPIO_PORTK_DIR_R = 0xFF; // LCD
 	GPIO_PORTL_DIR_R = 0x00;
@@ -82,13 +89,15 @@ void GPIO_Init(void)
 	GPIO_PORTN_DIR_R = 0x03;//2_0011
 	GPIO_PORTP_DIR_R = 0x20;//2_0010 0000
 	GPIO_PORTQ_DIR_R = 0x0F;//2_00001111
+	GPIO_PORTF_AHB_DIR_R = 0x00;//2_00000000
+	
 
 
 	// 5. Limpar os bits AFSEL para 0 para selecionar GPIO sem fun��o alternativa	
 
 	GPIO_PORTJ_AHB_AFSEL_R = 0x00;
 	GPIO_PORTA_AHB_AFSEL_R = 0x00;//
-	GPIO_PORTE_AHB_AFSEL_R = 0x10;//
+	GPIO_PORTE_AHB_AFSEL_R = 0x00;//
 	GPIO_PORTH_AHB_AFSEL_R = 0x00;//
 	GPIO_PORTK_AFSEL_R = 0x00; // 
 	GPIO_PORTL_AFSEL_R = 0x00;
@@ -96,13 +105,14 @@ void GPIO_Init(void)
 	GPIO_PORTN_AFSEL_R = 0x00;//
 	GPIO_PORTP_AFSEL_R = 0x00;//
 	GPIO_PORTQ_AFSEL_R = 0x00;//
+	GPIO_PORTF_AHB_AFSEL_R = 0x00;//
 
 	// 6. Setar os bits de DEN para habilitar I/O digital	
 
 
 	GPIO_PORTJ_AHB_DEN_R = 0x03;
 	GPIO_PORTA_AHB_DEN_R = 0xF0;//2_11110000
-	GPIO_PORTE_AHB_DEN_R &= ~0x10;
+	GPIO_PORTE_AHB_DEN_R = 0x0F;
 	GPIO_PORTH_AHB_DEN_R = 0x0F;//2_11110000
 	GPIO_PORTK_DEN_R = 0xFF; // LCD
 	GPIO_PORTL_DEN_R = 0x0F;
@@ -110,7 +120,8 @@ void GPIO_Init(void)
 	GPIO_PORTN_DEN_R = 0x03;//2_0011
 	GPIO_PORTP_DEN_R = 0x20;//2_0010 0000
 	GPIO_PORTQ_DEN_R = 0x0F;//2_00001111
-	
+	GPIO_PORTF_AHB_DEN_R = 0x0F;//2_00001111
+
 	// 7. Habilitar resistor de pull-up interno, setar PUR para 1
 	GPIO_PORTJ_AHB_PUR_R = 0x03;   //Bit0 e bit1	
 		GPIO_PORTL_DEN_R = 0x0F;

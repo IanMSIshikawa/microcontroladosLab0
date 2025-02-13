@@ -46,8 +46,13 @@ uint32_t new_key_det;// ;R8 = nova tecla detectada
 
 uint32_t programState = 0;
 char readChar = 0;
-uint32_t direction = 0;
-uint32_t vel = 0;
+
+bool direction = 0;
+bool direction_target = 0;
+uint32_t pwm_duty_cycle = 0;
+uint32_t pwm_duty_cycle_target = 0;
+bool pwm_high =  false;
+
 
 int main(void) {
     PLL_Init();
@@ -79,22 +84,22 @@ int main(void) {
         if (programState == 2) { // Controle por potenciômetro
             while (programState == 2) {
                 uint32_t adcValue = ADC_Read();
-                vel = (adcValue < 2048) ? ((2048 - adcValue) * 100 / 2048) : ((adcValue - 2048) * 100 / 2048);
+                pwm_duty_cycle = (adcValue < 2048) ? ((2048 - adcValue) * 100 / 2048) : ((adcValue - 2048) * 100 / 2048);
                 uint32_t newDirection = (adcValue < 2048) ? 0 : 1;
                 if (newDirection != direction) {
                     direction = newDirection;
                     step_motor(direction);
                 }
-                PWM_SetDutyCycle(vel);
+                PWM_SetDutyCycle(pwm_duty_cycle);
 
                 char buffer[50];
-                sprintf(buffer, "Velocidade: %d%%, Direção: %s\r\n", vel, direction == 0 ? "Horário" : "Anti-horário");
+                sprintf(buffer, "pwm_duty_cycleocidade: %d%%, Direção: %s\r\n", pwm_duty_cycle, direction == 0 ? "Horário" : "Anti-horário");
                 UART0_SendString(buffer);
 
                 if (UART0_Available() && UART0_ReadChar() == 's') {
                     programState = 0;
-                    vel = 0;
-                    PWM_SetDutyCycle(vel);
+                    pwm_duty_cycle = 0;
+                    PWM_SetDutyCycle(pwm_duty_cycle);
                 }
                 SysTick_Wait1ms(1000);
             }
@@ -111,16 +116,16 @@ int main(void) {
                 step_motor(direction);
             }
 
-            UART0_SendString("Selecione a velocidade (0-9):\r\n");
+            UART0_SendString("Selecione a pwm_duty_cycleocidade (0-9):\r\n");
             while (readChar < '0' || readChar > '9') {
                 readChar = UART0_ReadChar();
             }
-            vel = (readChar == '0') ? 100 : (readChar - '0') * 10;
-            PWM_SetDutyCycle(vel);
+            pwm_duty_cycle = (readChar == '0') ? 100 : (readChar - '0') * 10;
+            PWM_SetDutyCycle(pwm_duty_cycle);
 
             while (1) {
                 char buffer[50];
-                sprintf(buffer, "Velocidade: %d%%, Direção: %s\r\n", vel, direction == 0 ? "Horário" : "Anti-horário");
+                sprintf(buffer, "pwm_duty_cycleocidade: %d%%, Direção: %s\r\n", pwm_duty_cycle, direction == 0 ? "Horário" : "Anti-horário");
                 UART0_SendString(buffer);
 
                 if (UART0_Available()) {
@@ -133,13 +138,13 @@ int main(void) {
                         }
                     }
                     if (readChar >= '0' && readChar <= '9') {
-                        vel = (readChar == '0') ? 100 : (readChar - '0') * 10;
-                        PWM_SetDutyCycle(vel);
+                        pwm_duty_cycle = (readChar == '0') ? 100 : (readChar - '0') * 10;
+                        PWM_SetDutyCycle(pwm_duty_cycle);
                     }
                     if (readChar == 's') {
                         programState = 0;
-                        vel = 0;
-                        PWM_SetDutyCycle(vel);
+                        pwm_duty_cycle = 0;
+                        PWM_SetDutyCycle(pwm_duty_cycle);
                         break;
                     }
                 }
