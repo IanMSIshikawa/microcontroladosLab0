@@ -40,10 +40,12 @@ void GPIO_Init(void)
 //1a. Ativar o clock para a porta setando o bit correspondente no registrador RCGCGPIO
 //SYSCTL_RCGCGPIO_R = (GPIO_PORTJ | GPIO_PORTN);
 	SYSCTL_RCGCGPIO_R = or_portas;
-	SYSCTL_RCGCUART_R |= 0x01; //ativa uart0
+	
 //1b.   ap�s isso verificar no PRGPIO se a porta est� pronta para uso.
 //while((SYSCTL_PRGPIO_R & (GPIO_PORTJ | GPIO_PORTN) ) != (GPIO_PORTJ | GPIO_PORTN) ){};
 	while((SYSCTL_PRGPIO_R & or_portas) != or_portas ){};
+
+	
 	
 	// 2. Limpar o AMSEL para desabilitar a anal�gica
 	GPIO_PORTJ_AHB_AMSEL_R = 0x00;
@@ -87,7 +89,7 @@ void GPIO_Init(void)
 	// 5. Limpar os bits AFSEL para 0 para selecionar GPIO sem fun��o alternativa	
 
 	GPIO_PORTJ_AHB_AFSEL_R = 0x00;
-	GPIO_PORTA_AHB_AFSEL_R = 0x00;//
+	GPIO_PORTA_AHB_AFSEL_R = 0x03;//
 	GPIO_PORTE_AHB_AFSEL_R = 0x10;//
 	GPIO_PORTH_AHB_AFSEL_R = 0x00;//
 	GPIO_PORTK_AFSEL_R = 0x00; // 
@@ -101,7 +103,7 @@ void GPIO_Init(void)
 
 
 	GPIO_PORTJ_AHB_DEN_R = 0x03;
-	GPIO_PORTA_AHB_DEN_R = 0xF0;//2_11110000
+	GPIO_PORTA_AHB_DEN_R = 0xF0 | 0x03;//2_11110000
 	GPIO_PORTE_AHB_DEN_R &= ~0x10;
 	GPIO_PORTH_AHB_DEN_R = 0x0F;//2_11110000
 	GPIO_PORTK_DEN_R = 0xFF; // LCD

@@ -6,6 +6,8 @@
 
 #include <stdint.h>
 #include <stdio.h>
+
+
 void SysTick_Wait1ms(uint32_t delay);
 void SysTick_Wait1us(uint32_t delay);
 
@@ -76,7 +78,6 @@ int main(void) {
     GPIO_Init();
     init_uart();
     initPot();
-	step_motor(direction);
 
     char readChar = 0;
 
@@ -102,15 +103,16 @@ int main(void) {
                 uint32_t adcValue = ADC_Read();
                 vel = (adcValue < 2048) ? ((2048 - adcValue) * 100 / 2048) : ((adcValue - 2048) * 100 / 2048);
                 uint32_t newDirection = (adcValue < 2048) ? 0 : 1;
+                char buffer[50];
+                sprintf(buffer, "Velocidade: %d%%, Direção: %s\r\n", vel, direction == 0 ? "Horário" : "Anti-horário");
+                UART0_SendString(buffer);
                 if (newDirection != direction) {
                     direction = newDirection;
                     step_motor(direction);
                 }
                 PWM_SetDutyCycle(vel);
 
-                char buffer[50];
-                sprintf(buffer, "Velocidade: %d%%, Direção: %s\r\n", vel, direction == 0 ? "Horário" : "Anti-horário");
-                UART0_SendString(buffer);
+                
 
                 if (UART0_Available() && UART0_ReadChar() == 's') {
                     programState = 0;
