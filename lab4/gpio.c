@@ -96,7 +96,7 @@ void GPIO_Init(void)
 	// 5. Limpar os bits AFSEL para 0 para selecionar GPIO sem fun��o alternativa	
 
 	GPIO_PORTJ_AHB_AFSEL_R = 0x00;
-	GPIO_PORTA_AHB_AFSEL_R = 0x00;//
+	GPIO_PORTA_AHB_AFSEL_R = 0x00 | 0x03;//
 	GPIO_PORTE_AHB_AFSEL_R = 0x00;//
 	GPIO_PORTH_AHB_AFSEL_R = 0x00;//
 	GPIO_PORTK_AFSEL_R = 0x00; // 

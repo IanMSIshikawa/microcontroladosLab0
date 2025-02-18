@@ -16,12 +16,12 @@ void vel_control(){
     if(direction==direction_target){
         
         pwm_duty_cycle= (pwm_duty_cycle_target + pwm_duty_cycle)/STEPS+1;
-        if(pwm_duty_cycle=0){
+        if(pwm_duty_cycle==0){
             pwm_duty_cycle=1;
             //disable motor
             GPIO_PORTE_AHB_DATA_R &= 0xFFF0;
         }
-        else if(pwm_duty_cycle=100){
+        else if(pwm_duty_cycle==100){
             pwm_duty_cycle=99;
         }
         else{
@@ -35,7 +35,7 @@ void vel_control(){
     else{
         
         pwm_duty_cycle= ( 0 + pwm_duty_cycle)/STEPS;
-        if(pwm_duty_cycle=0){
+        if(pwm_duty_cycle==0){
             direction=direction_target;
             pwm_duty_cycle= (pwm_duty_cycle_target + pwm_duty_cycle)/STEPS;
             GPIO_PORTE_AHB_DATA_R ^= 0x03; //inverte enable motor

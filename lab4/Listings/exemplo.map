@@ -471,12 +471,12 @@ Removing Unused input sections from the image.
     Removing uart.o(.ARM.exidx.text.UART0_ReadChar), (8 bytes).
     Removing uart.o(.ARM.exidx.text.UART0_Available), (8 bytes).
     Removing motor.o(.text), (0 bytes).
-    Removing motor.o(.text.vel_control), (328 bytes).
+    Removing motor.o(.text.vel_control), (320 bytes).
     Removing motor.o(.ARM.exidx.text.vel_control), (8 bytes).
     Removing motor.o(.text.PWM_SetDutyCycle), (78 bytes).
     Removing motor.o(.ARM.exidx.text.PWM_SetDutyCycle), (8 bytes).
 
-69 unused section(s) (total 1438 bytes) removed from the image.
+69 unused section(s) (total 1430 bytes) removed from the image.
 
 ==============================================================================
 
