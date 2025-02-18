@@ -15,7 +15,7 @@ extern uint32_t pwm_duty_cycle ;
 extern uint32_t pwm_duty_cycle_target;
 
 void step_motor(int direction);
-int calcular_tempo_ms(char tecla);
+int calcular_tempo_ms(int velocidade);
 int PWM_SetDutyCycle(int vel);
 
 

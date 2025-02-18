@@ -2,15 +2,19 @@
 #include <stdbool.h>
 
 void init_uart(){
+    SYSCTL_RCGCUART_R |= 0x01; //ativa uart0
+    while((SYSCTL_PRUART_R & 0x01) != 0x01 ){};
+
     UART0_CTL_R &= ~0x01;
     
     // Configura baud rate (IBRD + FBRD) para 115200
-    uint32_t brd = 80000000 / (16 * 115200);  // IBRD = int(80MHz / (16 * Baud Rate))
-    UART0_IBRD_R = brd;  // Parte inteira do divisor
-    UART0_FBRD_R = ((80000000 % (16 * 115200)) * 64 + (115200 / 2)) / 115200; // Parte fracionária
+    UART0_IBRD_R = 260;  // Parte inteira do divisor
+    UART0_FBRD_R = 27; // Parte fracionária
     
     //Configura UART para 8 bits, sem paridade, 1 stop bit (8N1)
     UART0_LCRH_R = (0x3 << 5);  // 8 bits de dados, FIFO desativado
+
+    UART0_CC_R = 0x0; // Usa o clock do sistema
     
     //Habilita o UART0 novamente
     UART0_CTL_R |= 0x301; // Habilita UART, RX e TX

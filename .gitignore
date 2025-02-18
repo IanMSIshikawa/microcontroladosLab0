@@ -20,3 +20,10 @@ lab2/gpio.uvprojx
 lab1/gpio.uvguix.enzoh
 *.IanIshikawa
 *.uvoptx
+*.uvprojx
+*.enzoh
+*.lst
+*.axf
+*.dep
+*.htm
+*.lst
