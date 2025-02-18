@@ -14,9 +14,10 @@ extern bool direction_target;
 extern uint32_t pwm_duty_cycle ;
 extern uint32_t pwm_duty_cycle_target;
 
-void step_motor(int direction);
+// void step_motor(int direction);
 int calcular_tempo_ms(int velocidade);
-int PWM_SetDutyCycle(int vel);
+void PWM_SetDutyCycle(int vel);
+void vel_control();
 
 
 #endif  //!__MOTOR__H__

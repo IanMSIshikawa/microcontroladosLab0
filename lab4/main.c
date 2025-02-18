@@ -40,6 +40,7 @@ void debounce();
 uint32_t varredura(void);
 
 // void step_motor(int direction);
+void vel_control();
 bool UART0_Available();
 void initPot();
 
@@ -110,11 +111,11 @@ int main(void) {
                 uint32_t newDirection = (adcValue < 2048) ? 0 : 1;
 
 
-                // if (newDirection != direction) {
-                //     direction = newDirection;
-                //     step_motor(direction);
-                // }
-                // PWM_SetDutyCycle(pwm_duty_cycle);
+                if (newDirection != direction) {
+                    direction = newDirection;
+                    vel_control();
+                }
+                PWM_SetDutyCycle(pwm_duty_cycle);
 
                 char buffer[50];
                 sprintf(buffer, "pwm_duty_cycleocidade: %d%%, Direção: %s\r\n", pwm_duty_cycle, direction == 0 ? "Horário" : "Anti-horário");
@@ -123,7 +124,7 @@ int main(void) {
                 if (UART0_Available() && UART0_ReadChar() == 's') {
                     programState = 0;
                     pwm_duty_cycle = 0;
-                    // PWM_SetDutyCycle(pwm_duty_cycle);
+                    PWM_SetDutyCycle(pwm_duty_cycle);
                 }
                 SysTick_Wait1ms(1000);
             }
@@ -137,7 +138,7 @@ int main(void) {
             uint32_t newDirection = (readChar == 'h') ? 0 : 1;
             if (newDirection != direction) {
                 direction = newDirection;
-                // step_motor(direction);
+                vel_control();
             }
 
             UART0_SendString("Selecione a pwm_duty_cycleocidade (0-9):\r\n");
@@ -145,7 +146,7 @@ int main(void) {
                 readChar = UART0_ReadChar();
             }
             pwm_duty_cycle = (readChar == '0') ? 100 : (readChar - '0') * 10;
-            // PWM_SetDutyCycle(pwm_duty_cycle);
+            PWM_SetDutyCycle(pwm_duty_cycle);
 
             while (1) {
                 char buffer[50];
@@ -158,17 +159,17 @@ int main(void) {
                         newDirection = (readChar == 'h') ? 0 : 1;
                         if (newDirection != direction) {
                             direction = newDirection;
-                            // step_motor(direction);
+                            vel_control();
                         }
                     }
                     if (readChar >= '0' && readChar <= '9') {
                         pwm_duty_cycle = (readChar == '0') ? 100 : (readChar - '0') * 10;
-                        // PWM_SetDutyCycle(pwm_duty_cycle);
+                        PWM_SetDutyCycle(pwm_duty_cycle);
                     }
                     if (readChar == 's') {
                         programState = 0;
                         pwm_duty_cycle = 0;
-                        // PWM_SetDutyCycle(pwm_duty_cycle);
+                        PWM_SetDutyCycle(pwm_duty_cycle);
                         break;
                     }
                 }

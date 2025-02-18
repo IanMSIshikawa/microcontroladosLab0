@@ -51,7 +51,7 @@ void vel_control(){
     }
 }
 
-int PWM_SetDutyCycle(int vel){
+void PWM_SetDutyCycle(int vel){
     if (vel < 0) vel = 0;
     if (vel > 100) vel = 100;
     
@@ -60,7 +60,6 @@ int PWM_SetDutyCycle(int vel){
     
     // Configura o PWM
     PWM0_0_CMPA_R = pwm;
-    
-    return vel;
+
 }
 
