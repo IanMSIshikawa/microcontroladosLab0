@@ -28,7 +28,7 @@
 
 extern uint32_t pwm_duty_cycle;
 extern bool pwm_high;
-extern uint32_t direction;
+extern bool direction;
 
 void Timer0A_Handler(void);
 void Timer0A_init(void);

@@ -17,28 +17,20 @@ Library Manager: ArmAr.exe V6.22
 Hex Converter:   FromElf.exe V6.22
 CPU DLL:         SARMCM3.DLL V5.41.0.0
 Dialog DLL:      DCM.DLL V1.17.5.0
-Target DLL:      UL2CM3.DLL V1.164.14.0
+Target DLL:      lmidk-agdi.dll V???
 Dialog DLL:      TCM.DLL V1.56.4.0
  
 <h2>Project:</h2>
 C:\Users\IanIshikawa\Documents\microcontroladosLab0\lab4\exemplo.uvprojx
-Project File Date:  02/13/2025
+Project File Date:  02/18/2025
 
 <h2>Output:</h2>
 *** Using Compiler 'V6.22', folder: 'C:\Users\IanIshikawa\AppData\Local\Keil_v5\ARM\ARMCLANG\Bin'
 Build target 'Target 1'
-main.c(42): error: unknown type name 'bool'
-   42 | bool UART0_Available();
-      | ^
-main.c(109): error: call to undeclared function 'PWM_SetDutyCycle'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-  109 |                 PWM_SetDutyCycle(vel);
-      |                 ^
-main.c(140): error: call to undeclared function 'PWM_SetDutyCycle'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-  140 |             PWM_SetDutyCycle(vel);
-      |             ^
-3 errors generated.
 compiling main.c...
-".\Objects\exemplo.axf" - 3 Error(s), 0 Warning(s).
+linking...
+Program Size: Code=10328 RO-data=820 RW-data=0 ZI-data=1144  
+".\Objects\exemplo.axf" - 0 Error(s), 0 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -51,8 +43,7 @@ Package Vendor: Keil
   C:/Users/IanIshikawa/AppData/Local/Arm/Packs/Keil/TM4C_DFP/1.1.0/Device/Include/TM4C129
 
 <h2>Collection of Component Files used:</h2>
-Target not created.
-Build Time Elapsed:  00:00:01
+Build Time Elapsed:  00:00:00
 </pre>
 </body>
 </html>

@@ -1,6 +1,9 @@
 #include "timer.h"
 
-
+void Set_Contagem_timer(uint32_t contagem)
+{
+    TIMER0_TAILR_R = contagem;
+}
 void Timer0A_init(void){
     
     SYSCTL_RCGCTIMER_R=0x01;//;Habilitar o TIMER 0 no registrador RCGCTIMER
@@ -54,7 +57,3 @@ void Timer0A_Handler(void){
 }
 
 
-void Set_Contagem_timer(uint32_t contagem)
-{
-    TIMER0_TAILR_R = contagem;
-}

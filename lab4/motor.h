@@ -2,6 +2,7 @@
 #define __MOTOR__H__
 
 #include <stdint.h>
+#include <stdbool.h>
 
 #include "tm4c1294ncpdt.h"
 
