@@ -19,16 +19,15 @@ void vel_control(){
         if(pwm_duty_cycle==0){
             pwm_duty_cycle=1;
             //disable motor
-            GPIO_PORTE_AHB_DATA_R &= 0xFFF0;
+            // GPIO_PORTE_AHB_DATA_R &= 0xFFF0;
+            GPIO_PORTF_AHB_DATA_R = 0x00;
         }
         else if(pwm_duty_cycle==100){
             pwm_duty_cycle=99;
+            GPIO_PORTF_AHB_DATA_R = 0x02;
         }
         else{
-            if(direction)//enable motor
-                GPIO_PORTE_AHB_DATA_R = 0x01;
-            else
-                GPIO_PORTE_AHB_DATA_R = 0x02;
+            GPIO_PORTF_AHB_DATA_R = 0x02;
         }
 
     }
@@ -38,15 +37,7 @@ void vel_control(){
         if(pwm_duty_cycle==0){
             direction=direction_target;
             pwm_duty_cycle= (pwm_duty_cycle_target + pwm_duty_cycle)/STEPS;
-            GPIO_PORTE_AHB_DATA_R ^= 0x03; //inverte enable motor
         }
-        else{
-            if(direction)//enable motor
-                GPIO_PORTE_AHB_DATA_R = 0x01;
-            else
-                GPIO_PORTE_AHB_DATA_R = 0x02;
-        }
-        
         
     }
 }

@@ -11,7 +11,7 @@ void SysTick_Wait1ms(uint32_t delay);
 void SysTick_Wait1us(uint32_t delay);
 
 #include "lab3.h"
-// #include "timer.h"
+#include "timer.h"
 #include "lcd.h"
 #include "motor.h"
 #include "uart.h"
@@ -53,8 +53,8 @@ char readChar = 0;
 
 bool direction = 0;
 bool direction_target = 0;
-uint32_t pwm_duty_cycle = 0;
-uint32_t pwm_duty_cycle_target = 0;
+uint32_t pwm_duty_cycle = 1;
+uint32_t pwm_duty_cycle_target = 1;
 bool pwm_high =  false;
 
 
@@ -83,10 +83,10 @@ int main(void) {
     GPIO_Init();
     init_uart();
     initPot();
-	// step_motor(direction);
+    Timer0A_init();
+    vel_control();
 
     char readChar = 0;
-
     while (1) {
         if (programState == 0) {
             UART0_SendString("Motor parado, pressione * para iniciar.\r\n");
@@ -107,24 +107,19 @@ int main(void) {
         if (programState == 2) { // Controle por potenciômetro
             while (programState == 2) {
                 uint32_t adcValue = ADC_Read();
-                pwm_duty_cycle = (adcValue < 2048) ? ((2048 - adcValue) * 100 / 2048) : ((adcValue - 2048) * 100 / 2048);
-                uint32_t newDirection = (adcValue < 2048) ? 0 : 1;
+                pwm_duty_cycle_target = (adcValue < 2048) ? ((2048 - adcValue) * 100 / 2048) : ((adcValue - 2048) * 100 / 2048);
+                uint32_t direction_target = (adcValue < 2048) ? 0 : 1;
+                direction = direction_target;
 
-
-                if (newDirection != direction) {
-                    direction = newDirection;
-                    vel_control();
-                }
-                PWM_SetDutyCycle(pwm_duty_cycle);
 
                 char buffer[50];
-                sprintf(buffer, "pwm_duty_cycleocidade: %d%%, Direção: %s\r\n", pwm_duty_cycle, direction == 0 ? "Horário" : "Anti-horário");
+                sprintf(buffer, "pwm_duty_cycleocidade: %d%%, Direção: %s\r\n", pwm_duty_cycle_target, direction_target == 0 ? "Horário" : "Anti-horário");
                 UART0_SendString(buffer);
 
                 if (UART0_Available() && UART0_ReadChar() == 's') {
                     programState = 0;
-                    pwm_duty_cycle = 0;
-                    PWM_SetDutyCycle(pwm_duty_cycle);
+                    pwm_duty_cycle_target = 1;
+                    programState = 0;
                 }
                 SysTick_Wait1ms(1000);
             }
@@ -135,18 +130,15 @@ int main(void) {
             while (readChar != 'h' && readChar != 'a') {
                 readChar = UART0_ReadChar();
             }
-            uint32_t newDirection = (readChar == 'h') ? 0 : 1;
-            if (newDirection != direction) {
-                direction = newDirection;
-                vel_control();
-            }
+            direction_target = (readChar == 'h') ? 0 : 1;
+            direction = direction_target;
 
             UART0_SendString("Selecione a pwm_duty_cycleocidade (0-9):\r\n");
             while (readChar < '0' || readChar > '9') {
                 readChar = UART0_ReadChar();
             }
-            pwm_duty_cycle = (readChar == '0') ? 100 : (readChar - '0') * 10;
-            PWM_SetDutyCycle(pwm_duty_cycle);
+            pwm_duty_cycle_target = (readChar == '0') ? 100 : (readChar - '0') * 10;
+
 
             while (1) {
                 char buffer[50];
@@ -156,20 +148,15 @@ int main(void) {
                 if (UART0_Available()) {
                     readChar = UART0_ReadChar();
                     if (readChar == 'h' || readChar == 'a') {
-                        newDirection = (readChar == 'h') ? 0 : 1;
-                        if (newDirection != direction) {
-                            direction = newDirection;
-                            vel_control();
-                        }
+                        direction_target = (readChar == 'h') ? 0 : 1;
+                        direction = direction_target;
                     }
                     if (readChar >= '0' && readChar <= '9') {
-                        pwm_duty_cycle = (readChar == '0') ? 100 : (readChar - '0') * 10;
-                        PWM_SetDutyCycle(pwm_duty_cycle);
+                        pwm_duty_cycle_target = (readChar == '0') ? 100 : (readChar - '0') * 10;
                     }
                     if (readChar == 's') {
                         programState = 0;
-                        pwm_duty_cycle = 0;
-                        PWM_SetDutyCycle(pwm_duty_cycle);
+                        pwm_duty_cycle_target = 1;
                         break;
                     }
                 }

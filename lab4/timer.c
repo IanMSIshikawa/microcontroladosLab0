@@ -1,4 +1,5 @@
 #include "timer.h"
+#include "motor.h"
 
 void Set_Contagem_timer(uint32_t contagem)
 {
@@ -10,7 +11,7 @@ void Timer0A_init(void){
 
     int wait = 0x01;
     
-    while (wait==0x01)//Espera_PRTIMER
+    while (SYSCTL_RCGCTIMER_R!=0x01)//Espera_PRTIMER
     {
         wait = SYSCTL_PRTIMER_R;
     }
@@ -45,14 +46,23 @@ void Timer0A_Handler(void){
         contagem=((CONTAGEM_1_MS+1)*pwm_duty_cycle)/100 -1 ;
         Set_Contagem_timer(contagem);
         pwm_high=1;
+        vel_control();
     }
     else{
         contagem=((CONTAGEM_1_MS+1)*(100 - pwm_duty_cycle))/100 -1 ;
         Set_Contagem_timer(contagem);
         pwm_high=0;
     }
-    //toggle_led= toggle_led ^ 0x01;
-   //set_toggle_led(get_toggle_led() ^ 0x01);
+    if(direction){
+
+        GPIO_PORTE_AHB_DATA_R = (GPIO_PORTE_AHB_DATA_R & ~0x1) | 0x01 & pwm_high ;
+        // GPIO_PORTE_AHB_DATA_R &= (0xF1 & pwm_high );
+    }
+    else{
+        GPIO_PORTE_AHB_DATA_R = (GPIO_PORTE_AHB_DATA_R & ~0x02) | 0x02 & pwm_high <<1 ;
+        // GPIO_PORTE_AHB_DATA_R &= (0xF2 & pwm_high << 1);
+    }
+
 
 }
 
