@@ -18,8 +18,8 @@
 #define CONTAGEM_900_MS     71999999
 
 
-#define CONTAGEM_PREESCALE (799)//800-1//10 us
-#define CONTAGEM_1_MS				(99)//100-1//1% de resolucao
+#define CONTAGEM_PREESCALE          (79)    //80-1//10 us
+#define CONTAGEM_1_MS				(999)     //1000-1//1% de resolucao
 
 //ADDRESS_MEMORY_CONTAGEM EQU 0x20001000
 //ADDRESS_MEMORY_OFFSET   EQU 0x04

@@ -40,7 +40,7 @@ void Timer0A_init(void){
 
 void Timer0A_Handler(void){
 
-    TIMER0_ICR_R=0;
+    TIMER0_ICR_R=0x01;
     uint32_t contagem;
     if(pwm_high==0){
         contagem=((CONTAGEM_1_MS+1)*pwm_duty_cycle)/100 -1 ;
