@@ -39,7 +39,11 @@ void Timer0A_init(void){
 
 void Timer0A_Handler(void){
 
+<<<<<<< HEAD
     TIMER0_ICR_R=1;
+=======
+    TIMER0_ICR_R=0x01;
+>>>>>>> 5fc7c74bf21a4231f041b121d72a61886602aec1
     uint32_t contagem;
     pwm_duty_cycle=50;
 
