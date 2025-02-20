@@ -860,7 +860,7 @@ PortJ_Input
 ; -------------------------------------------------------------------------------
 ; Fun��o PortJ_Input
 ; Par�metro de entrada: N�o tem
-; Par�metro de sa�da: R0 --> o valor da leitura
+; Par�metro d	 sa�da: R0 --> o valor da leitura
 PortL_Input
 ; ****************************************
 ; Escrever fun��o que l� a chave e retorna 

@@ -24,10 +24,10 @@ void vel_control(){
         }
         else if(pwm_duty_cycle==100){
             pwm_duty_cycle=99;
-            GPIO_PORTF_AHB_DATA_R = 0x02;
+            GPIO_PORTF_AHB_DATA_R = 0x04;
         }
         else{
-            GPIO_PORTF_AHB_DATA_R = 0x02;
+            GPIO_PORTF_AHB_DATA_R = ~0x04;
         }
 
     }

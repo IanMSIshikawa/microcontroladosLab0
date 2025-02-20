@@ -7,13 +7,12 @@ void Set_Contagem_timer(uint32_t contagem)
 }
 void Timer0A_init(void){
     
-    SYSCTL_RCGCTIMER_R=0x01;//;Habilitar o TIMER 0 no registrador RCGCTIMER
+    SYSCTL_RCGCTIMER_R|=0x01;//;Habilitar o TIMER 0 no registrador RCGCTIMER
 
     int wait = 0x01;
     
-    while (SYSCTL_RCGCTIMER_R!=0x01)//Espera_PRTIMER
+    while ((SYSCTL_PRTIMER_R & 0x01)==0)//Espera_PRTIMER
     {
-        wait = SYSCTL_PRTIMER_R;
     }
 
     TIMER0_CTL_R=0x00;//;Desabilita TIMERS
@@ -40,8 +39,10 @@ void Timer0A_init(void){
 
 void Timer0A_Handler(void){
 
-    TIMER0_ICR_R=0;
+    TIMER0_ICR_R=1;
     uint32_t contagem;
+    pwm_duty_cycle=50;
+
     if(pwm_high==0){
         contagem=((CONTAGEM_1_MS+1)*pwm_duty_cycle)/100 -1 ;
         Set_Contagem_timer(contagem);
@@ -55,11 +56,11 @@ void Timer0A_Handler(void){
     }
     if(direction){
 
-        GPIO_PORTE_AHB_DATA_R = (GPIO_PORTE_AHB_DATA_R & ~0x1) | 0x01 & pwm_high ;
+        GPIO_PORTE_AHB_DATA_R = (GPIO_PORTE_AHB_DATA_R & ~0x1) | (0x01 & pwm_high) ;
         // GPIO_PORTE_AHB_DATA_R &= (0xF1 & pwm_high );
     }
     else{
-        GPIO_PORTE_AHB_DATA_R = (GPIO_PORTE_AHB_DATA_R & ~0x02) | 0x02 & pwm_high <<1 ;
+        GPIO_PORTE_AHB_DATA_R = (GPIO_PORTE_AHB_DATA_R & ~0x02) | 0x02 & (pwm_high <<1) ;
         // GPIO_PORTE_AHB_DATA_R &= (0xF2 & pwm_high << 1);
     }
 

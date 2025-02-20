@@ -83,7 +83,7 @@ int main(void) {
     GPIO_Init();
     init_uart();
     initPot();
-    Timer0A_init();
+		Timer0A_init();
     vel_control();
 
     char readChar = 0;
